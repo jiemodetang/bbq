@@ -11,7 +11,11 @@ import { Switch,Route } from 'react-router-dom'
 
 import Home from '../Home'
 import Navigation from '../Navigation'
+// 我的集合
+import Collections from '../MyCollection'
 
+// 创建集合
+import createCollection from '../CreateCollection'
 const NB = ()=>{
   return 111
 }
@@ -25,6 +29,11 @@ const App =()=>{
     <Switch>
       <Route exact path='/' component={Home} />
       <Route exact path='/NB' component={NB} />
+      {/* 我的集合页面 */}
+      <Route exact path='/collections' component={Collections} />
+
+      {/* 创建集合页面 */}
+      <Route exact path='/collection/create' component={createCollection} />
     </Switch>
     </div>
   )
