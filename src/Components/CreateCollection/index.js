@@ -36,16 +36,8 @@ function Collections() {
       <p>此图像也将用于导航</p>
 
       <h4>名称</h4>
-      <Box
-        component="form"
-        sx={{
-          '& > :not(style)': { m: 1, width: '25ch' },
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <TextField fullWidth id="outlined-basic" label="集合名称" variant="outlined" />
-      </Box>
+      <TextField fullWidth id="outlined-basic" label="集合名称" variant="outlined" />
+
 
       <h4>描述</h4>
       <TextField
@@ -53,7 +45,7 @@ function Collections() {
         id="outlined-multiline-flexible"
         label="Description"
         multiline
-        maxRows={4}
+        maxRows={4} 
       />
 
       <h4>类型</h4>

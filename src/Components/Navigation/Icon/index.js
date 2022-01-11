@@ -1,4 +1,5 @@
 import React,{useState} from 'react';
+import { useHistory } from "react-router-dom";
 import styled from 'styled-components'
 import {connect} from 'react-redux'
 
@@ -10,6 +11,7 @@ const Container = styled.div`
   display:flex;
   align-items:center;
   color:rgba(14, 14, 14, 0.75);
+  cursor:pointer;
 
 `
 const IconContainer = styled.div`
@@ -20,7 +22,6 @@ const IconContainer = styled.div`
   align-items:center;
   justify-content:center;
   padding:5px 7px 9px 7px;
-  cursor:pointer;
 `
 const ArrowContainer = styled.div`
   transition:all 0.3s;
@@ -29,11 +30,9 @@ const ArrowContainer = styled.div`
   display:flex;
   align-items:center;
   justify-content:center;
-
   @media only screen and (min-width: 1030px) {
     display:none;
 }
-
 `
 
 const Text = styled.div`
@@ -49,9 +48,13 @@ const Text = styled.div`
 
 
 const Icon =({toggle,show})=>{
+  const history = useHistory();
+  const goHome = () => {
+    history.push("/");
+  }
 
   return(
-    <Container>
+    <Container onClick={goHome}>
       <IconContainer>
         <FilterHdrIcon style={{fontSize:'30px'}}/>
       </IconContainer>

@@ -37,21 +37,37 @@ const Item = styled.li`
 `
 
 const Links = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [nftType, setNftType] = React.useState(null);
+  const [userInfo, setUserInfo] = React.useState(null);
   // 跳转路由
   const history = useHistory();
+  
+  // EXPLORE nft 类型选择
+  const openNftType = Boolean(nftType);
+  const handleNftType = (event) => {
+    setNftType(event.currentTarget);
+  };
+  const handleCloseNftType = () => {
+    setNftType(null);
+  };
 
-  const open = Boolean(anchorEl);
+  // ACCOUNT 账号信息
+  const open = Boolean(userInfo);
   const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+    setUserInfo(event.currentTarget);
   };
   const handleClose = () => {
-    setAnchorEl(null);
+    setUserInfo(null);
   };
+
+  function handleAllNfts() {
+
+  }
 
   // 我的集合
   function handleMyCollection() {
     history.push("/collections");
+    handleClose()
   }
 
   // 登出
@@ -59,6 +75,12 @@ const Links = () => {
     alert('1')
     handleClose()
   }
+
+  // 链接钱包
+  function connectWallent() {
+    
+  }
+
   return (
     <Container>
       <UnorderedList>
@@ -67,51 +89,54 @@ const Links = () => {
             return<Item key={index}>{item}</Item>
           })
         } */}
+
+        {/* EXPLORE 对应原网站 explore nft类型选择 */}
         <Button
           id="demo-positioned-button"
-          aria-controls={open ? 'demo-positioned-menu' : undefined}
+          aria-controls={openNftType ? 'demo-positioned-menu' : undefined}
           aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
+          aria-expanded={openNftType ? 'true' : undefined}
+          onClick={handleNftType}
         >
           Explore
       </Button>
       <Menu
-          id="demo-positioned-menu"
-          aria-labelledby="demo-positioned-button"
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
-          transformOrigin={{
-            vertical: 'top',
-            horizontal: 'left',
-          }}
+        style={{ top: '55px' }}
+        id="demo-positioned-menu"
+        aria-labelledby="demo-positioned-button"
+        anchorEl={nftType}
+        open={openNftType}
+        onClose={handleCloseNftType}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
         >
-          <MenuItem onClick={handleMyCollection}>All Nfts</MenuItem>
-          <MenuItem onClick={handleLogOut}>Art</MenuItem>
+          <MenuItem onClick={handleAllNfts}>All Nfts</MenuItem>
+          <MenuItem>Art</MenuItem>
         </Menu>
 
 
 
 
       <Button
-          id="demo-positioned-button"
-          
-          aria-controls={open ? 'demo-positioned-menu' : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? 'true' : undefined}
-          onClick={handleClick}
+        id="demo-positioned-button"
+        aria-controls={open ? 'demo-positioned-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
         >
           Account
       </Button>
         <Menu
+          style={{ top: '55px' }}
           id="demo-positioned-menu"
           aria-labelledby="demo-positioned-button"
-          anchorEl={anchorEl}
+          anchorEl={userInfo}
           open={open}
           onClose={handleClose}
           anchorOrigin={{
@@ -126,6 +151,16 @@ const Links = () => {
           <MenuItem onClick={handleMyCollection}>My Collections</MenuItem>
           <MenuItem onClick={handleLogOut}>Logout</MenuItem>
         </Menu>
+
+        <Button
+        id="demo-positioned-button"
+        aria-controls={open ? 'demo-positioned-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={connectWallent}
+        >
+        链接钱包
+      </Button>
       </UnorderedList>
     </Container>
   )
