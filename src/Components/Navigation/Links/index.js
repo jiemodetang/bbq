@@ -4,8 +4,11 @@ import styled from 'styled-components'
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-
-
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Stack from '@mui/material/Stack';
+import $web3js from "../../../lib/contract/web3";
+import { formartadd, removeLocalStorage, setLocalStorage, getLocalStorage } from "../../../utils/index";
 const Container = styled.div`
 display:none;
 margin-left:10px;
@@ -41,7 +44,7 @@ const Links = () => {
   const [userInfo, setUserInfo] = React.useState(null);
   // 跳转路由
   const history = useHistory();
-  
+
   // EXPLORE nft 类型选择
   const openNftType = Boolean(nftType);
   const handleNftType = (event) => {
@@ -60,8 +63,11 @@ const Links = () => {
     setUserInfo(null);
   };
 
-  function handleAllNfts() {
 
+  // type 是 nft 类型为变量
+  function handleNftsType(type) {
+    history.push('/assets/type')
+    handleCloseNftType(null);
   }
 
   // 我的集合
@@ -72,13 +78,45 @@ const Links = () => {
 
   // 登出
   function handleLogOut() {
-    alert('1')
+    removeLocalStorage('walletaccount');
     handleClose()
   }
 
   // 链接钱包
   function connectWallent() {
-    
+    console.log('111', $web3js);
+    $web3js.connectMetaMask().then((res) => {
+      if (!getLocalStorage("walletaccount")) {
+        loadingData();
+      }
+    })
+      .catch((error) => {
+        // this.$toast(this.$t("lang.connectfail") + error);
+        console.log(error);
+      });
+  }
+
+  function loadingData() {
+    $web3js.connectWallet().finally(() => {
+      const address = $web3js.getCurrWalletAddress();
+      //const address = '0xA19Cf83903B61E327f46149c0bF986B50F8e249c';
+      
+      // 链接钱包成功之后，弹出提示信息
+      // ActionAlerts();
+      setLocalStorage("walletaccount", address);
+
+    });
+  }
+
+  function ActionAlerts() {
+    return (
+      <Stack sx={{ width: '100%', top: '90px' }} spacing={2}>
+        <Alert severity="success">
+          <AlertTitle>Success</AlertTitle>
+            This is a success alert — <strong>check it out!</strong>
+        </Alert>
+      </Stack>
+    );
   }
 
   return (
@@ -100,35 +138,35 @@ const Links = () => {
         >
           Explore
       </Button>
-      <Menu
-        style={{ top: '55px' }}
-        id="demo-positioned-menu"
-        aria-labelledby="demo-positioned-button"
-        anchorEl={nftType}
-        open={openNftType}
-        onClose={handleCloseNftType}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
+        <Menu
+          style={{ top: '55px' }}
+          id="demo-positioned-menu"
+          aria-labelledby="demo-positioned-button"
+          anchorEl={nftType}
+          open={openNftType}
+          onClose={handleCloseNftType}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
         >
-          <MenuItem onClick={handleAllNfts}>All Nfts</MenuItem>
-          <MenuItem>Art</MenuItem>
+          <MenuItem>All Nfts</MenuItem>
+          <MenuItem onClick={handleNftsType}>Art</MenuItem>
         </Menu>
 
 
 
 
-      <Button
-        id="demo-positioned-button"
-        aria-controls={open ? 'demo-positioned-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
+        <Button
+          id="demo-positioned-button"
+          aria-controls={open ? 'demo-positioned-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={handleClick}
         >
           Account
       </Button>
@@ -153,13 +191,13 @@ const Links = () => {
         </Menu>
 
         <Button
-        id="demo-positioned-button"
-        aria-controls={open ? 'demo-positioned-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-        onClick={connectWallent}
+          id="demo-positioned-button"
+          aria-controls={open ? 'demo-positioned-menu' : undefined}
+          aria-haspopup="true"
+          aria-expanded={open ? 'true' : undefined}
+          onClick={connectWallent}
         >
-        链接钱包
+         {!getLocalStorage('walletaccount') ? '链接钱包' : formartadd(getLocalStorage('walletaccount'))}
       </Button>
       </UnorderedList>
     </Container>

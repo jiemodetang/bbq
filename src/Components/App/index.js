@@ -11,8 +11,12 @@ import { Switch,Route } from 'react-router-dom'
 
 import Home from '../Home'
 import Navigation from '../Navigation'
+
+// nft 类型
+import assets from '../Nfts'
+
 // 我的集合
-import Collections from '../MyCollection'
+import collections from '../MyCollection'
 
 // 创建集合
 import createCollection from '../CreateCollection'
@@ -29,8 +33,11 @@ const App =()=>{
     <Switch>
       <Route exact path='/' component={Home} />
       <Route exact path='/NB' component={NB} />
+
+      <Route exact path='/assets/type' component={assets} />
+
       {/* 我的集合页面 */}
-      <Route exact path='/collections' component={Collections} />
+      <Route exact path='/collections' component={collections} />
 
       {/* 创建集合页面 */}
       <Route exact path='/collection/create' component={createCollection} />
