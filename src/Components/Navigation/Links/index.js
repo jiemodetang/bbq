@@ -27,7 +27,6 @@ const UnorderedList = styled.ul`
   padding-left:0px;
 `
 const Item = styled.li`
-
   font-weight:600;
   letter-spacing:1px;
   font-size:16px;
@@ -42,6 +41,8 @@ const Item = styled.li`
 const Links = () => {
   const [nftType, setNftType] = React.useState(null);
   const [userInfo, setUserInfo] = React.useState(null);
+  // 登录状态
+  const [userState, setUserState] = React.useState(getLocalStorage('walletaccount'));
   // 跳转路由
   const history = useHistory();
 
@@ -84,7 +85,6 @@ const Links = () => {
 
   // 链接钱包
   function connectWallent() {
-    console.log('111', $web3js);
     $web3js.connectMetaMask().then((res) => {
       if (!getLocalStorage("walletaccount")) {
         loadingData();
@@ -100,11 +100,10 @@ const Links = () => {
     $web3js.connectWallet().finally(() => {
       const address = $web3js.getCurrWalletAddress();
       //const address = '0xA19Cf83903B61E327f46149c0bF986B50F8e249c';
-      
       // 链接钱包成功之后，弹出提示信息
       // ActionAlerts();
       setLocalStorage("walletaccount", address);
-
+      setUserState(address);
     });
   }
 
@@ -197,7 +196,7 @@ const Links = () => {
           aria-expanded={open ? 'true' : undefined}
           onClick={connectWallent}
         >
-         {!getLocalStorage('walletaccount') ? '链接钱包' : formartadd(getLocalStorage('walletaccount'))}
+         {!userState ? '链接钱包' : formartadd(getLocalStorage('walletaccount'))}
       </Button>
       </UnorderedList>
     </Container>
