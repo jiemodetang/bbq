@@ -80,6 +80,7 @@ const Links = () => {
   // 登出
   function handleLogOut() {
     removeLocalStorage('walletaccount');
+    setUserState(null)
     handleClose()
   }
 
