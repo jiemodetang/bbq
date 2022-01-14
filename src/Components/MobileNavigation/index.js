@@ -14,6 +14,7 @@ const Container = styled.div`
   width:100vw;
   top:72px;
   position:fixed;
+  z-index:10000
 `
 
 

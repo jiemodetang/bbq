@@ -9,9 +9,11 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { useHistory } from "react-router-dom";
+import Container from '@mui/material/Container';
 
-const Container = styled.div`
-    margin: 120px 210px 20px 210px;
+const ua = navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)
+const MYContainer = styled(Container)`
+    margin-top: 120px;
 `;
 const ConDiv = styled.div`
     margin-top: 15px;
@@ -100,8 +102,8 @@ const itemData = [
 const Home = () => {
     const history = useHistory();
     return (
-        <Container>
-            <ImageList sx={{ width: "100%", height: "100%" }} cols={4} gap={8}>
+        <MYContainer maxWidth={'xl'}>
+            <ImageList sx={{  height: "100%" }} cols={ua?1:4} gap={20}>
                 {itemData.map((item) => (
                     <ImageListItem
                         key={item.img}
@@ -111,8 +113,6 @@ const Home = () => {
                             boxShadow: "0px 5px 8px 0px rgba(231, 231, 231, 0.6)",
                             borderRadius: " 20px",
                             border: "1px solid #E4E8EB",
-                            width: "300px",
-                            height: "300px",
                         }}
                     >
                         <img
@@ -160,7 +160,7 @@ const Home = () => {
                     </ImageListItem>
                 ))}
             </ImageList>
-        </Container>
+        </MYContainer>
     );
 };
 
