@@ -16,7 +16,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 
 const Container = styled.div`
     margin: 120px 210px 20px 210px;
-    // display: flex;
+    min-height:500px
 `;
 const Box1 = styled(Box)`
     display: flex;
@@ -43,7 +43,10 @@ export default function ControlledOpenSelect() {
         <Container>
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    价格
+                     输入你的合约地址
+                </Grid>
+                <Grid item xs={12}>
+                您的 ERC721 或 ERC1155 在主网上的联系地址是什么？
                 </Grid>
                 <Grid item xs={2}>
                     <Box1
@@ -53,7 +56,7 @@ export default function ControlledOpenSelect() {
                         noV
                     >
                         <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">ETH</InputLabel>
+                            <InputLabel id="demo-simple-select-label">Ethereum</InputLabel>
                             <Select labelId="demo-simple-select-label" id="demo-simple-select" value={age} label="Age" onChange={handleChange}>
                                 <MenuItem value={10}>Ten</MenuItem>
                                 <MenuItem value={20}>Twenty</MenuItem>
@@ -71,58 +74,13 @@ export default function ControlledOpenSelect() {
                         noValidate
                         autoComplete="off"
                     >
-                        <TextField id="outlined-basic" label="数量" variant="outlined" />
+                        <TextField id="outlined-basic" label="输入您的 ERC721 或 ERC1155 合约地址" variant="outlined" />
                     </Box>
                 </Grid>
             </Grid>
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    期间
-                </Grid>
-                <Grid item xs={6}>
-                    <Box1
-                        sx={{
-                            "& > :not(style)": { m: 1, minWidth: "120px" },
-                        }}
-                        noV
-                    >
-                        <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">6个月</InputLabel>
-                            <Select labelId="demo-simple-select-label" id="demo-simple-select" value={age} label="Age" onChange={handleChange}>
-                                <MenuItem value={10}>Ten</MenuItem>
-                                <MenuItem value={20}>Twenty</MenuItem>
-                                <MenuItem value={30}>Thirty</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Box1>
-                </Grid>
-            </Grid>
-
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    费用
-                </Grid>
-                <Grid item xs={6}>
-                <FormControl variant="standard" sx={{ m: 1, mt: 3, width: "25ch" }}>
-                    <Input
-                        id="standard-adornment-weight"
-                        value={values.weight}
-                        onChange={handleChange1("weight")}
-                        endAdornment={<InputAdornment position="end">2.5%</InputAdornment>}
-                        aria-describedby="standard-weight-helper-text"
-                        inputProps={{
-                            "aria-label": "weight",
-                        }}
-                        placeholder={'服务费'}
-                    />
-                    <FormHelperText id="standard-weight-helper-text"></FormHelperText>
-                </FormControl>
-                </Grid>
-               
-            </Grid>
-            <Grid container spacing={2} sx={{mt:10}}>
+            <Grid container spacing={2} sx={{mt:20}}>
                 <Grid item xs={2}>
-                <Button variant="contained">创建</Button>
+                <Button variant="contained">提交</Button>
                 </Grid>
             </Grid>
               

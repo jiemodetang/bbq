@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {Link} from 'react-router-dom'
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-
+import cl from './image/cl.png'
 const Container = styled.div`
   margin:120px 210px 20px 210px;
 ` 
@@ -14,6 +14,9 @@ class Collections extends React.Component{
   }
   createCollections() {
     this.props.history.push('/collection/create')
+  }
+  goDr=()=>{
+    this.props.history.push('/collection/dr')
   }
    render() {
      return (
@@ -27,12 +30,9 @@ class Collections extends React.Component{
           >
             创建一个集合
           </Button>
-          <Button variant="outlined">导入只能合约</Button>
+          <Button variant="outlined" onClick={this.goDr}>导入智能合约</Button>
         </Stack>
-
-        <div>
-          有创建的集合就显示集合，没有就显示占位
-        </div>
+        <img src={cl} style={{width:'100%'}}></img>
       </Container>
      )
    }

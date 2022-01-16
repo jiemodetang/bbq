@@ -187,7 +187,7 @@ const Detail = () => {
                 </Grid>
             </Paper>
             <div>
-                <Accordion sx={{ marginTop: "50px" }} defaultExpanded>
+                <Accordion sx={{ marginTop: "10px" }} defaultExpanded>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
                         <Typography>项目活动</Typography>
                     </AccordionSummary>

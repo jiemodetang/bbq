@@ -114,7 +114,11 @@ const Links = () => {
     history.push('/assets/type')
     handleCloseNftType(null);
   }
-
+        // 我的集合
+        function handleList() {
+            history.push("/home/item");
+            handleClose()
+        }
   // 我的集合
   function handleMyCollection() {
     history.push("/collections");
@@ -238,7 +242,7 @@ const Links = () => {
                     {ntfList.map((item, index) => {
                         const dom = (
                             <div>
-                                <MenuItem onClick={handleMyCollection}>
+                                <MenuItem onClick={handleList}>
                                     <ListItemIcon key={item.img}>
                                         <img
                                             src={item.img}

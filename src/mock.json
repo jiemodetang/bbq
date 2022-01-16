@@ -1,0 +1,377 @@
+{
+    "openapi": "3.0.3",
+    "info": {
+        "title": "DM5 NFT Web Api Server Swagger3接口文档",
+        "description": "更多请咨询服务开发者Ame。",
+        "contact": { "name": "Ame", "url": "https://nft.finance", "email": "nft@finance.com" },
+        "version": "1.0"
+    },
+    "servers": [{ "url": "http://localhost:8082", "description": "Inferred Url" }],
+    "tags": [
+        { "name": "Web端-Collection操作Api", "description": "Collection Controller" },
+        { "name": "Web端-Item操作Api", "description": "Item Controller" },
+        { "name": "Web端-字典Api", "description": "System Dictionary Controller" },
+        { "name": "Web端-开放Api（无需token）", "description": "Open Controller" }
+    ],
+    "paths": {
+        "/api/v1/cqc/web/collection/delete": {
+            "post": {
+                "tags": ["Web端-Collection操作Api"],
+                "summary": "删除我的Collection",
+                "description": "删除我的Collection",
+                "operationId": "deleteUsingPOST",
+                "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CollectionReq" } } } },
+                "responses": {
+                    "200": { "description": "OK", "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CommonResult" } } } },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                },
+                "security": [{ "Authorization": ["global"] }]
+            }
+        },
+        "/api/v1/cqc/web/collection/getAllCollections": {
+            "get": {
+                "tags": ["Web端-Collection操作Api"],
+                "summary": "获取所有的Collections",
+                "description": "获取所有的Collections",
+                "operationId": "getAllCollectionsUsingGET",
+                "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CollectionPageReq" } } } },
+                "responses": {
+                    "200": { "description": "OK", "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CommonPageResult«CollectionResp»" } } } },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                },
+                "security": [{ "Authorization": ["global"] }]
+            }
+        },
+        "/api/v1/cqc/web/collection/getMyCollections": {
+            "get": {
+                "tags": ["Web端-Collection操作Api"],
+                "summary": "获取自己的Collections",
+                "description": "获取自己的Collections",
+                "operationId": "getMyCollectionsUsingGET",
+                "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CollectionPageReq" } } } },
+                "responses": {
+                    "200": { "description": "OK", "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CommonPageResult«CollectionResp»" } } } },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                },
+                "security": [{ "Authorization": ["global"] }]
+            }
+        },
+        "/api/v1/cqc/web/collection/save": {
+            "post": {
+                "tags": ["Web端-Collection操作Api"],
+                "summary": "添加Collection",
+                "description": "添加Collection",
+                "operationId": "saveUsingPOST",
+                "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CollectionReq" } } } },
+                "responses": {
+                    "200": { "description": "OK", "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CommonResult" } } } },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                },
+                "security": [{ "Authorization": ["global"] }]
+            }
+        },
+        "/api/v1/cqc/web/item/getAll": {
+            "get": {
+                "tags": ["Web端-Item操作Api"],
+                "summary": "获取所有的Items",
+                "description": "获取所有的Items",
+                "operationId": "getAllUsingGET",
+                "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ItemPageReq" } } } },
+                "responses": {
+                    "200": { "description": "OK", "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CommonPageResult«ItemResp»" } } } },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                },
+                "security": [{ "Authorization": ["global"] }]
+            }
+        },
+        "/api/v1/cqc/web/item/getMine": {
+            "get": {
+                "tags": ["Web端-Item操作Api"],
+                "summary": "获取自己的Items",
+                "description": "获取自己的Items",
+                "operationId": "getMyItemsUsingGET",
+                "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ItemPageReq" } } } },
+                "responses": {
+                    "200": { "description": "OK", "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CommonPageResult«ItemResp»" } } } },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                },
+                "security": [{ "Authorization": ["global"] }]
+            }
+        },
+        "/api/v1/cqc/web/item/save": {
+            "post": {
+                "tags": ["Web端-Item操作Api"],
+                "summary": "添加Item",
+                "description": "添加Item",
+                "operationId": "addUsingPOST",
+                "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ItemReq" } } } },
+                "responses": {
+                    "200": { "description": "OK", "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CommonResult" } } } },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                },
+                "security": [{ "Authorization": ["global"] }]
+            }
+        },
+        "/api/v1/cqc/web-open/login": {
+            "post": {
+                "tags": ["Web端-开放Api（无需token）"],
+                "summary": "账户登录",
+                "description": "Web端账户登录",
+                "operationId": "loginUsingPOST",
+                "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/OpenLoginReq" } } } },
+                "responses": {
+                    "200": { "description": "OK", "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CommonResult«OpenLoginResp»" } } } },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                },
+                "security": [{ "Authorization": ["global"] }]
+            }
+        },
+        "/api/v1/cqc/web/sysDict/addType": {
+            "post": {
+                "tags": ["Web端-字典Api"],
+                "summary": "添加类型",
+                "description": "添加类型",
+                "operationId": "addTypeUsingPOST",
+                "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SystemDictReq" } } } },
+                "responses": {
+                    "200": { "description": "OK", "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CommonResult«SystemDictionaryResp»" } } } },
+                    "201": { "description": "Created" },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                },
+                "security": [{ "Authorization": ["global"] }]
+            }
+        },
+        "/api/v1/cqc/web/sysDict/getAllColType": {
+            "get": {
+                "tags": ["Web端-字典Api"],
+                "summary": "获取所有的getAllColType",
+                "description": "获取所有的getAllColType",
+                "operationId": "getAllCollectionsUsingGET_1",
+                "responses": {
+                    "200": { "description": "OK", "content": { "*/*": { "schema": { "$ref": "#/components/schemas/CommonResult«List«SystemDictionaryResp»»" } } } },
+                    "401": { "description": "Unauthorized" },
+                    "403": { "description": "Forbidden" },
+                    "404": { "description": "Not Found" }
+                },
+                "security": [{ "Authorization": ["global"] }]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CollectionPageReq": {
+                "title": "CollectionPageReq",
+                "type": "object",
+                "properties": {
+                    "colType": { "type": "string", "description": "Collection类型" },
+                    "pageNo": { "type": "integer", "description": "第几页", "format": "int32" },
+                    "pageSize": { "type": "integer", "description": "数量", "format": "int32" }
+                }
+            },
+            "CollectionReq": {
+                "title": "CollectionReq",
+                "required": ["colImage", "colName", "colType", "externalLink"],
+                "type": "object",
+                "properties": {
+                    "colImage": { "type": "string", "description": "Collection图片" },
+                    "colName": { "type": "string", "description": "Collection名字" },
+                    "colType": { "type": "string", "description": "Collection类型" },
+                    "externalLink": { "type": "string", "description": "额外链接" },
+                    "id": { "type": "integer", "description": "主键", "format": "int64" },
+                    "reqNo": { "type": "string" }
+                }
+            },
+            "CollectionResp": {
+                "title": "CollectionResp",
+                "type": "object",
+                "properties": {
+                    "colImage": { "type": "string" },
+                    "colName": { "type": "string" },
+                    "colOwners": { "type": "integer", "format": "int32" },
+                    "colType": { "type": "string" },
+                    "externalLink": { "type": "string" },
+                    "id": { "type": "integer", "format": "int64" },
+                    "itemNums": { "type": "integer", "format": "int32" },
+                    "memo": { "type": "string" }
+                }
+            },
+            "CommonPageResult«CollectionResp»": {
+                "title": "CommonPageResult«CollectionResp»",
+                "type": "object",
+                "properties": { "code": { "type": "string" }, "msg": { "type": "string" }, "pageInfo": { "$ref": "#/components/schemas/PageInfo«CollectionResp»" } }
+            },
+            "CommonPageResult«ItemResp»": {
+                "title": "CommonPageResult«ItemResp»",
+                "type": "object",
+                "properties": { "code": { "type": "string" }, "msg": { "type": "string" }, "pageInfo": { "$ref": "#/components/schemas/PageInfo«ItemResp»" } }
+            },
+            "CommonResult": {
+                "title": "CommonResult",
+                "type": "object",
+                "properties": { "code": { "type": "string" }, "data": { "type": "object" }, "msg": { "type": "string" } }
+            },
+            "CommonResult«List«SystemDictionaryResp»»": {
+                "title": "CommonResult«List«SystemDictionaryResp»»",
+                "type": "object",
+                "properties": {
+                    "code": { "type": "string" },
+                    "data": { "type": "array", "items": { "$ref": "#/components/schemas/SystemDictionaryResp" } },
+                    "msg": { "type": "string" }
+                }
+            },
+            "CommonResult«OpenLoginResp»": {
+                "title": "CommonResult«OpenLoginResp»",
+                "type": "object",
+                "properties": { "code": { "type": "string" }, "data": { "$ref": "#/components/schemas/OpenLoginResp" }, "msg": { "type": "string" } }
+            },
+            "CommonResult«SystemDictionaryResp»": {
+                "title": "CommonResult«SystemDictionaryResp»",
+                "type": "object",
+                "properties": { "code": { "type": "string" }, "data": { "$ref": "#/components/schemas/SystemDictionaryResp" }, "msg": { "type": "string" } }
+            },
+            "ItemPageReq": {
+                "title": "ItemPageReq",
+                "type": "object",
+                "properties": {
+                    "colId": { "type": "integer", "description": "colId", "format": "int64" },
+                    "colType": { "type": "string", "description": "colType" },
+                    "pageNo": { "type": "integer", "description": "第几页", "format": "int32" },
+                    "pageSize": { "type": "integer", "description": "数量", "format": "int32" }
+                }
+            },
+            "ItemReq": {
+                "title": "ItemReq",
+                "required": ["externalLink", "itemImage", "itemName"],
+                "type": "object",
+                "properties": {
+                    "colType": { "type": "string", "description": "colType" },
+                    "collectId": { "type": "integer", "description": "归属于哪一个Collection", "format": "int64" },
+                    "contractAddr": { "type": "string", "description": "合约地址" },
+                    "externalLink": { "type": "string", "description": "额外链接" },
+                    "id": { "type": "integer", "format": "int64" },
+                    "itemImage": { "type": "string", "description": "itemImage" },
+                    "itemName": { "type": "string", "description": "itemName名字" },
+                    "reqNo": { "type": "string" },
+                    "tokenId": { "type": "string", "description": "tokenId" },
+                    "tokenType": { "type": "string", "description": "token类型" }
+                }
+            },
+            "ItemResp": {
+                "title": "ItemResp",
+                "type": "object",
+                "properties": {
+                    "colType": { "type": "string" },
+                    "collectId": { "type": "integer", "format": "int64" },
+                    "contractAddr": { "type": "string" },
+                    "externalLink": { "type": "string" },
+                    "id": { "type": "integer", "format": "int64" },
+                    "itemImage": { "type": "string" },
+                    "itemName": { "type": "string" },
+                    "memo": { "type": "string" },
+                    "tokenId": { "type": "string" }
+                }
+            },
+            "OpenLoginReq": {
+                "title": "OpenLoginReq",
+                "required": ["addr"],
+                "type": "object",
+                "properties": { "addr": { "type": "string", "description": "账户地址" }, "reqNo": { "type": "string" } }
+            },
+            "OpenLoginResp": {
+                "title": "OpenLoginResp",
+                "type": "object",
+                "properties": {
+                    "state": { "type": "integer", "description": "账户白名单类型：0 - 正常；1 - 白名单；2 - 黑名单", "format": "int32" },
+                    "token": { "type": "string", "description": "token" }
+                }
+            },
+            "PageInfo«CollectionResp»": {
+                "title": "PageInfo«CollectionResp»",
+                "type": "object",
+                "properties": {
+                    "endRow": { "type": "integer", "format": "int64" },
+                    "hasNextPage": { "type": "boolean" },
+                    "hasPreviousPage": { "type": "boolean" },
+                    "isFirstPage": { "type": "boolean" },
+                    "isLastPage": { "type": "boolean" },
+                    "list": { "type": "array", "items": { "$ref": "#/components/schemas/CollectionResp" } },
+                    "navigateFirstPage": { "type": "integer", "format": "int32" },
+                    "navigateLastPage": { "type": "integer", "format": "int32" },
+                    "navigatePages": { "type": "integer", "format": "int32" },
+                    "navigatepageNums": { "type": "array", "items": { "type": "integer", "format": "int32" } },
+                    "nextPage": { "type": "integer", "format": "int32" },
+                    "pageNum": { "type": "integer", "format": "int32" },
+                    "pageSize": { "type": "integer", "format": "int32" },
+                    "pages": { "type": "integer", "format": "int32" },
+                    "prePage": { "type": "integer", "format": "int32" },
+                    "size": { "type": "integer", "format": "int32" },
+                    "startRow": { "type": "integer", "format": "int64" },
+                    "total": { "type": "integer", "format": "int64" }
+                }
+            },
+            "PageInfo«ItemResp»": {
+                "title": "PageInfo«ItemResp»",
+                "type": "object",
+                "properties": {
+                    "endRow": { "type": "integer", "format": "int64" },
+                    "hasNextPage": { "type": "boolean" },
+                    "hasPreviousPage": { "type": "boolean" },
+                    "isFirstPage": { "type": "boolean" },
+                    "isLastPage": { "type": "boolean" },
+                    "list": { "type": "array", "items": { "$ref": "#/components/schemas/ItemResp" } },
+                    "navigateFirstPage": { "type": "integer", "format": "int32" },
+                    "navigateLastPage": { "type": "integer", "format": "int32" },
+                    "navigatePages": { "type": "integer", "format": "int32" },
+                    "navigatepageNums": { "type": "array", "items": { "type": "integer", "format": "int32" } },
+                    "nextPage": { "type": "integer", "format": "int32" },
+                    "pageNum": { "type": "integer", "format": "int32" },
+                    "pageSize": { "type": "integer", "format": "int32" },
+                    "pages": { "type": "integer", "format": "int32" },
+                    "prePage": { "type": "integer", "format": "int32" },
+                    "size": { "type": "integer", "format": "int32" },
+                    "startRow": { "type": "integer", "format": "int64" },
+                    "total": { "type": "integer", "format": "int64" }
+                }
+            },
+            "SystemDictReq": {
+                "title": "SystemDictReq",
+                "required": ["value"],
+                "type": "object",
+                "properties": { "memo": { "type": "string", "description": "Collection类型" }, "value": { "type": "string", "description": "Collection类型" } }
+            },
+            "SystemDictionaryResp": {
+                "title": "SystemDictionaryResp",
+                "type": "object",
+                "properties": {
+                    "id": { "type": "integer", "format": "int64" },
+                    "itemKeyDesc": { "type": "string" },
+                    "itemValue": { "type": "string" },
+                    "memo": { "type": "string" }
+                }
+            }
+        },
+        "securitySchemes": { "Authorization": { "type": "apiKey", "name": "Authorization", "in": "header" } }
+    }
+}
