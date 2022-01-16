@@ -129,7 +129,7 @@ const Home = () => {
                             subtitle={
                                 <Box>
                                     <Box sx={{ width: "100%", borderBottom: "1px solid #ccc" }} pb={2}>
-                                        <Grid container rowSpacing={1}>
+                                        <Grid container rowSpacing={1} sx={{margin:'12px 0 '}}>
                                             <Grid item xs={6}>
                                                 <Item1>心脏计划</Item1>
                                             </Grid>
@@ -137,10 +137,10 @@ const Home = () => {
                                                 <Item1>最高出价</Item1>
                                             </Grid>
                                             <Grid item xs={6} sx={{ textAlign: "left" }}>
-                                                <Item2>22</Item2>
+                                                <Item2>心脏计划 #223</Item2>
                                             </Grid>
                                             <Grid item xs={6} sx={{ textAlign: "right" }}>
-                                                <Item2>3</Item2>
+                                                <Item2>0.4052</Item2>
                                             </Grid>
                                         </Grid>
                                     </Box>
