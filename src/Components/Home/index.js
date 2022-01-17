@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
@@ -9,9 +9,9 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import { useHistory } from "react-router-dom";
-import Container from '@mui/material/Container';
-
-const ua = navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)
+import Container from "@mui/material/Container";
+import request from "../../utils/axios";
+const ua = navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
 const MYContainer = styled(Container)`
     margin-top: 120px;
 `;
@@ -101,9 +101,15 @@ const itemData = [
 ];
 const Home = () => {
     const history = useHistory();
+    useEffect(() => {
+        request({
+            method: "get",
+            url:'/users'
+        });
+    }, []);
     return (
-        <MYContainer maxWidth={'xl'}>
-            <ImageList sx={{  height: "100%" }} cols={ua?1:4} gap={20}>
+        <MYContainer maxWidth={"xl"}>
+            <ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
                 {itemData.map((item) => (
                     <ImageListItem
                         key={item.img}
@@ -129,7 +135,7 @@ const Home = () => {
                             subtitle={
                                 <Box>
                                     <Box sx={{ width: "100%", borderBottom: "1px solid #ccc" }} pb={2}>
-                                        <Grid container rowSpacing={1} sx={{margin:'12px 0 '}}>
+                                        <Grid container rowSpacing={1} sx={{ margin: "12px 0 " }}>
                                             <Grid item xs={6}>
                                                 <Item1>心脏计划</Item1>
                                             </Grid>
@@ -146,9 +152,13 @@ const Home = () => {
                                     </Box>
                                     <ConDiv>
                                         {/* <Stack spacing={1} sx={{width:'40%',margin:'auto'}} > */}
-                                        <Button variant="contained" sx={{ background: "#56ADBB", borderRadius: "10px" }} onClick={()=>{
-                                          history.push('/home/sell')
-                                        }}>
+                                        <Button
+                                            variant="contained"
+                                            sx={{ background: "#56ADBB", borderRadius: "10px" }}
+                                            onClick={() => {
+                                                history.push("/home/sell");
+                                            }}
+                                        >
                                             出价
                                         </Button>
                                         {/* </Stack> */}
