@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import Button from "@mui/material/Button";
@@ -22,34 +22,43 @@ import yingyue from "./image/yingyue.png";
 import yundong from "./image/yundong.png";
 import NEW from "./image/NEW.png";
 import ListItemIcon from "@mui/material/ListItemIcon";
+import { login } from "../../../service/bbq";
+import { connect } from "react-redux";
 const ntfList = [
     {
         title: "所有",
         img: suoyou,
+        type:''
     },
     {
         title: "最新",
         img: NEW,
+        type:''
     },
     {
         title: "摄影",
         img: sheying,
+        type:''
     },
     {
         title: "音乐",
         img: yingyue,
+        type:''
     },
     {
         title: "收藏品",
         img: shoucangping,
+        type:''
     },
     {
         title: "艺术",
         img: yishu,
+        type:''
     },
     {
         title: "运动",
         img: yundong,
+        type:''
     },
 ];
 
@@ -82,90 +91,105 @@ const Item = styled.li`
     cursor: pointer;
 `;
 
-const Links = () => {
-  const [nftType, setNftType] = React.useState(null);
-  const [userInfo, setUserInfo] = React.useState(null);
-  // 登录状态
-  const [userState, setUserState] = React.useState(getLocalStorage('walletaccount'));
-  // 跳转路由
-  const history = useHistory();
+const Links = ( {colTyple,dispatch}) => {
+    const [nftType, setNftType] = React.useState(null);
+    const [userInfo, setUserInfo] = React.useState(null);
+    // 登录状态
+    const [userState, setUserState] = React.useState(getLocalStorage("walletaccount"));
+    // 跳转路由
+    const history = useHistory();
 
-  // EXPLORE nft 类型选择
-  const openNftType = Boolean(nftType);
-  const handleNftType = (event) => {
-    setNftType(event.currentTarget);
-  };
-  const handleCloseNftType = () => {
-    setNftType(null);
-  };
+    useEffect(() => {
+        //登陆 TOTO
+        const params = {
+            data: {
+                addr: "1",
+                reqNo: "0x9B7b3021c0D3034F1bC6d9FB11536d0F817AfBBB",
+            },
+            method: "post",
+        };
+        login(params);
+    }, []);
+    // EXPLORE nft 类型选择
+    const openNftType = Boolean(nftType);
+    const handleNftType = (event) => {
+        setNftType(event.currentTarget);
+    };
+    const handleCloseNftType = () => {
+        setNftType(null);
+    };
 
-  // ACCOUNT 账号信息
-  const open = Boolean(userInfo);
-  const handleClick = (event) => {
-    setUserInfo(event.currentTarget);
-  };
-  const handleClose = () => {
-    setUserInfo(null);
-  };
+    // ACCOUNT 账号信息
+    const open = Boolean(userInfo);
+    const handleClick = (event) => {
+        setUserInfo(event.currentTarget);
+    };
+    const handleClose = () => {
+        setUserInfo(null);
+    };
 
+    // type 是 nft 类型为变量
+    function handleNftsType(type) {
+        history.push("/assets/type");
+        handleCloseNftType(null);
+    }
+    // 我的集合
+    function handleList(type) {
+        dispatch({
+            type:'LINK',
+            payload:type
+        })
+        handleClose();
+    }
+    // 我的集合
+    function handleMyCollection() {
+        history.push("/collections");
+        handleClose();
+    }
 
-  // type 是 nft 类型为变量
-  function handleNftsType(type) {
-    history.push('/assets/type')
-    handleCloseNftType(null);
-  }
-        // 我的集合
-        function handleList() {
-            history.push("/home/item");
-            handleClose()
-        }
-  // 我的集合
-  function handleMyCollection() {
-    history.push("/collections");
-    handleClose()
-  }
+    // 登出
+    function handleLogOut() {
+        removeLocalStorage("walletaccount");
+        setUserState(null);
+        handleClose();
+    }
 
-  // 登出
-  function handleLogOut() {
-    removeLocalStorage('walletaccount');
-    setUserState(null)
-    handleClose()
-  }
+    // 链接钱包
+    function connectWallent() {
+        $web3js
+            .connectMetaMask()
+            .then((res) => {
+                if (!getLocalStorage("walletaccount")) {
+                    loadingData();
+                }
+            })
+            .catch((error) => {
+                // this.$toast(this.$t("lang.connectfail") + error);
+                console.log(error);
+            });
+    }
 
-  // 链接钱包
-  function connectWallent() {
-    $web3js.connectMetaMask().then((res) => {
-      if (!getLocalStorage("walletaccount")) {
-        loadingData();
-      }
-    })
-      .catch((error) => {
-        // this.$toast(this.$t("lang.connectfail") + error);
-        console.log(error);
-      });
-  }
+    function loadingData() {
+        $web3js.connectWallet().finally(() => {
+            const address = $web3js.getCurrWalletAddress();
+            //const address = '0xA19Cf83903B61E327f46149c0bF986B50F8e249c';
+            // 链接钱包成功之后，弹出提示信息
+            // ActionAlerts();
+            setLocalStorage("walletaccount", address);
+            setUserState(address);
+        });
+    }
 
-  function loadingData() {
-    $web3js.connectWallet().finally(() => {
-      const address = $web3js.getCurrWalletAddress();
-      //const address = '0xA19Cf83903B61E327f46149c0bF986B50F8e249c';
-      // 链接钱包成功之后，弹出提示信息
-      // ActionAlerts();
-      setLocalStorage("walletaccount", address);
-      setUserState(address);
-    });
-  }
-
-  function ActionAlerts() {
-    return (
-      <Stack sx={{ width: '100%', top: '90px' }} spacing={2}>
-        <Alert severity="success">
-          <AlertTitle>Success</AlertTitle>
-            This is a success alert — <strong>check it out!</strong>
-        </Alert>
-      </Stack>
-    );
-  }
+    function ActionAlerts() {
+        return (
+            <Stack sx={{ width: "100%", top: "90px" }} spacing={2}>
+                <Alert severity="success">
+                    <AlertTitle>Success</AlertTitle>
+                    This is a success alert — <strong>check it out!</strong>
+                </Alert>
+            </Stack>
+        );
+    }
 
     // 链接钱包
     function connectWallent() {
@@ -224,7 +248,7 @@ const Links = () => {
                     资源
                 </Button>
                 <Menu
-                    sx={{ top: "55px", left: "-50px", }}
+                    sx={{ top: "55px", left: "-50px" }}
                     id="demo-positioned-menu"
                     aria-labelledby="demo-positioned-button"
                     anchorEl={nftType}
@@ -242,7 +266,9 @@ const Links = () => {
                     {ntfList.map((item, index) => {
                         const dom = (
                             <div>
-                                <MenuItem onClick={handleList}>
+                                <MenuItem onClick={()=>{
+                                    handleList(item.type)
+                                }} key ={index}>
                                     <ListItemIcon key={item.img}>
                                         <img
                                             src={item.img}
@@ -304,4 +330,10 @@ const Links = () => {
     );
 };
 
-export default Links;
+const mapStateToProps = ({linkReducer}) => {
+    return {
+        colTyple: linkReducer.colTyple,
+    };
+};
+
+export default connect(mapStateToProps)(Links);

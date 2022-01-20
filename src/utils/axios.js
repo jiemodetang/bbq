@@ -1,7 +1,8 @@
 import axios from "axios"; // 引入axios
 import Qs from "qs"; // 引入qs模块，用来序列化post类型的数据
 import MockAdapter from "axios-mock-adapter";
-import {dealMock} from "../myMock";
+import { dealMock } from "../myMock";
+import {apiConfig } from '../service/mmp'
 
 let inError = false;
 // 创建axios实例
@@ -20,15 +21,15 @@ const instance = axios.create({
         function (data) {
             console.log(data);
             // 对 data 进行任意转换处理
-            return JSON.parse(data);
+            return data;
         },
     ],
     headers: {
         "Cache-Control": "no-cache",
     },
 });
-var mock = new MockAdapter(instance);
-if(process.env.NODE_ENV === "development"){
+if (apiConfig.isMock) {
+    var mock = new MockAdapter(instance);
     dealMock(mock);
 }
 // 实例添加请求拦截器
@@ -40,9 +41,11 @@ instance.interceptors.request.use(
                 ? {
                       Accept: "application/json",
                       "Content-Type": "application/json; charset=UTF-8",
+                      "Access-Control-Allow-Origin": "*",
                   }
                 : {
-                      "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
+                      "Content-Type": "application/json; charset=UTF-8",
+                      "Access-Control-Allow-Origin": "*",
                   },
             config.headers
         );
@@ -51,20 +54,7 @@ instance.interceptors.request.use(
         if (config.method === "post") {
             const contentType = config.headers["Content-Type"];
             // 根据Content-Type转换data格式
-            if (contentType) {
-                if (contentType.includes("multipart")) {
-                    // 类型 'multipart/form-data;'
-                    // config.data = data;
-                } else if (contentType.includes("json")) {
-                    // 类型 'application/json;'
-                    // 服务器收到的raw body(原始数据) "{name:"nowThen",age:"18"}"（普通字符串）
-                    config.data = JSON.stringify(config.data);
-                } else {
-                    // 类型 'application/x-www-form-urlencoded;'
-                    // 服务器收到的raw body(原始数据) name=nowThen&age=18
-                    config.data = Qs.stringify(config.data);
-                }
-            }
+            config.data = JSON.stringify(config.data);
         }
         return Promise.resolve(config);
     },
@@ -106,16 +96,15 @@ const request = async function (opt) {
     const options = {
         method: "get",
         ifHandleError: true, // 是否统一处理接口失败(提示)
-        proxy: {
-            host: "127.0.0.1",
-            // port: 9000,
-        },
         ...opt,
     };
-      options.baseURL =  'http://localhost:3000'+'/api/v1/cqc/web'
+    const { myUrl, qz } = apiConfig;
+    if (process.env.NODE_ENV === "production") {
+        options.baseURL = myUrl.productionUrl + qz;
+    }
+    console.log(options,2)
     try {
         const res = await instance(options);
-        //可以处理全局统一error提示
         return res;
     } catch (err) {
         if (options.ifHandleError) {

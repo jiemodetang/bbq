@@ -156,3 +156,8 @@ export const isMobile = function() {
   );
   return flag;
 };
+
+export const  getQueryStringRegExp = function(name) { 
+  var reg = new RegExp("(^|\\?|&)"+ name +"=([^&]*)(\\s|&|$)", "i");   
+  return reg.test(window.location.href) ? unescape(RegExp.$2.replace(/\+/g, " ")) : ""; 
+};

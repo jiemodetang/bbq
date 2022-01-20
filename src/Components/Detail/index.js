@@ -34,6 +34,10 @@ import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import CommentIcon from "@mui/icons-material/Comment";
+import { postDetail } from "../../service/bbq";
+import {getQueryStringRegExp} from "../../utils/index";
+import _ from "lodash";
+
 
 const Container = styled.div`
     margin: 120px 210px 20px 210px;
@@ -95,16 +99,29 @@ const Detail = () => {
 
         setChecked(newChecked);
     };
+    React.useEffect(() => {
+        const i = _.get(getQueryStringRegExp('id'),['data','id'])
+        const params = {
+            data: {
+                id:i
+            },
+            method:'post'
+        };
+        postDetail(params).then(res=>{
+
+        })
+     
+    }, [])
     return (
         <Container>
-            <Paper sx={{ p: 20, margin: "auto", maxWidth: 1260, paddingTop: "0px", boxShadow: "none" }}>
+            <Paper sx={{ p: 20, margin: "auto", maxWidth: 1260, paddingTop: "0px", boxShadow: "none",padding:0 }}>
                 <Grid container spacing={2}>
-                    <Grid item>
+                    <Grid item xs={4}>
                         <ButtonBase sx={{ width: 414, height: 414, background: "#fcc" }}>
                             <Img src={"https://img2.baidu.com/it/u=3752982084,4280598468&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500"} />
                         </ButtonBase>
                     </Grid>
-                    <Grid item xs={12} sm container>
+                    <Grid item xs={8} sm container>
                         <Grid item xs container direction="column" spacing={2}>
                             <Grid sx={{ marginLeft: "30px", marginTop: "20px" }}>
                                 <Typography gutterBottom variant="subtitle1" component="div" sx={{ color: "#56ADBB", fontSize: "14px" }}>

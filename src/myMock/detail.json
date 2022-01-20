@@ -1,0 +1,14 @@
+{
+    "code": "string",
+    "data": {
+      "colImage": "string",
+      "colName": "string",
+      "colOwners": 0,
+      "colType": "string",
+      "externalLink": "string",
+      "id": 0,
+      "itemNums": 0,
+      "memo": "string"
+    },
+    "msg": "string"
+  }
