@@ -115,10 +115,12 @@ const Detail = () => {
         <Container>
             <Paper sx={{ p: 20, margin: "auto", maxWidth: 1260, paddingTop: "0px", boxShadow: "none",padding:0 }}>
                 <Grid container spacing={2}>
-                    <Grid item xs={4}>
-                        <ButtonBase sx={{ width: 414, height: 414, background: "#fcc" }}>
-                            <Img src={"https://img2.baidu.com/it/u=3752982084,4280598468&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500"} />
-                        </ButtonBase>
+                    <Grid item xs={4} sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                    }}>
+                         <Img src={"https://img2.baidu.com/it/u=3752982084,4280598468&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500"} />
                     </Grid>
                     <Grid item xs={8} sm container>
                         <Grid item xs container direction="column" spacing={2}>

@@ -47,9 +47,9 @@ export const   dealMock = (mock)=> {
         data: [detgetMyCollectionsail],
     });
     
-    // mock.onGet("/api/v1/cqc/web/collection/getAllCollections").reply(200, {
-    //     users: [userJson],
-    // });
+    mock.onGet("/api/v1/cqc/web/sysDict/getAllColType").reply(200, {
+        users: [userJson],
+    });
     // mock.onGet("/api/v1/cqc/web/collection/getAllCollections").reply(200, {
     //     users: [userJson],
     // });
