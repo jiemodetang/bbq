@@ -19,9 +19,9 @@ const instance = axios.create({
     // `transformResponse` 在传递给 then/catch 前，允许修改响应数据
     transformResponse: [
         function (data) {
-            console.log(data);
+            // console.log(JSON.parse(data));
             // 对 data 进行任意转换处理
-            return data;
+            return apiConfig.isMock?data:JSON.parse(data);
         },
     ],
     headers: {
@@ -42,10 +42,12 @@ instance.interceptors.request.use(
                       Accept: "application/json",
                       "Content-Type": "application/json; charset=UTF-8",
                       "Access-Control-Allow-Origin": "*",
+                      'Authorization': apiConfig.token
                   }
                 : {
                       "Content-Type": "application/json; charset=UTF-8",
                       "Access-Control-Allow-Origin": "*",
+                      'Authorization': apiConfig.token
                   },
             config.headers
         );
@@ -94,7 +96,7 @@ instance.interceptors.response.use(
 
 const request = async function (opt) {
     const options = {
-        method: "get",
+        method: "post",
         ifHandleError: true, // 是否统一处理接口失败(提示)
         ...opt,
     };
@@ -102,7 +104,6 @@ const request = async function (opt) {
     if (process.env.NODE_ENV === "production") {
         options.baseURL = myUrl.productionUrl + qz;
     }
-    console.log(options,2)
     try {
         const res = await instance(options);
         return res;

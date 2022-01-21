@@ -10,6 +10,9 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
 import Tp from "./tp.png";
+import { useForm } from "react-hook-form";
+
+
 const Container = styled.div`
     margin: 120px 210px 20px 210px;
 `;
@@ -28,17 +31,21 @@ const TpImg = styled.img`
 
 function Collections() {
     const [age, setAge] = React.useState("");
-
+    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const onSubmit = data => console.log(data);
     // 改变下拉框选择的值
     const handleChangeType = (event) => {
         setAge(event.target.value);
     };
 
     // 创建按钮
-    const createCollections = () => {};
+    const createCollections = () => {
+        handleSubmit(onSubmit)
+    };
 
     return (
         <Container>
+            <form onSubmit={handleSubmit(onSubmit)}>
             <Typography variant="h4" gutterBottom component="div">
                 创建一个集合
             </Typography>
@@ -56,15 +63,14 @@ function Collections() {
                 </Hs>
             </Typography>
             <Typography component="div"  sx={{mt:5}}>
-
                 <TpImg src={Tp} />
             </Typography>
 
             <h4>名称  <Xh>*</Xh></h4>
             <TextField fullWidth id="outlined-basic" label="集合名称" variant="outlined" />
-
+            {/* <input {...register("exampleRequired", { required: true })} /> */}
             <h4>描述</h4>
-            <TextField fullWidth id="outlined-multiline-flexible" label="Description" multiline maxRows={4} />
+            <TextField fullWidth id="outlined-multiline-flexible" label="Description" multiline maxRows={4} {...register("exampleRequired", { required: true })} />
 
             <h4>类型</h4>
             <Box sx={{ minWidth: 120 }}>
@@ -88,10 +94,11 @@ function Collections() {
             </Box>
 
             <CreateDiv>
-                <Button variant="contained" onClick={createCollections}>
+                <Button variant="contained"  type="submit" onPress={ createCollections}>
                     创建
                 </Button>
             </CreateDiv>
+            </form>
         </Container>
     );
 }

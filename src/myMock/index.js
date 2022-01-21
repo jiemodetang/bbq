@@ -37,13 +37,13 @@
 
 
 export const   dealMock = (mock)=> {
-    mock.onGet("/api/v1/cqc/web/collection/getAllCollections").reply(200, {
+    mock.onPost("/api/v1/cqc/web/collection/getAllCollections").reply(200, {
         data: [getAllCollectionsList],
     });
-    mock.onGet("/api/v1/cqc/web/collection/detail").reply(200, {
+    mock.onPost("/api/v1/cqc/web/collection/detail").reply(200, {
         data: [detail],
     });
-    mock.onGet("/api/v1/cqc/web/collection/getMyCollections").reply(200, {
+    mock.onPost("/api/v1/cqc/web/collection/getMyCollections").reply(200, {
         data: [detgetMyCollectionsail],
     });
     

@@ -30,4 +30,5 @@ export const apiConfig = {
     v2Api:'/api/v1/cqc/web-open',
     productionUrl: "http://54.169.111.234:8081",
     isMock: true,
+    token:''
 };

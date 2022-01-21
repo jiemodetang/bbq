@@ -105,7 +105,6 @@ const Detail = () => {
             data: {
                 id:i
             },
-            method:'post'
         };
         postDetail(params).then(res=>{
 

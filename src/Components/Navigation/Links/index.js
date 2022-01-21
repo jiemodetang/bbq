@@ -24,6 +24,9 @@ import NEW from "./image/NEW.png";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { login } from "../../../service/bbq";
 import { connect } from "react-redux";
+import {apiConfig } from '../../../service/mmp'
+import _ from "lodash";
+
 const ntfList = [
     {
         title: "所有",
@@ -100,15 +103,7 @@ const Links = ( {colTyple,dispatch}) => {
     const history = useHistory();
 
     useEffect(() => {
-        //登陆 TOTO
-        const params = {
-            data: {
-                addr: "1",
-                reqNo: "0x9B7b3021c0D3034F1bC6d9FB11536d0F817AfBBB",
-            },
-            method: "post",
-        };
-        login(params);
+       
     }, []);
     // EXPLORE nft 类型选择
     const openNftType = Boolean(nftType);
@@ -193,6 +188,17 @@ const Links = ( {colTyple,dispatch}) => {
 
     // 链接钱包
     function connectWallent() {
+         //登陆 TOTO 暂时搞一手
+         const params = {
+            data: {
+                addr: "0x9B7b3021c0D3034F1bC6d9FB11536d0F817AfBBB",
+                reqNo: "1",
+            },
+        };
+        login(params).then(res=>{
+            apiConfig.token = _.get(res,['data','token'])
+        });
+
         $web3js
             .connectMetaMask()
             .then((res) => {
