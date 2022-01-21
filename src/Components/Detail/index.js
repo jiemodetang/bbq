@@ -215,7 +215,7 @@ const Detail = () => {
                             <AccordionDetails>
                                 <Typography>
                                     <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-                                        {tableListMMP.map((value) => {
+                                        {tableListMMP.map((value,index) => {
                                             const labelId = `checkbox-list-label-${value}`;
 
                                             return (
@@ -226,6 +226,7 @@ const Detail = () => {
                                                             <CommentIcon />
                                                         </IconButton>
                                                     }
+                                                    key={index}
                                                     disablePadding
                                                 >
                                                     <ListItemButton role={undefined} onClick={handleToggle(value)} dense>

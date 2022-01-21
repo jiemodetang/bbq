@@ -28,6 +28,14 @@ export const getMyList = (payload)=>{
         ...payload
     })
 }
+export const getCollectionItemList = (payload)=>{
+    return  request({
+        url: apiConfig.v1Api +'/getMyCollections',
+        ...payload
+    })
+}
+
+
 
 
 ///=---------------------------------------------------------------------------------------

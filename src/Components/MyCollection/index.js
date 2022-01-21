@@ -144,7 +144,7 @@ handleChange = (event, value) => {
                             alt={item.colName}
                             loading="lazy"
                             onClick={() => {
-                                this.props.history.push("/home/detail");
+                                this.props.history.push("/collection/item");
                             }}
                             style={{
                               height:'200px'

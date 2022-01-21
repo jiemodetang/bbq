@@ -65,7 +65,7 @@ const Home = ({ colTyple }) => {
             const data = _.get(res, ["data", 0, "pageInfo", "list"], []);
             const t = _.get(res, ["data", 0, "pageInfo", "total"]);
             setCount(Math.ceil(t / pageSize));
-            setItemData(_.chunk(data, 12));
+            setItemData(_.chunk(data, pageSize));
         });
     }, [colTyple]);
     return (
@@ -89,7 +89,7 @@ const Home = ({ colTyple }) => {
                                 alt={item.colName}
                                 loading="lazy"
                                 onClick={() => {
-                                    history.push("/home/detail?id=" + item.id);
+                                    history.push("/collection/detail?id=" + item.id);
                                 }}
                             />
                             <ImageListItemBar
@@ -141,7 +141,7 @@ const Home = ({ colTyple }) => {
                   
                 }}
             >
-                <Pagination count={count} onChange={handleChange} />
+                {!_.isEmpty(itemData) && <Pagination count={count} onChange={handleChange} />}
             </Box>
         </MYContainer>
     );

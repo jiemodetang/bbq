@@ -20,6 +20,8 @@ import createCollection from "../CreateCollection";
 import Footer from "../Footer";
 
 import Drcollection from "../Drcollection";
+import CreateItem from "../CreateItem";
+
 const NB = () => {
     return 111;
 };
@@ -31,14 +33,18 @@ const App = () => {
             <Switch>
                 <Route exact path="/" component={Home} />
                 <Route exact path="/NB" component={NB} />
-                <Route exact path="/home/detail" component={Detail} />
+                <Route exact path="/collection/detail" component={Detail} />
                 <Route exact path="/home/sell" component={Sell} />
                 <Route exact path="/assets/type" component={assets} />
-                <Route exact path="/home/item" component={Item} />
+                <Route exact path="/collection/item" component={Item} />
                 <Route exact path="/collections" component={collections} />
 
                 <Route exact path="/collection/create" component={createCollection} />
                 <Route exact path="/collection/dr" component={Drcollection} />
+
+                <Route exact path="/collection/createItem" component={CreateItem} />
+
+                
             </Switch>
             <Footer></Footer>
         </div>

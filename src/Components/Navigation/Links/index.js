@@ -130,10 +130,12 @@ const Links = ( {colTyple,dispatch}) => {
     }
     // 我的集合
     function handleList(type) {
+        history.push("/");
         dispatch({
             type:'LINK',
             payload:type
         })
+        
         handleClose();
     }
     // 我的集合
@@ -281,7 +283,7 @@ const Links = ( {colTyple,dispatch}) => {
                                             alt={item.title}
                                             loading="lazy"
                                             onClick={() => {
-                                                // history.push("/home/detail");
+                                                // history.push("/collection/detail");
                                             }}
                                         ></img>
                                     </ListItemIcon>
