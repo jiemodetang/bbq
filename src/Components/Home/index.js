@@ -11,7 +11,7 @@ import Stack from "@mui/material/Stack";
 import { useHistory } from "react-router-dom";
 import Container from "@mui/material/Container";
 // import request from "../../utils/index";
-import { getHomeList,getI } from "../../service/bbq";
+import { getHomeList, getI } from "../../service/bbq";
 import _ from "lodash";
 import { connect } from "react-redux";
 import Pagination from "@mui/material/Pagination";
@@ -55,17 +55,17 @@ const Home = ({ colTyple }) => {
     };
 
     const history = useHistory();
-    
+
     useEffect(() => {
-        
+
         const params = {
             data: {
                 colType: colTyple,
             },
         };
         getI(params).then((res) => {
-            const data = _.get(res, [ "pageInfo", "list"], []);
-            const t = _.get(res, [ "pageInfo", "total"]);
+            const data = _.get(res, ["pageInfo", "list"], []);
+            const t = _.get(res, ["pageInfo", "total"]);
             setCount(Math.ceil(t / pageSize));
             setItemData(_.chunk(data, pageSize));
         });
@@ -124,7 +124,7 @@ const Home = ({ colTyple }) => {
                                                     history.push("/collection/detail?id=" + item.id);
                                                 }}
                                             >
-                                                出售
+                                                购买
                                             </Button>
                                             {/* </Stack> */}
                                         </ConDiv>
@@ -137,11 +137,11 @@ const Home = ({ colTyple }) => {
             </ImageList>
             <Box
                 sx={{
-                  display:'flex',
-                  justifyContent: 'end',
-                  margin:' 20px',
-              
-                  
+                    display: 'flex',
+                    justifyContent: 'end',
+                    margin: ' 20px',
+
+
                 }}
             >
                 {!_.isEmpty(itemData) && <Pagination count={count} onChange={handleChange} />}

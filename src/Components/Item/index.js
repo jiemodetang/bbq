@@ -31,7 +31,7 @@ import { apiConfig } from "../../service/mmp";
 import {getQueryStringRegExp} from '../../utils'
 import DeleteIcon from '@mui/icons-material/Delete';
 const Container = styled.div`
-    // margin: 120px 210px 20px 210px;
+    //margin: 100px 210px 20px 210px;
 `;
 const Box1 = styled(Box)`
     display: flex;

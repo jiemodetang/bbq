@@ -21,7 +21,7 @@ import Typography from "@mui/material/Typography";
 import { apiConfig } from "../../service/mmp";
 
 const Container = styled.div`
-    margin: 120px 210px 20px 210px;
+   margin: 100px 210px 20px 210px;
 `;
 const MYContainer = styled(Container)`
     margin-top: 120px;
@@ -130,11 +130,11 @@ class Collections extends React.Component {
                     <Button variant="contained" onClick={this.createCollections.bind(this)}>
                         创建一个集合
                     </Button>
-                    <Button variant="outlined" onClick={this.goDr}>
+                    {/* <Button variant="outlined" onClick={this.goDr}>
                         导入智能合约
-                    </Button>
+                    </Button> */}
                 </Stack>
-                <div>
+                <div style={{height:'350px'}}>
                     <ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
                         {!_.isEmpty(this.state.data) &&
                             this.state.data[this.state.page].map((item) => (

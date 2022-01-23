@@ -68,8 +68,8 @@ const Icon = ({ toggle, show }) => {
                 </Grid>
             </Box>
             <ArrowContainer onClick={() => toggle()} state={show}>
-                            <KeyboardArrowDownIcon style={{ fontSize: "30px" }} />
-                        </ArrowContainer>
+                <KeyboardArrowDownIcon style={{ fontSize: "30px" }} />
+            </ArrowContainer>
 
             <Text>Here my logo</Text>
         </Container>

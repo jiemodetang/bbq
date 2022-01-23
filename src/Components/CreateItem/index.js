@@ -14,10 +14,10 @@ import { useForm } from "react-hook-form";
 
 
 const Container = styled.div`
-    margin: 120px 210px 20px 210px;
+   margin: 100px 210px 20px 210px;
 `;
 const CreateDiv = styled.div`
-    margin-top: 40px;
+    margin: 30px 0 40px;
 `;
 const Xh = styled.span`
     color: red;
@@ -49,7 +49,7 @@ function CreateItem() {
     return (
         <Container>
             <form onSubmit={handleSubmit(onSubmit)}>
-            <Typography variant="h4" gutterBottom component="div">
+            <Typography variant="h5" gutterBottom component="div">
                 创建一个集合
             </Typography>
             <Typography variant="body2" gutterBottom>
@@ -57,7 +57,7 @@ function CreateItem() {
                 <Hs>必填字段</Hs>
             </Typography>
 
-            <Typography variant="h5" gutterBottom component="div">
+            <Typography variant="h6" gutterBottom component="div">
                 形象标识<Xh>*</Xh>
             </Typography>
             <Typography component="div">

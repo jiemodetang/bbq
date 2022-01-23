@@ -15,10 +15,25 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormHelperText from "@mui/material/FormHelperText";
 import { useForm } from "react-hook-form";
 import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import $message from 'popular-message';
+// 合约
+import $web3js from "../../lib/contract/web3";
+import numberUtils from "../../utils/numberUtils";
+import { formartadd, removeLocalStorage, setLocalStorage, getLocalStorage, div } from "../../utils/index";
+// 出售挂单 abi
+const creatOrderJson = require("../../lib/contract/creatOrder.json");
+const nftContract = require("../../lib/contract/contractAddress");
+// 交易 abi
+const sellJson = require("../../lib/contract/sell.json");
+
 
 const Container = styled.div`
-    margin: 120px 210px 20px 210px;
+   margin: 100px 210px 20px 210px;
     // display: flex;
 `;
 const Box1 = styled(Box)`
@@ -64,15 +79,129 @@ export default function ControlledOpenSelect() {
         formState: { errors },
         setValue,
     } = useForm();
-    const chushou = () => {
+
+    const handlerSell = () => {
         handleSubmit(onSubmit);
     };
     const onSubmit = (data) => {
-        // TODO
+        // TODO 1.调后台接口，接口返回成功打开弹窗 handleOpen(),
         handleOpen();
-        console.log(data, 22);
+        // console.log(data, 22);
     };
-    console.log(232324);
+    const handlerConfirm = () => {
+        const nftContractSellAdd = nftContract.default.test.sellContract;
+        const nftContractAdd = nftContract.default.test.nftContract;
+        const myaddress = getLocalStorage("walletaccount");
+        const thisWeb3 = $web3js.getWeb3();
+        const nftConst = new thisWeb3.eth.Contract(
+            creatOrderJson.abi,
+            nftContractAdd,
+            {
+                from: myaddress,
+            }
+        );
+        nftConst.methods
+            .isApprovedForAll(myaddress, nftContractSellAdd)
+            .call({ from: myaddress })
+            .then((res) => {
+                if (!res) {
+                    approveNft();
+                } else {
+                    handleClose();
+                }
+            });
+    }
+    const approveNft = () => {
+        let getedHash = '';
+        const nftContractAdd = nftContract.default.test.nftContract;
+        const nftContractSellAdd = nftContract.default.test.sellContract;
+        connectMetaMask();
+        const web3GetWeb3 = $web3js.getWeb3();
+        const myaddress = getLocalStorage("walletaccount");
+        const approveConst = new web3GetWeb3.eth.Contract(
+            creatOrderJson.abi,
+            nftContractAdd,
+            {
+                from: myaddress,
+            }
+        );
+        let alertMesg;
+        approveConst.methods
+            .setApprovalForAll(nftContractSellAdd, true)
+            .send({ from: myaddress })
+            .on("transactionHash", function (hash) {
+                console.log('hash', hash);
+                $message.info('请耐心等待交易打包，不要退出')
+                getedHash = hash;
+            })
+            .on("receipt", function (receipt) {
+                if (receipt.transactionHash === getedHash) {
+                    console.log('approve', 'success');
+                    if (alertMesg) {
+                        alertMesg.destroy();
+                    }
+                    $message.success('授权成功！')
+                }
+            })
+            .on("error", function (error, receipt) {
+                console.log('err', error);
+                if (alertMesg) {
+                    alertMesg.destroy();
+                }
+                $message.error(error.message)
+            });
+    }
+
+    const approveNftCancle = () => {
+        let getedHash = '';
+        const nftContractAdd = nftContract.default.test.nftContract;
+        const nftContractSellAdd = nftContract.default.test.sellContract;
+        connectMetaMask();
+        const web3GetWeb3 = $web3js.getWeb3();
+        const myaddress = getLocalStorage("walletaccount");
+        const approveConst = new web3GetWeb3.eth.Contract(
+            creatOrderJson.abi,
+            nftContractAdd,
+            {
+                from: myaddress,
+            }
+        );
+        let alertMesg;
+        approveConst.methods
+            .setApprovalForAll(nftContractSellAdd, false)
+            .send({ from: myaddress })
+            .on("transactionHash", function (hash) {
+                console.log('hash', hash);
+                $message.info('请耐心等待交易打包，不要退出')
+                getedHash = hash;
+            })
+            .on("receipt", function (receipt) {
+                if (receipt.transactionHash === getedHash) {
+                    console.log('approve', 'success');
+                    if (alertMesg) {
+                        alertMesg.destroy();
+                    }
+                    $message.success('授权成功！')
+                }
+            })
+            .on("error", function (error, receipt) {
+                console.log('err', error);
+                if (alertMesg) {
+                    alertMesg.destroy();
+                }
+                $message.error(error.message)
+            });
+    }
+    const connectMetaMask = () => {
+        $web3js
+            .connectMetaMask()
+            .then((res) => {
+            })
+            .catch((err) => {
+                $message.error(err)
+            });
+    }
+    // console.log(232324);
 
     return (
         <Container>
@@ -111,7 +240,7 @@ export default function ControlledOpenSelect() {
                     </Grid>
                 </Grid>
                 <Grid container spacing={2}>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} style={{ marginTop: '15px' }}>
                         期间
                     </Grid>
                     <Grid item xs={6}>
@@ -124,9 +253,9 @@ export default function ControlledOpenSelect() {
                             <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">6个月</InputLabel>
                                 <Select labelId="demo-simple-select-label" id="demo-simple-select" value={age} label="Age" onChange={handleChange} {...register("yue")}>
-                                    <MenuItem value={10}>Ten</MenuItem>
-                                    <MenuItem value={20}>Twenty</MenuItem>
-                                    <MenuItem value={30}>Thirty</MenuItem>
+                                    <MenuItem value={10}>1个月</MenuItem>
+                                    <MenuItem value={20}>3个月</MenuItem>
+                                    <MenuItem value={30}>6个月</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box1>
@@ -134,7 +263,7 @@ export default function ControlledOpenSelect() {
                 </Grid>
 
                 <Grid container spacing={2}>
-                    <Grid item xs={12}>
+                    <Grid item xs={12} style={{ marginTop: '15px' }}>
                         费用
                     </Grid>
                     <Grid item xs={6}>
@@ -156,35 +285,42 @@ export default function ControlledOpenSelect() {
                         </FormControl>
                     </Grid>
                 </Grid>
-                <Grid container spacing={2} sx={{ mt: 10 }}>
+                <Grid container spacing={2} sx={{ mt: 1, mb: 5 }}>
                     <Grid item xs={2}>
-                        <Button variant="contained" type="submit" onPress={chushou}>
+                        <Button variant="contained" type="submit" onPress={handlerSell}>
                             出售
                         </Button>
                     </Grid>
                 </Grid>
             </form>
-            <Modal open={open} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-                <Box sx={style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        1.
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        2.
-                    </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-                        3.
-                    </Typography>
-                    <Grid container direction="row" justifyContent="space-between" alignItems="center" >
-                        <Grid item xs={6}>
-                            取消
-                        </Grid>
-                        <Grid item xs={6}>
-                            确认
-                        </Grid>
-                    </Grid>
-                </Box>
-            </Modal>
+            <Dialog
+                open={open}
+                fullWidth
+                onClose={handleClose}
+                aria-labelledby="responsive-dialog-title">
+                <DialogTitle id="responsive-dialog-title">
+                    {"确认挂单"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        1.rr
+                    </DialogContentText>
+                    <DialogContentText>
+                        2.rr
+                    </DialogContentText>
+                    <DialogContentText>
+                        3.rr
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button autoFocus onClick={handleClose}>
+                        取消
+                    </Button>
+                    <Button onClick={handlerConfirm} autoFocus>
+                        确定
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Container>
     );
 }

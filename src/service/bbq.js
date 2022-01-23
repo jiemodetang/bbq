@@ -106,7 +106,7 @@ export const detailItem = (payload)=>{
 
 export const getI = (payload)=>{
     return  request({
-        url: apiConfig.v5Api +'/getAll',
+        url: apiConfig.v2Api +'/getAllItems',
         ...payload
     })
 }

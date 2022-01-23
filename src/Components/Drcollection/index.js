@@ -15,7 +15,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import FormHelperText from "@mui/material/FormHelperText";
 
 const Container = styled.div`
-    margin: 120px 210px 20px 210px;
+   margin: 100px 210px 20px 210px;
     min-height:500px
 `;
 const Box1 = styled(Box)`

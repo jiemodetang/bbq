@@ -34,14 +34,19 @@ import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import CommentIcon from "@mui/icons-material/Comment";
-import { postDetail ,detailItem} from "../../service/bbq";
-import {getQueryStringRegExp} from "../../utils/index";
+import { postDetail, detailItem } from "../../service/bbq";
+import { getQueryStringRegExp } from "../../utils/index";
 import _ from "lodash";
 import { apiConfig } from "../../service/mmp";
-
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 const Container = styled.div`
-    margin: 120px 210px 20px 210px;
+   margin: 100px 210px 20px 210px;
 `;
 const Img = styled.img`
     width: 100%;
@@ -80,13 +85,16 @@ const rows = [
     createData("test", 356, 16.0, 49, 3.9),
 ];
 const tableListMMP = [
-  '事件','价格','来自','去向','日期'
+    '事件', '价格', '来自', '去向', '日期'
 ];
 const Detail = () => {
     const [expanded, setExpanded] = React.useState("");
     const [checked, setChecked] = React.useState([]);
     const [data, setData] = React.useState([]);
-    
+    const [open, setOpen] = React.useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     };
@@ -105,25 +113,34 @@ const Detail = () => {
     React.useEffect(() => {
         const params = {
             data: {
-                id:getQueryStringRegExp('id')
+                id: getQueryStringRegExp('id')
             },
         };
-        detailItem(params).then(res=>{
-            
-            setData(_.get(res,'data',{}))
+        detailItem(params).then(res => {
+
+            setData(_.get(res, 'data', {}))
         })
-     
+
     }, [])
+    const giveAway = () => {
+        handleOpen();
+    }
+    const handlerConfirm = () => {
+        // todo
+        console.log('关闭');
+        handleClose();
+    }
+
     return (
         <Container>
-            <Paper sx={{ p: 20, margin: "auto", maxWidth: 1260, paddingTop: "0px", boxShadow: "none",padding:0 }}>
+            <Paper sx={{ p: 20, margin: "auto", maxWidth: 1260, paddingTop: "0px", boxShadow: "none", padding: 0 }}>
                 <Grid container spacing={2}>
                     <Grid item xs={4} sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
                     }}>
-                         <Img src={apiConfig.productionUrl+ data.itemImage} />
+                        <Img src={apiConfig.productionUrl + data.itemImage} />
                     </Grid>
                     <Grid item xs={8} sm container>
                         <Grid item xs container direction="column" spacing={2}>
@@ -188,9 +205,9 @@ const Detail = () => {
                                     <CardActions>
                                         <Button1 size="small">
                                             {" "}
-                                            <ImgGGOGOGO src={qbs} style={{ width: "20px", marginRight: "8px" }} /> 出售
+                                            <ImgGGOGOGO src={qbs} style={{ width: "20px", marginRight: "8px" }} /> 购买
                                         </Button1>
-                                        <Button1 size="small">
+                                        <Button1 size="small" onClick={giveAway}>
                                             {" "}
                                             <ImgGGOGOGO src={zs} style={{ width: "20px", marginRight: "8px" }} />
                                             赠送
@@ -208,19 +225,19 @@ const Detail = () => {
                 </Grid>
             </Paper>
             <div>
-                <Accordion sx={{ marginTop: "10px" }} defaultExpanded>
+                <Accordion style={{ margin: "20px 0 35px" }} defaultExpanded>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
                         <Typography>项目活动</Typography>
                     </AccordionSummary>
                     <AccordionDetails sx={{ background: "#FBFDFF", padding: "0" }}>
-                        <Accordion expanded={expanded === "panel1"} onChange={handleChange("panel1")} sx={{ background: "#FBFDFF", margin: "20px 20px" ,borderRadius: '10px'}}>
-                            <AccordionSummary aria-controls="panel1d-content" id="panel1d-header" sx={{background: "#fff",}}>
+                        <Accordion expanded={expanded === "panel1"} onChange={handleChange("panel1")} sx={{ background: "#FBFDFF", margin: "20px 20px", borderRadius: '10px' }}>
+                            <AccordionSummary aria-controls="panel1d-content" id="panel1d-header" sx={{ background: "#fff", }}>
                                 <Typography>筛选</Typography>
                             </AccordionSummary>
                             <AccordionDetails>
                                 <Typography>
                                     <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-                                        {tableListMMP.map((value,index) => {
+                                        {tableListMMP.map((value, index) => {
                                             const labelId = `checkbox-list-label-${value}`;
 
                                             return (
@@ -259,11 +276,11 @@ const Detail = () => {
                             <Table sx={{ minWidth: 650 }} aria-label="simple table">
                                 <TableHead>
                                     <TableRow>
-                                      {
-                                        tableListMMP.map((item,index)=> <TableCell align={index>0?'right':''} key={index}>{item}</TableCell>)
-                                      }
-                                      
-                                                                  
+                                        {
+                                            tableListMMP.map((item, index) => <TableCell align={index > 0 ? 'right' : ''} key={index}>{item}</TableCell>)
+                                        }
+
+
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -284,6 +301,27 @@ const Detail = () => {
                     </AccordionDetails>
                 </Accordion>
             </div>
+            <Dialog open={open} fullWidth onClose={handleClose}>
+                <DialogTitle>赠送</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        请输入赠送此NFT的帐户地址：
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="User Address"
+                        type="text"
+                        fullWidth
+                        variant="standard"
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleClose}>取消</Button>
+                    <Button onClick={handlerConfirm}>确定</Button>
+                </DialogActions>
+            </Dialog>
         </Container>
     );
 };

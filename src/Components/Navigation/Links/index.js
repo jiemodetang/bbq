@@ -22,53 +22,53 @@ import yingyue from "./image/yingyue.png";
 import yundong from "./image/yundong.png";
 import NEW from "./image/NEW.png";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import { login ,getAllColType} from "../../../service/bbq";
+import { login, getAllColType } from "../../../service/bbq";
 import { connect } from "react-redux";
-import {apiConfig } from '../../../service/mmp'
+import { apiConfig } from '../../../service/mmp'
 import _ from "lodash";
 
 const ntfList = [
     {
         title: "所有",
         img: suoyou,
-        type:''
+        type: ''
     },
     {
         title: "最新",
         img: NEW,
-        type:''
+        type: ''
     },
     {
         title: "摄影",
         img: sheying,
-        type:''
+        type: ''
     },
     {
         title: "音乐",
         img: yingyue,
-        type:''
+        type: ''
     },
     {
         title: "收藏品",
         img: shoucangping,
-        type:''
+        type: ''
     },
     {
         title: "艺术",
         img: yishu,
-        type:''
+        type: ''
     },
     {
         title: "运动",
         img: yundong,
-        type:''
+        type: ''
     },
 ];
 
 const Container = styled.div`
     display: none;
-    margin-left: 10px;
-    width: 20%;
+    margin-left: 5px;
+    width: 24%;
     @media only screen and (min-width: 1030px) {
         display: block;
     }
@@ -94,7 +94,7 @@ const Item = styled.li`
     cursor: pointer;
 `;
 
-const Links = ( {colTyple,dispatch}) => {
+const Links = ({ colTyple, dispatch }) => {
     const [nftType, setNftType] = React.useState(null);
     const [userInfo, setUserInfo] = React.useState(null);
     // 登录状态
@@ -103,8 +103,8 @@ const Links = ( {colTyple,dispatch}) => {
     const history = useHistory();
 
     useEffect(() => {
-        const params={
-            method:'get'
+        const params = {
+            method: 'get'
         }
         getAllColType(params)
     }, []);
@@ -135,10 +135,10 @@ const Links = ( {colTyple,dispatch}) => {
     function handleList(type) {
         history.push("/");
         dispatch({
-            type:'LINK',
-            payload:type
+            type: 'LINK',
+            payload: type
         })
-        
+
         handleClose();
     }
     // 我的集合
@@ -152,6 +152,7 @@ const Links = ( {colTyple,dispatch}) => {
         removeLocalStorage("walletaccount");
         setUserState(null);
         handleClose();
+        history.push("/");
     }
 
     // 链接钱包
@@ -172,73 +173,24 @@ const Links = ( {colTyple,dispatch}) => {
     function loadingData() {
         $web3js.connectWallet().finally(() => {
             const address = $web3js.getCurrWalletAddress();
-            //const address = '0xA19Cf83903B61E327f46149c0bF986B50F8e249c';
-            // 链接钱包成功之后，弹出提示信息
-            // ActionAlerts();
-            setLocalStorage("walletaccount", address);
-            setUserState(address);
-        });
-    }
-
-    function ActionAlerts() {
-        return (
-            <Stack sx={{ width: "100%", top: "90px" }} spacing={2}>
-                <Alert severity="success">
-                    <AlertTitle>Success</AlertTitle>
-                    This is a success alert — <strong>check it out!</strong>
-                </Alert>
-            </Stack>
-        );
-    }
-
-    // 链接钱包
-    function connectWallent() {
-         //登陆 TOTO 暂时搞一手
-         const params = {
-            data: {
-                addr: "0x9B7b3021c0D3034F1bC6d9FB11536d0F817AfBBB",
-                reqNo: "1",
-            },
-        };
-        login(params).then(res=>{
-            console.log(res,22);
-            
-            apiConfig.token = _.get(res,['data','token'])
-        });
-
-        $web3js
-            .connectMetaMask()
-            .then((res) => {
-                if (!getLocalStorage("walletaccount")) {
-                    loadingData();
+            //const address = '0x9B7b3021c0D3034F1bC6d9FB11536d0F817AfBBB';
+            const params = {
+                data: {
+                    addr: address,
+                },
+            };
+            login(params).then(res => {
+                if (res.code === '0000') {
+                    apiConfig.token = _.get(res, ['data', 'token'])
+                    window._M.success('链接钱包成功');
+                    // 链接钱包成功之后，弹出提示信息
+                    setLocalStorage("walletaccount", address);
+                    setUserState(address);
+                } else {
+                    window._M.error(res.msg);
                 }
-            })
-            .catch((error) => {
-                // this.$toast(this.$t("lang.connectfail") + error);
-                console.log(error);
             });
-    }
-
-    function loadingData() {
-        $web3js.connectWallet().finally(() => {
-            const address = $web3js.getCurrWalletAddress();
-            //const address = '0xA19Cf83903B61E327f46149c0bF986B50F8e249c';
-            // 链接钱包成功之后，弹出提示信息
-            // ActionAlerts();
-            setLocalStorage("walletaccount", address);
-            setUserState(address);
         });
-    }
-
-    function ActionAlerts() {
-        return (
-            <Stack sx={{ width: "100%", top: "90px" }} spacing={2}>
-                <Alert severity="success">
-                    <AlertTitle>Success</AlertTitle>
-                    This is a success alert — <strong>check it out!</strong>
-                </Alert>
-            </Stack>
-        );
     }
 
     return (
@@ -261,7 +213,7 @@ const Links = ( {colTyple,dispatch}) => {
                     资源
                 </Button>
                 <Menu
-                    sx={{ top: "55px", left: "-50px" }}
+                    sx={{ top: "55px", left: "-40px" }}
                     id="demo-positioned-menu"
                     aria-labelledby="demo-positioned-button"
                     anchorEl={nftType}
@@ -279,9 +231,9 @@ const Links = ( {colTyple,dispatch}) => {
                     {ntfList.map((item, index) => {
                         const dom = (
                             <div>
-                                <MenuItem onClick={()=>{
+                                <MenuItem onClick={() => {
                                     handleList(item.type)
-                                }} key ={index}>
+                                }} key={index}>
                                     <ListItemIcon key={item.img}>
                                         <img
                                             src={item.img}
@@ -310,7 +262,7 @@ const Links = ( {colTyple,dispatch}) => {
                     <AccountCircleOutlinedIcon sx={{ color: "#7e7e7e" }}></AccountCircleOutlinedIcon>
                 </Button>
                 <Menu
-                    sx={{ top: "55px", left: "-50px" }}
+                    sx={{ top: "55px", left: "-40px" }}
                     id="demo-positioned-menu"
                     aria-labelledby="demo-positioned-button"
                     anchorEl={userInfo}
@@ -325,7 +277,7 @@ const Links = ( {colTyple,dispatch}) => {
                         horizontal: "left",
                     }}
                 >
-                    <MenuItem onClick={handleMyCollection}>我的收藏</MenuItem>
+                    <MenuItem onClick={handleMyCollection}>我的集合</MenuItem>
                     <MenuItem onClick={handleLogOut}>退出</MenuItem>
                 </Menu>
 
@@ -343,7 +295,7 @@ const Links = ( {colTyple,dispatch}) => {
     );
 };
 
-const mapStateToProps = ({linkReducer}) => {
+const mapStateToProps = ({ linkReducer }) => {
     return {
         colTyple: linkReducer.colTyple,
     };
