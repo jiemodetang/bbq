@@ -34,7 +34,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import CommentIcon from "@mui/icons-material/Comment";
-import { postDetail } from "../../service/bbq";
+import { postDetail ,detailItem} from "../../service/bbq";
 import {getQueryStringRegExp} from "../../utils/index";
 import _ from "lodash";
 import { apiConfig } from "../../service/mmp";
@@ -108,7 +108,7 @@ const Detail = () => {
                 id:getQueryStringRegExp('id')
             },
         };
-        postDetail(params).then(res=>{
+        detailItem(params).then(res=>{
             
             setData(_.get(res,'data',{}))
         })
@@ -123,7 +123,7 @@ const Detail = () => {
                             justifyContent: 'center',
                             alignItems: 'center',
                     }}>
-                         <Img src={apiConfig.productionUrl+ data.colImage} />
+                         <Img src={apiConfig.productionUrl+ data.itemImage} />
                     </Grid>
                     <Grid item xs={8} sm container>
                         <Grid item xs container direction="column" spacing={2}>
@@ -135,7 +135,7 @@ const Detail = () => {
                                     #{data.colType}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    拥有者：{data.colName}
+                                    拥有者：{data.itemName}
                                 </Typography>
                             </Grid>
                             <Grid sx={{ borderRadius: "20px", border: "1px solid #E4E8EB", height: "auto", padding: "10px", marginLeft: "30px", marginTop: "20px" }}>

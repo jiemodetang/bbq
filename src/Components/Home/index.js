@@ -11,7 +11,7 @@ import Stack from "@mui/material/Stack";
 import { useHistory } from "react-router-dom";
 import Container from "@mui/material/Container";
 // import request from "../../utils/index";
-import { getHomeList } from "../../service/bbq";
+import { getHomeList,getI } from "../../service/bbq";
 import _ from "lodash";
 import { connect } from "react-redux";
 import Pagination from "@mui/material/Pagination";
@@ -63,7 +63,7 @@ const Home = ({ colTyple }) => {
                 colType: colTyple,
             },
         };
-        getHomeList(params).then((res) => {
+        getI(params).then((res) => {
             const data = _.get(res, [ "pageInfo", "list"], []);
             const t = _.get(res, [ "pageInfo", "total"]);
             setCount(Math.ceil(t / pageSize));
@@ -86,7 +86,7 @@ const Home = ({ colTyple }) => {
                             }}
                         >
                             <img
-                                src={apiConfig.productionUrl + item.colImage}
+                                src={apiConfig.productionUrl + item.itemImage}
                                 // srcSet={`${item.colImage}?w=260&h=260&fit=crop&auto=format&dpr=2 2x`}
                                 alt={item.colName}
                                 loading="lazy"
@@ -107,7 +107,7 @@ const Home = ({ colTyple }) => {
                                                     <Item1>最高出价</Item1>
                                                 </Grid>
                                                 <Grid item xs={6} sx={{ textAlign: "left" }}>
-                                                    <Item2>{item.colName}</Item2>
+                                                    <Item2>{item.itemName}</Item2>
                                                 </Grid>
                                                 <Grid item xs={6} sx={{ textAlign: "right" }}>
                                                     <Item2>{item.itemNums}</Item2>
@@ -120,10 +120,11 @@ const Home = ({ colTyple }) => {
                                                 variant="contained"
                                                 sx={{ background: "#56ADBB", borderRadius: "10px" }}
                                                 onClick={() => {
-                                                    history.push("/home/sell?id=" + item.id);
+                                                    // history.push("/home/sell?id=" + item.id);
+                                                    history.push("/collection/detail?id=" + item.id);
                                                 }}
                                             >
-                                                出价
+                                                出售
                                             </Button>
                                             {/* </Stack> */}
                                         </ConDiv>

@@ -174,7 +174,22 @@ const Item = ({ collectionId }) => {
                                         <ConDiv>
                                             <Typography align={"center"}>{item.itemNums}</Typography>
                                         </ConDiv>
+                                        <ConDiv>
+                                            {/* <Stack spacing={1} sx={{width:'40%',margin:'auto'}} > */}
+                                            <Button
+                                                variant="contained"
+                                                sx={{ background: "#56ADBB", borderRadius: "10px" }}
+                                                onClick={() => {
+                                                    // history.push("/home/sell?id=" + item.id);
+                                                    history.push("/home/sell?id=" + item.id);
+                                                }}
+                                            >
+                                                出售
+                                            </Button>
+                                            {/* </Stack> */}
+                                        </ConDiv>
                                     </Box>
+                                    
                                 }
                                 position="below"
                             />
