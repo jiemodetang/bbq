@@ -18,7 +18,7 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import Pagination from "@mui/material/Pagination";
-import { getCollectionItemList } from "../../service/bbq";
+import { getCollectionItemList, getMineItem, getAllItem, deleteItem, deleteC } from "../../service/bbq";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import Typography from "@mui/material/Typography";
@@ -27,7 +27,9 @@ import Divider from "@mui/material/Divider";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
-
+import { apiConfig } from "../../service/mmp";
+import {getQueryStringRegExp} from '../../utils'
+import DeleteIcon from '@mui/icons-material/Delete';
 const Container = styled.div`
     // margin: 120px 210px 20px 210px;
 `;
@@ -71,16 +73,26 @@ const Item = ({ collectionId }) => {
     React.useEffect(() => {
         const params = {
             data: {
-                // colType: colTyple,
+                colId: getQueryStringRegExp('colId'),
             },
         };
-        getCollectionItemList(params).then((res) => {
-            const data = _.get(res, ["data", 0, "pageInfo", "list"], []);
-            const t = _.get(res, ["data", 0, "pageInfo", "total"]);
+        getMineItem(params).then((res) => {
+            const data = _.get(res, ["pageInfo", "list"], []);
+            const t = _.get(res, ["pageInfo", "total"]);
             setCount(Math.ceil(t / pageSize));
             setItemData(_.chunk(data, pageSize));
         });
+       
     }, []);
+    const d=()=>{
+            const c= {
+                data: {
+                    id: getQueryStringRegExp('colId'),
+                },
+            };
+            deleteC(c)
+    }
+
     return (
         <MYContainer maxWidth={"xl"}>
             <img src={jp} style={{ width: "100%" }} />
@@ -93,9 +105,9 @@ const Item = ({ collectionId }) => {
                         color="primary"
                         aria-label="edit"
                         size="small"
-                        sx={{ mr: 1, ml: 1 }}
+                        sx={{  ml: 1 }}
                         onClick={() => {
-                            history.push("/collection/createItem");
+                            history.push("/collection/create?colId="+ getQueryStringRegExp('colId'));
                         }}
                     >
                         <EditIcon />
@@ -104,8 +116,17 @@ const Item = ({ collectionId }) => {
                         color="primary"
                         aria-label="add"
                         size="small"
+                        onClick={d}
+                        sx={{ mr: 1, ml: 1 }}
+                    >
+                        <DeleteIcon />
+                    </Fab>
+                    <Fab
+                        color="primary"
+                        aria-label="add"
+                        size="small"
                         onClick={() => {
-                            history.push("/collection/createItem");
+                            history.push("/collection/create?type=item");
                         }}
                     >
                         <AddIcon />
@@ -131,8 +152,7 @@ const Item = ({ collectionId }) => {
                             }}
                         >
                             <img
-                                src={`${item.colImage}?w=260&h=260&fit=crop&auto=format`}
-                                srcSet={`${item.colImage}?w=260&h=260&fit=crop&auto=format&dpr=2 2x`}
+                                src={apiConfig.productionUrl + item.itemImage}
                                 alt={item.colName}
                                 loading="lazy"
                                 onClick={() => {
@@ -148,12 +168,10 @@ const Item = ({ collectionId }) => {
                                     <Box>
                                         <Box sx={{ width: "100%", borderBottom: "1px solid #ccc" }} pb={2}>
                                             <Typography align={"center"}>{item.colName}</Typography>
-                                            <Typography align={"center"}>{222}</Typography>
                                             <Typography align={"center"}>{item.externalLink}</Typography>
+                                            <Typography align={"center"}>{item.memo}</Typography>
                                         </Box>
                                         <ConDiv>
-                                            {/* <Stack spacing={1} sx={{width:'40%',margin:'auto'}} > */}
-
                                             <Typography align={"center"}>{item.itemNums}</Typography>
                                         </ConDiv>
                                     </Box>

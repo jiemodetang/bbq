@@ -11,7 +11,12 @@ import Typography from "@mui/material/Typography";
 import InputLabel from "@mui/material/InputLabel";
 import Tp from "./tp.png";
 import { useForm } from "react-hook-form";
-
+import { uploadImg, save, update, saveItem, getMineItem, postDetail, detailItem } from "../../service/bbq";
+import { apiConfig } from "../../service/mmp";
+import TypeListComponent from "../component/TypeListComponent";
+import Snackbar from "@mui/material/Snackbar";
+import _ from "lodash";
+import { getQueryStringRegExp } from "../../utils/index";
 
 const Container = styled.div`
     margin: 120px 210px 20px 210px;
@@ -28,76 +33,181 @@ const Hs = styled.span`
 const TpImg = styled.img`
     width: 160px;
 `;
+const Input = styled("input")({
+    display: "none",
+});
 
 function Collections() {
-    const [age, setAge] = React.useState("");
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
-    const onSubmit = data => console.log(data);
-    // 改变下拉框选择的值
-    const handleChangeType = (event) => {
-        setAge(event.target.value);
-    };
+    const [type, setType] = React.useState("");
+    const [colData, setColData] = React.useState({});
+    const [itemData, setItemData] = React.useState({});
 
+    const [img, setImg] = React.useState("");
+    const {
+        register,
+        handleSubmit,
+        watch,
+        formState: { errors },
+        setValue
+    } = useForm();
+
+    React.useEffect(() => {
+        if (getQueryStringRegExp("colId")) {
+            const params = {
+                data: {
+                    id: getQueryStringRegExp("colId"),
+                },
+            };
+            postDetail(params).then((res) => {
+                const d= _.get(res, "data", {})
+                setColData(_.get(res, "data", {}));
+                const {colImage,colName,memo,externalLink,colType} = d
+                setValue('colName',colName)
+                setValue('externalLink',externalLink)
+                setValue('memo',memo)
+                setValue('colImage',colImage)
+                setType(colType)
+
+                
+            });
+        } 
+        if(getQueryStringRegExp("itemId")) {
+            const params = {
+                data: {
+                    id: getQueryStringRegExp('itemId')
+                },
+            };
+            detailItem(params).then(res=>{
+                // TODO
+                // setItemData(_.get(res,'data',{}))x
+            })
+        }
+    }, []);
+ 
+
+    const onSubmit = (data) => {
+        if (!type) {
+            window._M.error("请选择类型");
+        } else {
+            const params = {
+                data: {
+                    ...data,
+                    colType: type,
+                    colImage: img,
+                },
+            };
+            if (getQueryStringRegExp("colId")) {
+                update(params).then((res) => {
+                   if(res.code == '0000'){
+                    window._M.success("更新成功");
+                   }else{
+                    window._M.error(res.msg);
+                   }
+                });
+            }
+            if (getQueryStringRegExp("type") == "col") {
+                save(params).then((res) => {
+                    window._M.success("保存成功");
+                });
+            }
+              if(getQueryStringRegExp("type") == "item" ){
+                  const {colName,externalLink,memo} = data
+                const p= {
+                    data:{
+                     itemImage: img,
+                     itemName: colName,
+                     externalLink: externalLink,
+                     colType: type,
+                     memo: memo,
+                     collectId: getQueryStringRegExp("colId")
+                    }
+                 }
+                 saveItem(p).then(res=>{
+                    window._M.success('保存成功')
+                 })
+              }
+                
+        }
+    };
     // 创建按钮
     const createCollections = () => {
-        handleSubmit(onSubmit)
+        handleSubmit(onSubmit);
+    };
+    const cb = (data) => {
+        setType(data);
+    };
+
+    const nC = (e) => {
+        const input = e.target;
+        const files = e.target.files;
+        const formData = new FormData();
+        const file = files[0];
+        if (files && files[0]) {
+            if (file.size > 1024 * 1024 * 3) {
+                return false;
+            } else {
+                formData.append("file", file);
+            }
+        }
+        const params = {
+            data: formData,
+            headers: {
+                "Content-Type": "application/x-www-form-urlencode",
+            },
+        };
+
+        uploadImg(params).then((res) => {
+            console.log(res, 22);
+            setImg(_.get(res, ["data"]));
+        });
     };
 
     return (
         <Container>
             <form onSubmit={handleSubmit(onSubmit)}>
-            <Typography variant="h4" gutterBottom component="div">
-                创建一个集合
-            </Typography>
-            <Typography variant="body2" gutterBottom>
-                <Xh>*</Xh>
-                <Hs>必填字段</Hs>
-            </Typography>
+                <Typography variant="h4" gutterBottom component="div">
+                    创建一个集合
+                </Typography>
+                <Typography variant="body2" gutterBottom>
+                    <Xh>*</Xh>
+                    <Hs>必填字段</Hs>
+                </Typography>
 
-            <Typography variant="h5" gutterBottom component="div">
-                形象标识<Xh>*</Xh>
-            </Typography>
-            <Typography component="div">
-                <Hs>
-                    此图像也将用于导航。推荐 350x350<Xh>*</Xh>
-                </Hs>
-            </Typography>
-            <Typography component="div"  sx={{mt:5}}>
-                <TpImg src={Tp} />
-            </Typography>
+                <Typography variant="h5" gutterBottom component="div">
+                    形象标识<Xh>*</Xh>
+                </Typography>
+                <Typography component="div">
+                    <Hs>
+                        此图像也将用于导航。推荐 350x350<Xh>*</Xh>
+                    </Hs>
+                </Typography>
+                <Typography component="div" sx={{ mt: 5 }}>
+                    <label htmlFor="contained-button-file">
+                        <Input accept="image/*" id="contained-button-file" type="file" onChange={nC} />
 
-            <h4>名称  <Xh>*</Xh></h4>
-            <TextField fullWidth id="outlined-basic" label="集合名称" variant="outlined" />
-            {/* <input {...register("exampleRequired", { required: true })} /> */}
-            <h4>描述</h4>
-            <TextField fullWidth id="outlined-multiline-flexible" label="Description" multiline maxRows={4} {...register("exampleRequired", { required: true })} />
+                        <TpImg src={img ? apiConfig.productionUrl + img + "" : Tp} />
+                    </label>
+                </Typography>
 
-            <h4>类型</h4>
-            <Box sx={{ minWidth: 120 }}>
-                <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">请选择创建类型</InputLabel>
-                    <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
-                        // value={age}
-                        displayEmpty
-                        inputProps={{ "aria-label": "Without label" }}
-                        onChange={handleChangeType}
-                        label={''}
-                    >
-                     
-                        <MenuItem value={10}>Ten</MenuItem>
-                        <MenuItem value={20}>Twenty</MenuItem>
-                        <MenuItem value={30}>Thirty</MenuItem>
-                    </Select>
-                </FormControl>
-            </Box>
+                <h4>
+                    名称 <Xh>*</Xh>
+                </h4>
+                <TextField fullWidth id="outlined-basic" placeholder="集合名称" variant="outlined" {...register("colName", { required: true })} />
+                {/* <input {...register("exampleRequired", { required: true })} /> */}
+                <h4>描述</h4>
+                <TextField fullWidth id="outlined-multiline-flexible" placeholder="Description" multiline maxRows={4} {...register("memo", { required: true })} />
 
-            <CreateDiv>
-                <Button variant="contained"  type="submit" onPress={ createCollections}>
-                    创建
-                </Button>
-            </CreateDiv>
+                <h4>外部链接</h4>
+                <TextField fullWidth id="outlined-multiline-flexible" placeholder="Description" multiline maxRows={4} {...register("externalLink", { required: true })} />
+
+                <h4>类型</h4>
+                <TypeListComponent cb={cb}></TypeListComponent>
+
+                <CreateDiv>
+                    <Button variant="contained" type="submit" onPress={createCollections}>
+                        创建
+                    </Button>
+                </CreateDiv>
             </form>
         </Container>
     );

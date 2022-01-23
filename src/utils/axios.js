@@ -5,21 +5,18 @@ import { dealMock } from "../myMock";
 import {apiConfig } from '../service/mmp'
 
 let inError = false;
-// 创建axios实例
 const instance = axios.create({
-    // baseURL: process.env.BASE_URL,
+   
     timeout: 15000, // 请求超时时间
     // `transformRequest` 允许在向服务器发送前，修改请求数据
     transformRequest: [
         function (data) {
-            // 对 data 进行任意转换处理
             return data;
         },
     ],
-    // `transformResponse` 在传递给 then/catch 前，允许修改响应数据
     transformResponse: [
         function (data) {
-            // console.log(JSON.parse(data));
+            console.log(JSON.parse(data));
             // 对 data 进行任意转换处理
             return apiConfig.isMock?data:JSON.parse(data);
         },
@@ -35,28 +32,27 @@ if (apiConfig.isMock) {
 // 实例添加请求拦截器
 instance.interceptors.request.use(
     function (config) {
-        // 在发送请求之前做处理...
         config.headers = Object.assign(
             config.method === "get"
                 ? {
-                      Accept: "application/json",
-                      "Content-Type": "application/json; charset=UTF-8",
                       "Access-Control-Allow-Origin": "*",
-                      'Authorization': apiConfig.token
                   }
                 : {
                       "Content-Type": "application/json; charset=UTF-8",
                       "Access-Control-Allow-Origin": "*",
-                      'Authorization': apiConfig.token
                   },
             config.headers
         );
-        // config.headers.token = sessionStorage.getItem(`${projectPrefix}_token_`);
-
+        config.headers.Authorization= apiConfig.token
         if (config.method === "post") {
             const contentType = config.headers["Content-Type"];
+            console.log(contentType)
             // 根据Content-Type转换data格式
-            config.data = JSON.stringify(config.data);
+            if(contentType == 'application/json; charset=UTF-8'){
+                config.data = JSON.stringify(config.data);
+            }else{
+                config.data  = config.data
+            }
         }
         return Promise.resolve(config);
     },
@@ -69,8 +65,10 @@ instance.interceptors.request.use(
 // 实例添加响应拦截器
 instance.interceptors.response.use(
     function (response) {
+
         const { code } = response.data || {};
         if (code === 109 || code === 108) {
+            
             // error
             if (!inError) {
                 inError = true;
@@ -82,6 +80,8 @@ instance.interceptors.response.use(
         }
     },
     function (error) {
+        console.log(error);
+        
         // 对响应错误做处理...
         // console.log(error);
         if (error.response) {
@@ -118,8 +118,11 @@ const request = async function (opt) {
 export default request;
 
 export function checkStatus(response) {
+    
     const status = response.status || -1000; // -1000 自己定义，连接错误的status
-    if ((status >= 200 && status < 300) || status === 304) {
+    if ((status >= 200 && status < 300) || status === 304 || status === '0000') {
+    console.log(response,777);
+
         // 如果http状态码正常，则直接返回数据
         return response.data;
     } else {

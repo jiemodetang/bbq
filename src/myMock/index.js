@@ -34,21 +34,21 @@
  import detail from './detail.json'
 
  import detgetMyCollectionsail from './getMyCollections.json'
-
+ import getAllColType from './getAllColType.json'
 
 export const   dealMock = (mock)=> {
     mock.onPost("/api/v1/cqc/web/collection/getAllCollections").reply(200, {
-        data: [getAllCollectionsList],
+      ...getAllCollectionsList
     });
     mock.onPost("/api/v1/cqc/web/collection/detail").reply(200, {
-        data: [detail],
+      ...detail
     });
     mock.onPost("/api/v1/cqc/web/collection/getMyCollections").reply(200, {
-        data: [detgetMyCollectionsail],
+       ...detgetMyCollectionsail
     });
     
-    mock.onGet("/api/v1/cqc/web/sysDict/getAllColType").reply(200, {
-        users: [userJson],
+    mock.onGet("/api/v1/cqc/portal/sysDict/getAllColType").reply(200, {
+     ...getAllColType
     });
     // mock.onGet("/api/v1/cqc/web/collection/getAllCollections").reply(200, {
     //     users: [userJson],

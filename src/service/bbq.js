@@ -34,11 +34,76 @@ export const getCollectionItemList = (payload)=>{
         ...payload
     })
 }
+export const save = (payload)=>{
+    return  request({
+        url: apiConfig.v1Api +'/save',
+        ...payload
+    })
+}
+export const update = (payload)=>{
+    return  request({
+        url: apiConfig.v1Api +'/update',
+        ...payload
+    })
+}
+export const deleteC = (payload)=>{
+    return  request({
+        url: apiConfig.v1Api +'/delete',
+        ...payload
+    })
+}
+
+
+export const getAllColType = (payload)=>{
+    return  request({
+        url: apiConfig.protal +'/getAllColType',
+        ...payload
+    })
+}
+
+export const uploadImg = (payload)=>{
+    return  request({
+        url: apiConfig.v3Api +'/fileUpload',
+        ...payload
+    })
+}
 
 
 
+// item
 
-///=---------------------------------------------------------------------------------------
+export const saveItem = (payload)=>{
+    return  request({
+        url: apiConfig.v5Api +'/save',
+        ...payload
+    })
+}
+export const getMineItem = (payload)=>{
+    return  request({
+        url: apiConfig.v5Api +'/getMine',
+        ...payload
+    })
+}
+export const getAllItem = (payload)=>{
+    return  request({
+        url: apiConfig.v5Api +'/getAll',
+        ...payload
+    })
+}
+
+export const deleteItem = (payload)=>{
+    return  request({
+        url: apiConfig.v5Api +'/delete',
+        ...payload
+    })
+}
+export const detailItem = (payload)=>{
+    return  request({
+        url: apiConfig.v5Api +'/detail',
+        ...payload
+    })
+}
+
 
 
 

@@ -22,7 +22,7 @@ import yingyue from "./image/yingyue.png";
 import yundong from "./image/yundong.png";
 import NEW from "./image/NEW.png";
 import ListItemIcon from "@mui/material/ListItemIcon";
-import { login } from "../../../service/bbq";
+import { login ,getAllColType} from "../../../service/bbq";
 import { connect } from "react-redux";
 import {apiConfig } from '../../../service/mmp'
 import _ from "lodash";
@@ -103,7 +103,10 @@ const Links = ( {colTyple,dispatch}) => {
     const history = useHistory();
 
     useEffect(() => {
-       
+        const params={
+            method:'get'
+        }
+        getAllColType(params)
     }, []);
     // EXPLORE nft 类型选择
     const openNftType = Boolean(nftType);
@@ -198,6 +201,8 @@ const Links = ( {colTyple,dispatch}) => {
             },
         };
         login(params).then(res=>{
+            console.log(res,22);
+            
             apiConfig.token = _.get(res,['data','token'])
         });
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
@@ -42,6 +42,9 @@ function CreateItem() {
     const createCollections = () => {
         handleSubmit(onSubmit)
     };
+    useEffect(() => {
+       
+    }, [])
 
     return (
         <Container>

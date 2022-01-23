@@ -15,6 +15,8 @@ import { getHomeList } from "../../service/bbq";
 import _ from "lodash";
 import { connect } from "react-redux";
 import Pagination from "@mui/material/Pagination";
+import { apiConfig } from "../../service/mmp";
+
 
 
 const ua = navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
@@ -62,8 +64,8 @@ const Home = ({ colTyple }) => {
             },
         };
         getHomeList(params).then((res) => {
-            const data = _.get(res, ["data", 0, "pageInfo", "list"], []);
-            const t = _.get(res, ["data", 0, "pageInfo", "total"]);
+            const data = _.get(res, [ "pageInfo", "list"], []);
+            const t = _.get(res, [ "pageInfo", "total"]);
             setCount(Math.ceil(t / pageSize));
             setItemData(_.chunk(data, pageSize));
         });
@@ -84,8 +86,8 @@ const Home = ({ colTyple }) => {
                             }}
                         >
                             <img
-                                src={`${item.colImage}?w=260&h=260&fit=crop&auto=format`}
-                                srcSet={`${item.colImage}?w=260&h=260&fit=crop&auto=format&dpr=2 2x`}
+                                src={apiConfig.productionUrl + item.colImage}
+                                // srcSet={`${item.colImage}?w=260&h=260&fit=crop&auto=format&dpr=2 2x`}
                                 alt={item.colName}
                                 loading="lazy"
                                 onClick={() => {

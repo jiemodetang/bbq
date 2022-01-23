@@ -28,7 +28,10 @@
 export const apiConfig = {
     v1Api: "/api/v1/cqc/web/collection",
     v2Api:'/api/v1/cqc/web-open',
+    v3Api: "/api/v1/cqc/web/file",
+    protal:'/api/v1/cqc/portal/sysDict',
+    v5Api:'/api/v1/cqc/web/item',
     productionUrl: "http://54.169.111.234:8081",
-    isMock: true,
+    isMock: false,
     token:''
 };

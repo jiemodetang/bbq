@@ -37,6 +37,7 @@ import CommentIcon from "@mui/icons-material/Comment";
 import { postDetail } from "../../service/bbq";
 import {getQueryStringRegExp} from "../../utils/index";
 import _ from "lodash";
+import { apiConfig } from "../../service/mmp";
 
 
 const Container = styled.div`
@@ -84,6 +85,8 @@ const tableListMMP = [
 const Detail = () => {
     const [expanded, setExpanded] = React.useState("");
     const [checked, setChecked] = React.useState([]);
+    const [data, setData] = React.useState([]);
+    
     const handleChange = (panel) => (event, newExpanded) => {
         setExpanded(newExpanded ? panel : false);
     };
@@ -100,14 +103,14 @@ const Detail = () => {
         setChecked(newChecked);
     };
     React.useEffect(() => {
-        const i = _.get(getQueryStringRegExp('id'),['data','id'])
         const params = {
             data: {
-                id:i
+                id:getQueryStringRegExp('id')
             },
         };
         postDetail(params).then(res=>{
-
+            
+            setData(_.get(res,'data',{}))
         })
      
     }, [])
@@ -120,19 +123,19 @@ const Detail = () => {
                             justifyContent: 'center',
                             alignItems: 'center',
                     }}>
-                         <Img src={"https://img2.baidu.com/it/u=3752982084,4280598468&fm=253&fmt=auto&app=138&f=JPEG?w=500&h=500"} />
+                         <Img src={apiConfig.productionUrl+ data.colImage} />
                     </Grid>
                     <Grid item xs={8} sm container>
                         <Grid item xs container direction="column" spacing={2}>
                             <Grid sx={{ marginLeft: "30px", marginTop: "20px" }}>
                                 <Typography gutterBottom variant="subtitle1" component="div" sx={{ color: "#56ADBB", fontSize: "14px" }}>
-                                    Standard license
+                                    {data.memo}
                                 </Typography>
                                 <Typography variant="body2" gutterBottom sx={{ color: "#333330", fontSize: "30px", mt: 2, fontWeight: "500" }}>
-                                    #1920
+                                    #{data.colType}
                                 </Typography>
                                 <Typography variant="body2" color="text.secondary">
-                                    拥有者：艾克雅
+                                    拥有者：{data.colName}
                                 </Typography>
                             </Grid>
                             <Grid sx={{ borderRadius: "20px", border: "1px solid #E4E8EB", height: "auto", padding: "10px", marginLeft: "30px", marginTop: "20px" }}>

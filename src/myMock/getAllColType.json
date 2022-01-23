@@ -1,0 +1,15 @@
+{
+    "code": "string",
+    "data": [
+      {
+        "id": 0,
+        "itemValue": "1",
+        "memo": "2"
+      },{
+        "id": 0,
+        "itemValue": "2",
+        "memo": "3"
+      }
+    ],
+    "msg": "string"
+  }
