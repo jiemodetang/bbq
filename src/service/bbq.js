@@ -135,6 +135,14 @@ export const sellItem = (payload)=>{
     })
 }
 
+// 转增
+export const increase = (payload)=>{
+    return  request({
+        url: apiConfig.v5Api +'/transfer',
+        ...payload
+    })
+}
+
 
 
 

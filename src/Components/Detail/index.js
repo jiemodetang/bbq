@@ -34,7 +34,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import CommentIcon from "@mui/icons-material/Comment";
-import { postDetail, detailItem, BuyItem, BuyItemSuccess } from "../../service/bbq";
+import { postDetail, detailItem, BuyItem, BuyItemSuccess, increase } from "../../service/bbq";
 import { getQueryStringRegExp } from "../../utils/index";
 import _ from "lodash";
 import { getLocalStorage } from "../../utils/index";
@@ -101,6 +101,7 @@ const Detail = () => {
 	const [data, setData] = React.useState([]);
 	const [open, setOpen] = React.useState(false);
 	const [disableBtn, setDisableBtn] = React.useState(false);
+	const [toAddress, setToAddress] = React.useState('');
 	const handleOpen = () => setOpen(true);
 	const handleClose = () => setOpen(false);
 
@@ -233,14 +234,73 @@ const Detail = () => {
 
 	// 赠送
 	const giveAway = () => {
+		if (NotLogin()) return;
 		handleOpen();
 	}
-
+	const handleChangeAddr = (event) => {
+		setToAddress(event.target.value);
+};
 	// 赠送确定
-	const handlerConfirm = () => {
-		// todo
-		console.log('关闭');
-		handleClose();
+	const handlerConfirm = (event) => {
+		console.log('toAddress', toAddress)
+		incaseTo(toAddress);
+	}
+	const incaseTo = (toAddress) => {
+		let incaseHash = '';
+		const nftContractSellAdd = nftContract.default.test.sellContract;
+		const myaddress = getLocalStorage("walletaccount");
+		const incaseWeb3 = $web3js.getWeb3();
+		connectMetaMask();
+		const incaseConst = new incaseWeb3.eth.Contract(
+			creatOrderJson.abi,
+			nftContractSellAdd,
+			{
+				from: myaddress,
+			}
+		);
+		let tokenId = data.tokenId;
+		let itemId =  getQueryStringRegExp('id')
+		// let toAddress = '0x89351d3339738Da10428581D05F420248D2c841D';
+		console.log('incaseConst', incaseConst);
+		incaseConst.methods
+			.safeTransferFrom(myaddress, toAddress, tokenId)
+			.send({ from: myaddress })
+			.on("transactionHash", function (hash) {
+				console.log('incaseHash', hash);
+				$message.info('请耐心等待交易打包，不要退出')
+				incaseHash = hash;
+			})
+			.on("receipt", function (receipt) {
+				if (receipt.transactionHash == incaseHash) {
+					// 调后台确认交易
+					incaseSuccess(itemId, toAddress, incaseHash);
+				}
+			})
+			.on("error", function (error, receipt) {
+				// incaseSuccess(itemId, toAddress, incaseHash);
+				$message.error(error.message)
+			});
+	}
+
+	// 转赠成功
+	const incaseSuccess = (itemId, toAddress, incaseHash) => {
+		const params = {
+			data: {
+				itemId: itemId,
+				toAddr: toAddress,
+				txHash: incaseHash,
+			},
+		};
+		increase(params).then(res => {
+			if (res.code === '0000') {
+				$message.success('转增成功');
+				handleClose();
+				// 购买和赠送成功之后，按钮状态修改
+				setDisableBtn(true);
+			} else {
+				$message.error(res.msg)
+			}
+		})
 	}
 	const connectMetaMask = () => {
 		$web3js
@@ -336,13 +396,13 @@ const Detail = () => {
 										<Button
 											disabled={disableBtn}
 											variant="contained"
-											nClick={giveAway}
+											onClick={giveAway}
 											style={{ marginLeft: '25px' }}
 											disableBtn>
 											{" "}
 											<ImgGGOGOGO src={zs} style={{ width: "20px", marginRight: "8px" }} />
-                                            赠送
-                                        </Button>
+											转赠
+                    </Button>
 									</CardActions>
 								</Card>
 							</Grid>
@@ -432,13 +492,14 @@ const Detail = () => {
 					</AccordionDetails>
 				</Accordion>
 			</div>
-			<Dialog open={open} fullWidthonClose={handleClose}>
-				<DialogTitle>赠送</DialogTitle>
+			<Dialog open={open} fullWidthonClose={handleClose} fullWidth>
+				<DialogTitle>转赠</DialogTitle>
 				<DialogContent>
 					<DialogContentText>
-						请输入赠送此NFT的帐户地址：
-                    </DialogContentText>
+						请输入转赠此NFT的帐户地址：
+        </DialogContentText>
 					<TextField
+						value={toAddress}
 						autoFocus
 						margin="dense"
 						id="name"
@@ -446,6 +507,7 @@ const Detail = () => {
 						type="text"
 						fullWidth
 						variant="standard"
+						onChange={handleChangeAddr}
 					/>
 				</DialogContent>
 				<DialogActions>
