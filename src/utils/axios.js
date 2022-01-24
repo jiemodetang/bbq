@@ -16,7 +16,7 @@ const instance = axios.create({
     ],
     transformResponse: [
         function (data) {
-            console.log(JSON.parse(data));
+            // console.log(JSON.parse(data));
             // 对 data 进行任意转换处理
             return apiConfig.isMock?data:JSON.parse(data);
         },
@@ -32,6 +32,7 @@ if (apiConfig.isMock) {
 // 实例添加请求拦截器
 instance.interceptors.request.use(
     function (config) {
+        console.log('config', config)
         config.headers = Object.assign(
             config.method === "get"
                 ? {
@@ -46,7 +47,6 @@ instance.interceptors.request.use(
         config.headers.Authorization= apiConfig.token
         if (config.method === "post") {
             const contentType = config.headers["Content-Type"];
-            console.log(contentType)
             // 根据Content-Type转换data格式
             if(contentType == 'application/json; charset=UTF-8'){
                 config.data = JSON.stringify(config.data);
@@ -121,7 +121,7 @@ export function checkStatus(response) {
     
     const status = response.status || -1000; // -1000 自己定义，连接错误的status
     if ((status >= 200 && status < 300) || status === 304 || status === '0000') {
-    console.log(response,777);
+    // console.log(response,777);
 
         // 如果http状态码正常，则直接返回数据
         return response.data;

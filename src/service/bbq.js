@@ -99,7 +99,7 @@ export const deleteItem = (payload)=>{
 }
 export const detailItem = (payload)=>{
     return  request({
-        url: apiConfig.v5Api +'/detail',
+        url: apiConfig.v2Api +'/detail',
         ...payload
     })
 }
@@ -110,6 +110,33 @@ export const getI = (payload)=>{
         ...payload
     })
 }
+
+// 购买 item
+export const BuyItem = (payload)=>{
+    return  request({
+        url: apiConfig.v5Api +'/toBuy',
+        ...payload
+    })
+}
+
+// 购买成功
+export const BuyItemSuccess = (payload)=>{
+    return  request({
+        url: apiConfig.v5Api +'/buySuccess',
+        ...payload
+    })
+}
+
+// 挂单
+export const sellItem = (payload)=>{
+    return  request({
+        url: apiConfig.v5Api +'/toSell',
+        ...payload
+    })
+}
+
+
+
 
 
 

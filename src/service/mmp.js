@@ -33,5 +33,5 @@ export const apiConfig = {
     v5Api:'/api/v1/cqc/web/item',
     productionUrl: "http://54.169.111.234:8081",
     isMock: false,
-    token:''
+    token:'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJtb3NlcyIsImV4cCI6MTY0MzY0MTAzMywiYWRkciI6IjB4MjVCYTA1NjRmNEY2NEU2YzUyOUYyQWQwNUExNTY5OGE3MTBGMGFGOSIsImlhdCI6MTY0MzAzNjIzMywidXNlck5vIjoiOCJ9.5BmGO2-Th1-Kp1l_O32SfzkPLmSYrE97fSEwXPif3Bw'
 };

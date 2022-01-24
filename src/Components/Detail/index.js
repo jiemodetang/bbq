@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -34,9 +34,10 @@ import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import CommentIcon from "@mui/icons-material/Comment";
-import { postDetail, detailItem } from "../../service/bbq";
+import { postDetail, detailItem, BuyItem, BuyItemSuccess } from "../../service/bbq";
 import { getQueryStringRegExp } from "../../utils/index";
 import _ from "lodash";
+import { getLocalStorage } from "../../utils/index";
 import { apiConfig } from "../../service/mmp";
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -44,6 +45,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import $message from 'popular-message';
+
+import $web3js from "../../lib/contract/web3";
+import numberUtils from "../../utils/numberUtils";
+const creatOrderJson = require("../../lib/contract/creatOrder.json");
+const nftContract = require("../../lib/contract/contractAddress");
+const sellJson = require("../../lib/contract/sell.json");
 
 const Container = styled.div`
    margin: 100px 210px 20px 210px;
@@ -92,6 +100,7 @@ const Detail = () => {
     const [checked, setChecked] = React.useState([]);
     const [data, setData] = React.useState([]);
     const [open, setOpen] = React.useState(false);
+    const [disableBtn, setDisableBtn] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -117,18 +126,129 @@ const Detail = () => {
             },
         };
         detailItem(params).then(res => {
-
             setData(_.get(res, 'data', {}))
         })
 
     }, [])
+
+    // 用户没有登录
+    const NotLogin = () => {
+        if (!getLocalStorage('walletaccount')) {
+            window._M.info('请先链接钱包，登录账号')
+            return true;
+        } else {
+            return false;
+        }
+    }
+    // 购买
+    const handlerBuy = () => {
+        if (NotLogin()) return;
+        const params = {
+            data: {
+                id: getQueryStringRegExp('id')
+            },
+        };
+        BuyItem(params).then(res => {
+          console.log('res', res);
+					if (res.code === '0000') {
+					// 后端成功之后调 handlerBuyUseBnb()
+					//  tokenid ---- 后台返回
+					let tokenId = res.data.tokenid;
+					// sellAddress ---- 后台返回卖家地址
+					let sellAddress = res.data.sellerAddr;
+					// contractAddFromEnd ---- 后台返回的合约地址
+					let contractAddFromEnd = res.data.nftAddr;;
+					let value = numberUtils.movePointRight(res.data.price, 18);
+					// 暂时写死  1---- usdt
+					if (res.data.priceType === 1) {
+						handlerBuyUseBnb(contractAddFromEnd, sellAddress, tokenId, value);
+					} else {
+						handlerBuyUseBnb(contractAddFromEnd, sellAddress, tokenId, value);
+					}
+					} else {
+						$message.error(res.msg)
+					} 
+        })
+        console.log('123');
+        // 购买和赠送成功之后，按钮状态修改
+        // setDisableBtn(true);
+    }
+    const handlerBuyUseBnb = (contractAddFromEnd, sellAddress, tokenId, value) => {
+        let tradeHash = '';
+        const nftContractSellAdd = nftContract.default.test.sellContract;
+        const web3GetWeb3 = $web3js.getWeb3();
+        const myaddress = getLocalStorage("walletaccount");
+        const tradeWeb3 = $web3js.getWeb3();
+        connectMetaMask();
+        const tradeConst = new tradeWeb3.eth.Contract(
+            sellJson.abi,
+            nftContractSellAdd,
+            {
+                from: myaddress,
+            }
+        );
+        //  tokenid ---- 后台返回
+        // let tokenId = 12345;
+        // // sellAddress ---- 后台返回卖家地址
+        // let sellAddress = '0x25Ba0564f4F64E6c529F2Ad05A15698a710F0aF9';
+        // // contractAddFromEnd ---- 后台返回的合约地址
+        // let contractAddFromEnd = '0x7234dDd2E6129580b2F8777BCE15966070C4c2c6';
+        // let value = numberUtils.movePointRight(0.001, 18);
+        tradeConst.methods
+            .callTransferFrom(contractAddFromEnd, sellAddress, tokenId)
+            .send({ from: myaddress, value: value })
+            .on("transactionHash", function (hash) {
+                console.log('tradehash', hash);
+								$message.info('请耐心等待交易打包，不要退出')
+                tradeHash = hash;
+            })
+            .on("receipt", function (receipt) {
+                if (receipt.transactionHash == tradeHash) {
+									// 调后台确认交易
+									handlerBuySuccess(sellAddress, tokenId, tradeHash);
+                }
+            })
+            .on("error", function (error, receipt) {
+							$message.error(error.message)
+            });
+    }
+		// 购买成功
+		const handlerBuySuccess = (sellerAddr, tokenId, txHash) => {
+			const params = {
+				data: {
+					sellerAddr: sellerAddr,
+					tokenId: tokenId,
+					txHash: txHash,
+				},
+		};
+			BuyItemSuccess(params).then(res => {
+				if (res.code === '0000') {
+					$message.success('购买成功')
+				} else {
+					$message.error(res.msg)
+				}
+			})
+		}
+
+    // 赠送
     const giveAway = () => {
         handleOpen();
     }
+
+    // 赠送确定
     const handlerConfirm = () => {
         // todo
         console.log('关闭');
         handleClose();
+    }
+    const connectMetaMask = () => {
+        $web3js
+            .connectMetaMask()
+            .then((res) => {
+            })
+            .catch((err) => {
+                $message.error(err)
+            });
     }
 
     return (
@@ -203,15 +323,25 @@ const Detail = () => {
                                         </Typography>
                                     </CardContent>
                                     <CardActions>
-                                        <Button1 size="small">
+                                        <Button
+                                            disabled={disableBtn}
+                                            variant="contained"
+                                            style={{ marginLeft: '10px' }}
+                                            onClick={handlerBuy}
+                                        >
                                             {" "}
                                             <ImgGGOGOGO src={qbs} style={{ width: "20px", marginRight: "8px" }} /> 购买
-                                        </Button1>
-                                        <Button1 size="small" onClick={giveAway}>
+                                        </Button>
+                                        <Button
+                                            disabled={disableBtn}
+                                            variant="contained"
+                                            nClick={giveAway}
+                                            style={{ marginLeft: '25px' }}
+                                            disableBtn>
                                             {" "}
                                             <ImgGGOGOGO src={zs} style={{ width: "20px", marginRight: "8px" }} />
                                             赠送
-                                        </Button1>
+                                        </Button>
                                     </CardActions>
                                 </Card>
                             </Grid>
@@ -301,7 +431,7 @@ const Detail = () => {
                     </AccordionDetails>
                 </Accordion>
             </div>
-            <Dialog open={open} fullWidth onClose={handleClose}>
+            <Dialog open={open} fullWidthonClose={handleClose}>
                 <DialogTitle>赠送</DialogTitle>
                 <DialogContent>
                     <DialogContentText>

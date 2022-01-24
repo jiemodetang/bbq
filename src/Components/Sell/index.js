@@ -21,6 +21,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import $message from 'popular-message';
+import { sellItem } from '../../service/bbq'
 // 合约
 import $web3js from "../../lib/contract/web3";
 import numberUtils from "../../utils/numberUtils";
@@ -85,8 +86,23 @@ export default function ControlledOpenSelect() {
     };
     const onSubmit = (data) => {
         // TODO 1.调后台接口，接口返回成功打开弹窗 handleOpen(),
-        handleOpen();
-        // console.log(data, 22);
+        // sell 参数
+        const params = {
+            data: {
+                itemId: 2,
+                price: 0.001,
+                priceType: 1,
+                deadLine: 6
+            },
+        };
+        sellItem(params).then(res => {
+            if(res.code === '0000') {
+                // 打开弹窗
+                handleOpen();
+            } else {
+                $message.error(res.msg)
+            }
+        })
     };
     const handlerConfirm = () => {
         const nftContractSellAdd = nftContract.default.test.sellContract;
@@ -130,7 +146,6 @@ export default function ControlledOpenSelect() {
             .setApprovalForAll(nftContractSellAdd, true)
             .send({ from: myaddress })
             .on("transactionHash", function (hash) {
-                console.log('hash', hash);
                 $message.info('请耐心等待交易打包，不要退出')
                 getedHash = hash;
             })
@@ -303,13 +318,13 @@ export default function ControlledOpenSelect() {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        1.rr
+                        1. 初始化你的钱包
                     </DialogContentText>
                     <DialogContentText>
-                        2.rr
+                        2. 批准出售此商品
                     </DialogContentText>
                     <DialogContentText>
-                        3.rr
+                        3. 确认
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
