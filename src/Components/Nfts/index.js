@@ -5,19 +5,19 @@ import Button from '@mui/material/Button';
 
 const Container = styled.div`
   margin:120px 210px 20px 210px;
-` 
+`
 
-class assets extends React.Component{
-  constructor(props){
+class assets extends React.Component {
+  constructor(props) {
     super(props)
   }
-   render() {
-     return (
+  render() {
+    return (
       <Container>
         <h3>ARTS</h3>
       </Container>
-     )
-   }
+    )
+  }
 }
 
 export default assets;

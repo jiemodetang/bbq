@@ -103,8 +103,10 @@ const Detail = () => {
 	const [disableBtn, setDisableBtn] = React.useState(false);
 	const [toAddress, setToAddress] = React.useState('');
 	const handleOpen = () => setOpen(true);
-	const handleClose = () => setOpen(false);
-
+	const handleClose = () => {
+		setToAddress('');
+		setOpen(false);
+	}
 	const handleChange = (panel) => (event, newExpanded) => {
 		setExpanded(newExpanded ? panel : false);
 	};
@@ -295,6 +297,7 @@ const Detail = () => {
 			if (res.code === '0000') {
 				$message.success('转增成功');
 				handleClose();
+				setToAddress('');
 				// 购买和赠送成功之后，按钮状态修改
 				setDisableBtn(true);
 			} else {

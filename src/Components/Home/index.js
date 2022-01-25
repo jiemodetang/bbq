@@ -51,17 +51,17 @@ height: 190px;
 `;
 
 const pageSize = 12;
-const Home = ({ colTyple,search }) => {
-    const [itemData, setItemData] = useState([]);
-    const [page, setPage] = React.useState(0);
-    const [count, setCount] = React.useState(1);
-    const [loading, setLoading] = React.useState(true);
+const Home = ({ colTyple, search }) => {
+	const [itemData, setItemData] = useState([]);
+	const [page, setPage] = React.useState(0);
+	const [count, setCount] = React.useState(1);
+	const [loading, setLoading] = React.useState(true);
 
-    const handleChange = (event, value) => {
-        setPage(value - 1);
-    };
+	const handleChange = (event, value) => {
+		setPage(value - 1);
+	};
 
-    const history = useHistory();
+	const history = useHistory();
 
     useEffect(() => {
         const params = {
@@ -180,10 +180,10 @@ const Home = ({ colTyple,search }) => {
 };
 
 const mapStateToProps = ({ linkReducer }) => {
-    return {
-        colTyple: linkReducer.colTyple,
-        search:linkReducer.search
-    };
+	return {
+		colTyple: linkReducer.colTyple,
+		search: linkReducer.search
+	};
 };
 
 export default connect(mapStateToProps)(Home);

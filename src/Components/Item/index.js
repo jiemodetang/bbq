@@ -75,10 +75,10 @@ const Item2 = styled.div`
 `;
 const pageSize = 12;
 const Item = ({ collectionId }) => {
-    const [itemData, setItemData] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    const [count, setCount] = React.useState(1);
-    const [colData, setColData] = React.useState({});
+	const [itemData, setItemData] = React.useState([]);
+	const [page, setPage] = React.useState(0);
+	const [count, setCount] = React.useState(1);
+	const [colData, setColData] = React.useState({});
 
     const handleChange = (event, value) => {
         setPage(value - 1);

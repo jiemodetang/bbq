@@ -183,3 +183,8 @@ export function setCookie(cName, value, expiredays) {
   document.cookie = cName + "=" + value + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
 }
 
+//清除cookie
+export function removeCookie(name) {
+  setCookie("token", '');
+}
+
