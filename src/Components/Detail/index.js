@@ -98,7 +98,7 @@ const tableListMMP = [
 const Detail = () => {
 	const [expanded, setExpanded] = React.useState("");
 	const [checked, setChecked] = React.useState([]);
-	const [data, setData] = React.useState([]);
+	const [data, setData] = React.useState({});
 	const [open, setOpen] = React.useState(false);
 	const [disableBtn, setDisableBtn] = React.useState(false);
 	const [toAddress, setToAddress] = React.useState('');
@@ -129,7 +129,7 @@ const Detail = () => {
 			},
 		};
 		detailItem(params).then(res => {
-			setData(_.get(res, 'data', {}))
+			setData(_.get(res, 'data')|| {})
 		})
 
 	}, [])
@@ -314,7 +314,7 @@ const Detail = () => {
 				$message.error(err)
 			});
 	}
-
+	
 	return (
 		<Container>
 			<Paper sx={{ p: 20, margin: "auto", maxWidth: 1260, paddingTop: "0px", boxShadow: "none", padding: 0 }}>

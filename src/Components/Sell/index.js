@@ -214,7 +214,6 @@ export default function ControlledOpenSelect() {
 				$message.error(err)
 			});
 	}
-	// console.log(232324);
 
 	return (
 		<Container>

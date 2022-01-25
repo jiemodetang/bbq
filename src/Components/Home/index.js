@@ -21,7 +21,6 @@ import loadImg from "../Img/11.png";
 const ua = navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
 const MYContainer = styled(Container)`
     margin-top: 120px;
-    height: 100%;
 
 `;
 const ConDiv = styled.div`

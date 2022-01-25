@@ -170,7 +170,6 @@ function Collections() {
 		};
 
 		uploadImg(params).then((res) => {
-			console.log(res, 22);
 			setImg(_.get(res, ["data"]));
 		});
 	};
@@ -197,8 +196,7 @@ function Collections() {
 				<Typography component="div" sx={{ mt: 5 }}>
 					<label htmlFor="contained-button-file">
 						<Input accept="image/*" id="contained-button-file" type="file" onChange={nC} />
-
-						<TpImg src={editImg ? apiConfig.productionUrl + editImg + "" : Tp} />
+						<TpImg src={editImg ? apiConfig.productionUrl + editImg  : (img?apiConfig.productionUrl+img:Tp)} />
 					</label>
 				</Typography>
 

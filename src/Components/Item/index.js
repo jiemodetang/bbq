@@ -50,7 +50,6 @@ const Box1 = styled(Box)`
 const ua = navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
 const MYContainer = styled.div`
     margin-top: 72px;
-    height:100%
 `;
 const ConDiv = styled.div`
     margin-top: 15px;
@@ -196,7 +195,7 @@ const Item = ({ collectionId }) => {
                                 alt={item.colName}
                                 loading="lazy"
                                 onClick={() => {
-                                    history.push("/collection/detail?id=0&isItem=true");
+                                    history.push("/collection/detail?isItem=true&id="+getQueryStringRegExp("colId"));
                                 }}
                                 style={{
                                     height: "200px",
