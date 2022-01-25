@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components'
-import {connect} from 'react-redux'
+import { connect } from 'react-redux'
 
 const Container = styled.div`
   position:absolute;
@@ -9,24 +9,24 @@ const Container = styled.div`
   width:100vw;
   top:0;
   transition:all 0.35s;
-  right:${({state})=>state? '0vw' : '-100vw'};
+  right:${({ state }) => state ? '0vw' : '-100vw'};
 
 `
 
 
-const SecondView =({show})=>{
+const SecondView = ({ show }) => {
 
-  return(
+  return (
     <Container state={show}>
 
     </Container>
   )
 }
 
-const mapStateToProps =(state)=>{
+const mapStateToProps = (state) => {
 
-  return{
-    show:state.mobileLinksReducer.showSecondView
+  return {
+    show: state.mobileLinksReducer.showSecondView
   }
 }
 

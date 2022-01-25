@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 import MobileLinks from './MobileLinks'
 import SecondView from './SecondView'
 
 const Container = styled.div`
   background-color:rgb(32, 129, 226);
-  height:${({state})=> state ? '100%':'0'};
+  height:${({ state }) => state ? '100%' : '0'};
   position:relative;
   transition:all 0.35s;
   overflow:hidden;
@@ -19,18 +19,18 @@ const Container = styled.div`
 
 
 
-const MobileNavigation =({show})=>{
-  return(
+const MobileNavigation = ({ show }) => {
+  return (
     <Container state={show}>
-      <MobileLinks/>
-      <SecondView/>
+      <MobileLinks />
+      <SecondView />
     </Container>
   )
 }
 
-const mapToState =(state)=>{
-  return{
-      show:state.mobileNavReducer.show
+const mapToState = (state) => {
+  return {
+    show: state.mobileNavReducer.show
   }
 }
 

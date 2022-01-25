@@ -18,7 +18,7 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import Pagination from "@mui/material/Pagination";
-import { getCollectionItemList, getMineItem, getAllItem, deleteItem, deleteC ,postDetail} from "../../service/bbq";
+import { getCollectionItemList, getMineItem, getAllItem, deleteItem, deleteC, postDetail } from "../../service/bbq";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import Typography from "@mui/material/Typography";
@@ -28,7 +28,7 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import { apiConfig } from "../../service/mmp";
-import {getQueryStringRegExp} from '../../utils'
+import { getQueryStringRegExp } from '../../utils'
 import DeleteIcon from '@mui/icons-material/Delete';
 const Container = styled.div`
     //margin: 100px 210px 20px 210px;
@@ -63,170 +63,170 @@ const Item2 = styled.div`
 `;
 const pageSize = 12;
 const Item = ({ collectionId }) => {
-    const [itemData, setItemData] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    const [count, setCount] = React.useState(1);
-    const [colData, setColData] = React.useState({});
+	const [itemData, setItemData] = React.useState([]);
+	const [page, setPage] = React.useState(0);
+	const [count, setCount] = React.useState(1);
+	const [colData, setColData] = React.useState({});
 
 
-    const handleChange = (event, value) => {
-        setPage(value - 1);
-    };
-    const history = useHistory();
-    React.useEffect(() => {
-        const params = {
-            data: {
-                colId: getQueryStringRegExp('colId'),
-            },
-        };
-        getMineItem(params).then((res) => {
-            const data = _.get(res, ["pageInfo", "list"], []);
-            const t = _.get(res, ["pageInfo", "total"]);
-            setCount(Math.ceil(t / pageSize));
-            setItemData(_.chunk(data, pageSize));
-        });
+	const handleChange = (event, value) => {
+		setPage(value - 1);
+	};
+	const history = useHistory();
+	React.useEffect(() => {
+		const params = {
+			data: {
+				colId: getQueryStringRegExp('colId'),
+			},
+		};
+		getMineItem(params).then((res) => {
+			const data = _.get(res, ["pageInfo", "list"], []);
+			const t = _.get(res, ["pageInfo", "total"]);
+			setCount(Math.ceil(t / pageSize));
+			setItemData(_.chunk(data, pageSize));
+		});
 
-        const p = {
-            data: {
-                id: getQueryStringRegExp("colId"),
-            },
-        };
-        postDetail(p).then((res) => {
-            const d= _.get(res, "data", {})
-            setColData(_.get(res, "data", {}));
-            
-        });
-       
-    }, []);
-    const d=()=>{
-            const c= {
-                data: {
-                    id: getQueryStringRegExp('colId'),
-                },
-            };
-            deleteC(c).then(res=>{
-                if(res.code == '0000'){
-                    window._M.success('删除成功')
-                    history.push('/collections')
-                   }else{
-                    window._M.error(res.msg);
-                   }
-             
-            })
-    }
+		const p = {
+			data: {
+				id: getQueryStringRegExp("colId"),
+			},
+		};
+		postDetail(p).then((res) => {
+			const d = _.get(res, "data", {})
+			setColData(_.get(res, "data", {}));
 
-    return (
-        <MYContainer maxWidth={"xl"}>
-            <img src={jp} style={{ width: "100%" }} />
-            <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={2} sx={{ margin: "40px 0" }}>
-                <Box sx={{ display: "flex" }}>
-                    <Typography variant={"h4"} align={"center"}>
-                        {colData.colName}
-                    </Typography>
-                    <Fab
-                        color="primary"
-                        aria-label="edit"
-                        size="small"
-                        sx={{  ml: 1 }}
-                        onClick={() => {
-                            history.push("/collection/create?type=col&colId="+ getQueryStringRegExp('colId'));
-                        }}
-                    >
-                        <EditIcon />
-                    </Fab>
-                    <Fab
-                        color="primary"
-                        aria-label="add"
-                        size="small"
-                        onClick={d}
-                        sx={{ mr: 1, ml: 1 }}
-                    >
-                        <DeleteIcon />
-                    </Fab>
-                    <Fab
-                        color="primary"
-                        aria-label="add"
-                        size="small"
-                        onClick={() => {
-                            history.push("/collection/create?type=item&colId="+ getQueryStringRegExp('colId'));
-                        }}
-                    >
-                        <AddIcon />
-                    </Fab>
-                </Box>
-                <Box sx={{ display: "flex" }}>
-                    <Typography variant={"p"} sx={{ maxWidth: "490px", color: "#8A939B" }}>{colData.memo}</Typography>
-                </Box>
-            </Stack>
-            <Divider light sx={{ marginBottom: "60px" }} />
-            <ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
-                {!_.isEmpty(itemData) &&
-                    itemData[page].map((item) => (
-                        <ImageListItem
-                            key={item.img}
-                            sx={{
-                                padding: "10px",
-                                background: "#FFFFFF",
-                                boxShadow: "0px 5px 8px 0px rgba(231, 231, 231, 0.6)",
-                                borderRadius: " 20px",
-                                border: "1px solid #E4E8EB",
-                            }}
-                        >
-                            <img
-                                src={apiConfig.productionUrl + item.itemImage}
-                                alt={item.colName}
-                                loading="lazy"
-                                onClick={() => {
-                                    history.push("/collection/detail?id=0&isItem=true");
-                                }}
-                                style={{
-                                    height: "200px",
-                                }}
-                            />
-                            <ImageListItemBar
-                                // title={item.title}
-                                subtitle={
-                                    <Box>
-                                        <Box sx={{ width: "100%", borderBottom: "1px solid #ccc" }} pb={2}>
-                                            <Typography align={"center"}>{item.colName}</Typography>
-                                            <Typography align={"center"}>{item.externalLink}</Typography>
-                                            <Typography align={"center"}>{item.memo}</Typography>
-                                        </Box>
-                                        <ConDiv>
-                                            <Typography align={"center"}>{item.itemNums}</Typography>
-                                        </ConDiv>
-                                        <ConDiv>
-                                            {/* <Stack spacing={1} sx={{width:'40%',margin:'auto'}} > */}
-                                            <Button
-                                                variant="contained"
-                                                sx={{ background: "#56ADBB", borderRadius: "10px" }}
-                                                onClick={() => {
-                                                    // history.push("/home/sell?id=" + item.id);
-                                                    history.push("/home/sell?id=" + item.id);
-                                                }}
-                                            >
-                                                出售
+		});
+
+	}, []);
+	const d = () => {
+		const c = {
+			data: {
+				id: getQueryStringRegExp('colId'),
+			},
+		};
+		deleteC(c).then(res => {
+			if (res.code == '0000') {
+				window._M.success('删除成功')
+				history.push('/collections')
+			} else {
+				window._M.error(res.msg);
+			}
+
+		})
+	}
+
+	return (
+		<MYContainer maxWidth={"xl"}>
+			<img src={jp} style={{ width: "100%" }} />
+			<Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={2} sx={{ margin: "40px 0" }}>
+				<Box sx={{ display: "flex" }}>
+					<Typography variant={"h4"} align={"center"}>
+						{colData.colName}
+					</Typography>
+					<Fab
+						color="primary"
+						aria-label="edit"
+						size="small"
+						sx={{ ml: 1 }}
+						onClick={() => {
+							history.push("/collection/create?type=col&colId=" + getQueryStringRegExp('colId'));
+						}}
+					>
+						<EditIcon />
+					</Fab>
+					<Fab
+						color="primary"
+						aria-label="add"
+						size="small"
+						onClick={d}
+						sx={{ mr: 1, ml: 1 }}
+					>
+						<DeleteIcon />
+					</Fab>
+					<Fab
+						color="primary"
+						aria-label="add"
+						size="small"
+						onClick={() => {
+							history.push("/collection/create?type=item&colId=" + getQueryStringRegExp('colId'));
+						}}
+					>
+						<AddIcon />
+					</Fab>
+				</Box>
+				<Box sx={{ display: "flex" }}>
+					<Typography variant={"p"} sx={{ maxWidth: "490px", color: "#8A939B" }}>{colData.memo}</Typography>
+				</Box>
+			</Stack>
+			<Divider light sx={{ marginBottom: "60px" }} />
+			<ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
+				{!_.isEmpty(itemData) &&
+					itemData[page].map((item) => (
+						<ImageListItem
+							key={item.img}
+							sx={{
+								padding: "10px",
+								background: "#FFFFFF",
+								boxShadow: "0px 5px 8px 0px rgba(231, 231, 231, 0.6)",
+								borderRadius: " 20px",
+								border: "1px solid #E4E8EB",
+							}}
+						>
+							<img
+								src={apiConfig.productionUrl + item.itemImage}
+								alt={item.colName}
+								loading="lazy"
+								onClick={() => {
+									history.push("/collection/detail?id=0&isItem=true");
+								}}
+								style={{
+									height: "200px",
+								}}
+							/>
+							<ImageListItemBar
+								// title={item.title}
+								subtitle={
+									<Box>
+										<Box sx={{ width: "100%", borderBottom: "1px solid #ccc" }} pb={2}>
+											<Typography align={"center"}>{item.colName}</Typography>
+											<Typography align={"center"}>{item.externalLink}</Typography>
+											<Typography align={"center"}>{item.memo}</Typography>
+										</Box>
+										<ConDiv>
+											<Typography align={"center"}>{item.itemNums}</Typography>
+										</ConDiv>
+										<ConDiv>
+											{/* <Stack spacing={1} sx={{width:'40%',margin:'auto'}} > */}
+											<Button
+												variant="contained"
+												sx={{ background: "#56ADBB", borderRadius: "10px" }}
+												onClick={() => {
+													// history.push("/home/sell?id=" + item.id);
+													history.push("/home/sell?id=" + item.id);
+												}}
+											>
+												出售
                                             </Button>
-                                            {/* </Stack> */}
-                                        </ConDiv>
-                                    </Box>
-                                    
-                                }
-                                position="below"
-                            />
-                        </ImageListItem>
-                    ))}
-            </ImageList>
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "end",
-                    margin: " 20px",
-                }}
-            >
-                {!_.isEmpty(itemData) && <Pagination count={count} onChange={handleChange} />}
-            </Box>
-        </MYContainer>
-    );
+											{/* </Stack> */}
+										</ConDiv>
+									</Box>
+
+								}
+								position="below"
+							/>
+						</ImageListItem>
+					))}
+			</ImageList>
+			<Box
+				sx={{
+					display: "flex",
+					justifyContent: "end",
+					margin: " 20px",
+				}}
+			>
+				{!_.isEmpty(itemData) && <Pagination count={count} onChange={handleChange} />}
+			</Box>
+		</MYContainer>
+	);
 };
 export default Item;

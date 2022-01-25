@@ -56,49 +56,49 @@ const SubContainer = styled.div`
 `;
 
 //FUNCTIONALITY NEEDS TO BE REWORKED BUT FOR NOW THE VISUALS ARE CORRECT
-const Form = ({dispatch}) => {
-    const [state, setStateSearch] = useState(false);
-    const go =()=>{
-        dispatch({
-            type: "SEARCH",
-            payload: state,
-        });
-    }
-    return (
-        <Container>
-            <FormContainer>
-                <label htmlFor="searching" />
-                <SubContainer>
-                    <Box sx={{ flexGrow: 1 }}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={8}>
-                                <Paper component="form" sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400, boxShadow: "none", border: "1px solid #e1e1e1" }}>
-                                    <IconButton sx={{ p: "10px" }} aria-label="menu"></IconButton>
-                                    <InputBase sx={{ ml: 1, flex: 1 }} placeholder="搜索" inputProps={{ "aria-label": "search google maps" }} onChange={(e)=>{
-                                      setStateSearch(e.target.value)
-                                    }} />
-                                    <IconButton  sx={{ p: "10px" }} aria-label="search" onClick={
-                                        go
-                                    }>
-                                        <SearchIcon />
-                                    </IconButton>
-                                </Paper>
-                            </Grid>
-                        </Grid>
-                    </Box>
+const Form = ({ dispatch }) => {
+	const [state, setStateSearch] = useState(false);
+	const go = () => {
+		dispatch({
+			type: "SEARCH",
+			payload: state,
+		});
+	}
+	return (
+		<Container>
+			<FormContainer>
+				<label htmlFor="searching" />
+				<SubContainer>
+					<Box sx={{ flexGrow: 1 }}>
+						<Grid container spacing={2}>
+							<Grid item xs={8}>
+								<Paper component="form" sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400, boxShadow: "none", border: "1px solid #e1e1e1" }}>
+									<IconButton sx={{ p: "10px" }} aria-label="menu"></IconButton>
+									<InputBase sx={{ ml: 1, flex: 1 }} placeholder="搜索" inputProps={{ "aria-label": "search google maps" }} onChange={(e) => {
+										setStateSearch(e.target.value)
+									}} />
+									<IconButton sx={{ p: "10px" }} aria-label="search" onClick={
+										go
+									}>
+										<SearchIcon />
+									</IconButton>
+								</Paper>
+							</Grid>
+						</Grid>
+					</Box>
 
-                    <CloseContainer state={state}>{/* <CloseIcon style={{fontSize:'27px'}}/> */}</CloseContainer>
-                </SubContainer>
-            </FormContainer>
-        </Container>
-    );
+					<CloseContainer state={state}>{/* <CloseIcon style={{fontSize:'27px'}}/> */}</CloseContainer>
+				</SubContainer>
+			</FormContainer>
+		</Container>
+	);
 };
 const mapStateToProps = ({ linkReducer }) => {
-    return {
-        colTyple: linkReducer.colTyple,
-        search:linkReducer.search
-    };
+	return {
+		colTyple: linkReducer.colTyple,
+		search: linkReducer.search
+	};
 };
 
 
-export default connect(mapStateToProps)(Form)      ;
+export default connect(mapStateToProps)(Form);
