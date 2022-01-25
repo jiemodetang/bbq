@@ -16,8 +16,8 @@ import _ from "lodash";
 import { connect } from "react-redux";
 import Pagination from "@mui/material/Pagination";
 import { apiConfig } from "../../service/mmp";
-import limg from "./loading.png";
-import KImg from "./11.png";
+import noDataIMg from "../Img/noData.png";
+import loadImg from "../Img/11.png";
 const ua = navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
 const MYContainer = styled(Container)`
     margin-top: 120px;
@@ -90,7 +90,7 @@ const Home = ({ colTyple,search }) => {
                     height:'100%'
                   }
               }>
-                    <LoadingImg src={KImg} /> 
+                    <LoadingImg src={loadImg} /> 
               </Box>
             ) : (
                 !_.isEmpty(itemData) ?<ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
@@ -163,7 +163,7 @@ const Home = ({ colTyple,search }) => {
                     height:'100%'
                   }
               }>
-                    <LoadingImg src={limg} /> 
+                    <LoadingImg src={noDataIMg} /> 
               </Box>
             )}
             <Box

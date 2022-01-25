@@ -18,7 +18,7 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import Pagination from "@mui/material/Pagination";
-import { getCollectionItemList, getMineItem, getAllItem, deleteItem, deleteC ,postDetail} from "../../service/bbq";
+import { getCollectionItemList, getMineItem, getAllItem, deleteItem, deleteC, postDetail } from "../../service/bbq";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import Typography from "@mui/material/Typography";
@@ -28,17 +28,29 @@ import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import { apiConfig } from "../../service/mmp";
-import {getQueryStringRegExp} from '../../utils'
-import DeleteIcon from '@mui/icons-material/Delete';
-const Container = styled.div`
-    //margin: 100px 210px 20px 210px;
+import { getQueryStringRegExp } from "../../utils";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Container from "@mui/material/Container";
+import noDataIMg from "../Img/noData.png";
+
+const LoadingImg = styled.img`
+width: 190px;
+height: 190px;
 `;
+
+const colNameStyle = {
+    fontSize: "16px",
+    fontWeight: "500",
+    color: " #333333",
+};
+
 const Box1 = styled(Box)`
     display: flex;
 `;
 const ua = navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
-const MYContainer = styled(Container)`
-    margin-top: 72 px;
+const MYContainer = styled.div`
+    margin-top: 72px;
+    height:100%
 `;
 const ConDiv = styled.div`
     margin-top: 15px;
@@ -68,7 +80,6 @@ const Item = ({ collectionId }) => {
     const [count, setCount] = React.useState(1);
     const [colData, setColData] = React.useState({});
 
-
     const handleChange = (event, value) => {
         setPage(value - 1);
     };
@@ -76,7 +87,7 @@ const Item = ({ collectionId }) => {
     React.useEffect(() => {
         const params = {
             data: {
-                colId: getQueryStringRegExp('colId'),
+                colId: getQueryStringRegExp("colId"),
             },
         };
         getMineItem(params).then((res) => {
@@ -92,31 +103,28 @@ const Item = ({ collectionId }) => {
             },
         };
         postDetail(p).then((res) => {
-            const d= _.get(res, "data", {})
+            const d = _.get(res, "data", {});
             setColData(_.get(res, "data", {}));
-            
         });
-       
     }, []);
-    const d=()=>{
-            const c= {
-                data: {
-                    id: getQueryStringRegExp('colId'),
-                },
-            };
-            deleteC(c).then(res=>{
-                if(res.code == '0000'){
-                    window._M.success('删除成功')
-                    history.push('/collections')
-                   }else{
-                    window._M.error(res.msg);
-                   }
-             
-            })
-    }
+    const d = () => {
+        const c = {
+            data: {
+                id: getQueryStringRegExp("colId"),
+            },
+        };
+        deleteC(c).then((res) => {
+            if (res.code == "0000") {
+                window._M.success("删除成功");
+                history.push("/collections");
+            } else {
+                window._M.error(res.msg);
+            }
+        });
+    };
 
     return (
-        <MYContainer maxWidth={"xl"}>
+        <MYContainer maxWidth={"lg"}>
             <img src={jp} style={{ width: "100%" }} />
             <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={2} sx={{ margin: "40px 0" }}>
                 <Box sx={{ display: "flex" }}>
@@ -127,20 +135,14 @@ const Item = ({ collectionId }) => {
                         color="primary"
                         aria-label="edit"
                         size="small"
-                        sx={{  ml: 1 }}
+                        sx={{ ml: 1 }}
                         onClick={() => {
-                            history.push("/collection/create?type=col&colId="+ getQueryStringRegExp('colId'));
+                            history.push("/collection/create?type=col&colId=" + getQueryStringRegExp("colId"));
                         }}
                     >
                         <EditIcon />
                     </Fab>
-                    <Fab
-                        color="primary"
-                        aria-label="add"
-                        size="small"
-                        onClick={d}
-                        sx={{ mr: 1, ml: 1 }}
-                    >
+                    <Fab color="primary" aria-label="add" size="small" onClick={d} sx={{ mr: 1, ml: 1 }}>
                         <DeleteIcon />
                     </Fab>
                     <Fab
@@ -148,17 +150,34 @@ const Item = ({ collectionId }) => {
                         aria-label="add"
                         size="small"
                         onClick={() => {
-                            history.push("/collection/create?type=item&colId="+ getQueryStringRegExp('colId'));
+                            history.push("/collection/create?type=item&colId=" + getQueryStringRegExp("colId"));
                         }}
                     >
                         <AddIcon />
                     </Fab>
                 </Box>
                 <Box sx={{ display: "flex" }}>
-                    <Typography variant={"p"} sx={{ maxWidth: "490px", color: "#8A939B" }}>{colData.memo}</Typography>
+                    <Typography variant={"p"} sx={{ maxWidth: "490px", color: "#8A939B" }}>
+                        {colData.memo}
+                    </Typography>
                 </Box>
             </Stack>
             <Divider light sx={{ marginBottom: "60px" }} />
+            <Container maxWidth={'lg'}>
+                {
+                    _.isEmpty(itemData)?
+                    <Box sx={
+                        {
+                          display:'flex',
+                          justifyContent:'center',
+                          alignItems:'center',
+                          height:'100%'
+                        }
+                    }>
+                          <LoadingImg src={noDataIMg} /> 
+                    </Box>:
+
+           
             <ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
                 {!_.isEmpty(itemData) &&
                     itemData[page].map((item) => (
@@ -181,6 +200,7 @@ const Item = ({ collectionId }) => {
                                 }}
                                 style={{
                                     height: "200px",
+                                    objectFit: "contain",
                                 }}
                             />
                             <ImageListItemBar
@@ -188,12 +208,16 @@ const Item = ({ collectionId }) => {
                                 subtitle={
                                     <Box>
                                         <Box sx={{ width: "100%", borderBottom: "1px solid #ccc" }} pb={2}>
-                                            <Typography align={"center"}>{item.colName}</Typography>
-                                            <Typography align={"center"}>{item.externalLink}</Typography>
-                                            <Typography align={"center"}>{item.memo}</Typography>
+                                            <Typography align={"center"} sx={colNameStyle}>
+                                                {item.colName}
+                                            </Typography>
+                                            {/* <Typography align={"center"}>{item.externalLink}</Typography> */}
+                                            <Typography align={"center"} sx={{ color: "#8A939B" }}>
+                                                {item.memo}
+                                            </Typography>
                                         </Box>
                                         <ConDiv>
-                                            <Typography align={"center"}>{item.itemNums}</Typography>
+                                            <Typography align={"center"}  sx={{ color: "#8A939B" }} >{item.itemNums}项目</Typography>
                                         </ConDiv>
                                         <ConDiv>
                                             {/* <Stack spacing={1} sx={{width:'40%',margin:'auto'}} > */}
@@ -210,14 +234,15 @@ const Item = ({ collectionId }) => {
                                             {/* </Stack> */}
                                         </ConDiv>
                                     </Box>
-                                    
                                 }
                                 position="below"
                             />
                         </ImageListItem>
                     ))}
             </ImageList>
-            <Box
+           
+                 }
+                  <Box
                 sx={{
                     display: "flex",
                     justifyContent: "end",
@@ -226,6 +251,7 @@ const Item = ({ collectionId }) => {
             >
                 {!_.isEmpty(itemData) && <Pagination count={count} onChange={handleChange} />}
             </Box>
+            </Container>
         </MYContainer>
     );
 };

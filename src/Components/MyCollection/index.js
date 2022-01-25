@@ -20,6 +20,12 @@ import Pagination from "@mui/material/Pagination";
 import Typography from "@mui/material/Typography";
 import { apiConfig } from "../../service/mmp";
 
+const colNameStyle = {
+    fontSize: "16px",
+    fontWeight: "500",
+    color: " #333333",
+};
+
 const Container = styled.div`
    margin: 100px 210px 20px 210px;
 `;
@@ -157,6 +163,7 @@ class Collections extends React.Component {
                                         }}
                                         style={{
                                             height: "200px",
+                                            objectFit:'contain'
                                         }}
                                     />
                                     <ImageListItemBar
@@ -164,11 +171,11 @@ class Collections extends React.Component {
                                         subtitle={
                                             <Box>
                                                 <Box sx={{ width: "100%", borderBottom: "1px solid #ccc" }} pb={2}>
-                                                    <Typography align={"center"}>{item.colName}</Typography>
-                                                    <Typography align={"center"}>{item.memo}</Typography>
+                                                    <Typography align={"center"} sx= {colNameStyle}>{item.colName}</Typography>
+                                                    <Typography align={"center"} sx={{color:'#8A939B'}}>{item.memo}</Typography>
                                                 </Box>
                                                 <ConDiv>
-                                                    <Typography align={"center"}>{item.itemNums}</Typography>
+                                                <Typography align={"center"}  sx={{ color: "#8A939B" }} >{item.itemNums}项目</Typography>
                                                 </ConDiv>
                                             </Box>
                                         }
