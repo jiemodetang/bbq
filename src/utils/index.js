@@ -161,3 +161,25 @@ export const  getQueryStringRegExp = function(name) {
   var reg = new RegExp("(^|\\?|&)"+ name +"=([^&]*)(\\s|&|$)", "i");   
   return reg.test(window.location.href) ? unescape(RegExp.$2.replace(/\+/g, " ")) : ""; 
 };
+
+
+export function getCookie(cName) {
+  if (document.cookie.length > 0) {
+      var cStart = document.cookie.indexOf(cName + "=");
+      if (cStart != -1) {
+          cStart = cStart + cName.length + 1;
+          var cEnd = document.cookie.indexOf(";", cStart);
+          if (cEnd == -1) cEnd = document.cookie.length;
+          return document.cookie.substring(cStart, cEnd);
+      }
+  }
+  return "";
+}
+
+//设置cookie
+export function setCookie(cName, value, expiredays) {
+  var exdate = new Date();
+  exdate.setDate(exdate.getDate() + expiredays);
+  document.cookie = cName + "=" + value + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
+}
+

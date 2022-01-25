@@ -8,7 +8,7 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Stack from "@mui/material/Stack";
 import $web3js from "../../../lib/contract/web3";
-import { formartadd, removeLocalStorage, setLocalStorage, getLocalStorage, div } from "../../../utils/index";
+import { formartadd, removeLocalStorage, setLocalStorage, getLocalStorage, getCookie,setCookie } from "../../../utils/index";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
@@ -185,6 +185,7 @@ const Links = ({ colTyple, dispatch }) => {
                     window._M.success('链接钱包成功');
                     // 链接钱包成功之后，弹出提示信息
                     setLocalStorage("walletaccount", address);
+                    setCookie('token',_.get(res, ['data', 'token']),1)
                     setUserState(address);
                 } else {
                     window._M.error(res.msg);

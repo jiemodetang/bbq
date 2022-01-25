@@ -45,7 +45,7 @@ const TypeListComponent = ({ cb })=> {
                 >
                     {_.map(list, (i, d) => {
                         return (
-                            <MenuItem value={i.itemValue} key={d}>
+                            <MenuItem value={i.id} key={d}>
                                 {i.itemValue}
                             </MenuItem>
                         );

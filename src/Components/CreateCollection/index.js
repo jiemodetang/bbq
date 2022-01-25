@@ -17,9 +17,10 @@ import TypeListComponent from "../component/TypeListComponent";
 import Snackbar from "@mui/material/Snackbar";
 import _ from "lodash";
 import { getQueryStringRegExp } from "../../utils/index";
+import { useHistory } from "react-router-dom";
 
 const Container = styled.div`
-   margin: 100px 210px 20px 210px;
+    margin: 100px 210px 20px 210px;
 `;
 const CreateDiv = styled.div`
     margin: 30px 0 40px;
@@ -43,90 +44,101 @@ function Collections() {
     const [itemData, setItemData] = React.useState({});
 
     const [img, setImg] = React.useState("");
+    const history = useHistory();
+
     const {
         register,
         handleSubmit,
         watch,
         formState: { errors },
-        setValue
+        setValue,
     } = useForm();
 
     React.useEffect(() => {
-        if (getQueryStringRegExp("colId")) {
+        if (getQueryStringRegExp("type") == "col" && getQueryStringRegExp("colId")) {
             const params = {
                 data: {
                     id: getQueryStringRegExp("colId"),
                 },
             };
             postDetail(params).then((res) => {
-                const d= _.get(res, "data", {})
+                const d = _.get(res, "data", {});
                 setColData(_.get(res, "data", {}));
-                const {colImage,colName,memo,externalLink,colType} = d
-                setValue('colName',colName)
-                setValue('externalLink',externalLink)
-                setValue('memo',memo)
-                setValue('colImage',colImage)
-                setType(colType)
-
-                
+                const { colImage, colName, memo, externalLink, colType } = d;
+                setValue("colName", colName);
+                setValue("externalLink", externalLink);
+                setValue("memo", memo);
+                setValue("colImage", colImage);
+                setType(colType);
             });
-        } 
-        if(getQueryStringRegExp("itemId")) {
+        }
+        if (getQueryStringRegExp("type") == "item" && getQueryStringRegExp("itemId")) {
             const params = {
                 data: {
-                    id: getQueryStringRegExp('itemId')
+                    id: getQueryStringRegExp("itemId"),
                 },
             };
-            detailItem(params).then(res=>{
+            detailItem(params).then((res) => {
                 // TODO
                 // setItemData(_.get(res,'data',{}))x
-            })
+            });
         }
     }, []);
- 
 
     const onSubmit = (data) => {
         if (!type) {
             window._M.error("请选择类型");
         } else {
-            const params = {
+            const p = {
                 data: {
                     ...data,
                     colType: type,
                     colImage: img,
+                    id: getQueryStringRegExp("colId"),
                 },
             };
-            if (getQueryStringRegExp("colId")) {
-                update(params).then((res) => {
-                   if(res.code == '0000'){
-                    window._M.success("更新成功");
-                   }else{
-                    window._M.error(res.msg);
-                   }
-                });
-            }
-            if (getQueryStringRegExp("type") == "col") {
-                save(params).then((res) => {
-                    window._M.success("保存成功");
-                });
-            }
-              if(getQueryStringRegExp("type") == "item" ){
-                  const {colName,externalLink,memo} = data
-                const p= {
-                    data:{
-                     itemImage: img,
-                     itemName: colName,
-                     externalLink: externalLink,
-                     colType: type,
-                     memo: memo,
-                     collectId: getQueryStringRegExp("colId")
+            if (getQueryStringRegExp("type") == "col" && getQueryStringRegExp("colId")) {
+                update(p).then((res) => {
+                    if (res.code == "0000") {
+                        window._M.success("更新成功");
+                        history.push("/collections");
+                    } else {
+                        window._M.error(res.msg);
                     }
-                 }
-                 saveItem(p).then(res=>{
-                    window._M.success('保存成功')
-                 })
-              }
-                
+                });
+            }
+            if (getQueryStringRegExp("type") == "col" && !getQueryStringRegExp("colId")) {
+                const params = {
+                    data: {
+                        ...data,
+                        colType: type,
+                        colImage: img,
+                    },
+                };
+                save(params).then((res) => {
+                    window._M.success("新建成功");
+                    history.push("/collections");
+                });
+            }
+
+            if (getQueryStringRegExp("type") == "item" ) {
+                const { colName, externalLink, memo } = data;
+                const p = {
+                    data: {
+                        itemImage: img,
+                        itemName: colName,
+                        externalLink: externalLink,
+                        colType: type,
+                        memo: memo,
+                        collectId : getQueryStringRegExp("colId")?getQueryStringRegExp("colId"):''
+                    },
+                };
+          
+                saveItem(p).then((res) => {
+                    window._M.success("保存成功");
+                    history.push("/collections");
+                });
+            }
         }
     };
     // 创建按钮
@@ -195,10 +207,17 @@ function Collections() {
                 <TextField fullWidth id="outlined-basic" placeholder="集合名称" variant="outlined" {...register("colName", { required: true })} />
                 {/* <input {...register("exampleRequired", { required: true })} /> */}
                 <h4>描述</h4>
-                <TextField fullWidth id="outlined-multiline-flexible" placeholder="Description" multiline maxRows={4} {...register("memo", { required: true })} />
+                <TextField fullWidth id="outlined-multiline-flexible" placeholder="提供您的详细描述" multiline maxRows={4} {...register("memo", { required: true })} />
 
                 <h4>外部链接</h4>
-                <TextField fullWidth id="outlined-multiline-flexible" placeholder="Description" multiline maxRows={4} {...register("externalLink", { required: true })} />
+                <TextField
+                    fullWidth
+                    id="outlined-multiline-flexible"
+                    placeholder="http://yoursite.io/item"
+                    multiline
+                    maxRows={4}
+                    {...register("externalLink", { required: true })}
+                />
 
                 <h4>类型</h4>
                 <TypeListComponent cb={cb}></TypeListComponent>

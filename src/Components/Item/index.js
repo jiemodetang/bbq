@@ -18,7 +18,7 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import ImageListItemBar from "@mui/material/ImageListItemBar";
 import Pagination from "@mui/material/Pagination";
-import { getCollectionItemList, getMineItem, getAllItem, deleteItem, deleteC } from "../../service/bbq";
+import { getCollectionItemList, getMineItem, getAllItem, deleteItem, deleteC ,postDetail} from "../../service/bbq";
 import { useHistory } from "react-router-dom";
 import _ from "lodash";
 import Typography from "@mui/material/Typography";
@@ -66,6 +66,9 @@ const Item = ({ collectionId }) => {
     const [itemData, setItemData] = React.useState([]);
     const [page, setPage] = React.useState(0);
     const [count, setCount] = React.useState(1);
+    const [colData, setColData] = React.useState({});
+
+
     const handleChange = (event, value) => {
         setPage(value - 1);
     };
@@ -82,6 +85,17 @@ const Item = ({ collectionId }) => {
             setCount(Math.ceil(t / pageSize));
             setItemData(_.chunk(data, pageSize));
         });
+
+        const p = {
+            data: {
+                id: getQueryStringRegExp("colId"),
+            },
+        };
+        postDetail(p).then((res) => {
+            const d= _.get(res, "data", {})
+            setColData(_.get(res, "data", {}));
+            
+        });
        
     }, []);
     const d=()=>{
@@ -90,7 +104,15 @@ const Item = ({ collectionId }) => {
                     id: getQueryStringRegExp('colId'),
                 },
             };
-            deleteC(c)
+            deleteC(c).then(res=>{
+                if(res.code == '0000'){
+                    window._M.success('删除成功')
+                    history.push('/collections')
+                   }else{
+                    window._M.error(res.msg);
+                   }
+             
+            })
     }
 
     return (
@@ -99,7 +121,7 @@ const Item = ({ collectionId }) => {
             <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={2} sx={{ margin: "40px 0" }}>
                 <Box sx={{ display: "flex" }}>
                     <Typography variant={"h4"} align={"center"}>
-                        {"sfsfs"}
+                        {colData.colName}
                     </Typography>
                     <Fab
                         color="primary"
@@ -107,7 +129,7 @@ const Item = ({ collectionId }) => {
                         size="small"
                         sx={{  ml: 1 }}
                         onClick={() => {
-                            history.push("/collection/create?colId="+ getQueryStringRegExp('colId'));
+                            history.push("/collection/create?type=col&colId="+ getQueryStringRegExp('colId'));
                         }}
                     >
                         <EditIcon />
@@ -126,15 +148,14 @@ const Item = ({ collectionId }) => {
                         aria-label="add"
                         size="small"
                         onClick={() => {
-                            history.push("/collection/create?type=item");
+                            history.push("/collection/create?type=item&colId="+ getQueryStringRegExp('colId'));
                         }}
                     >
                         <AddIcon />
                     </Fab>
                 </Box>
                 <Box sx={{ display: "flex" }}>
-                    <Typography variant={"p"} sx={{ maxWidth: "490px", color: "#8A939B" }}>{`经过一个非常严酷的冰河时代，北极熊是唯一幸存下来的物种。现在，他们需
-要探索世界，创造发明和北极熊的世界——寒冷、时髦而且绝对有趣！他们…`}</Typography>
+                    <Typography variant={"p"} sx={{ maxWidth: "490px", color: "#8A939B" }}>{colData.memo}</Typography>
                 </Box>
             </Stack>
             <Divider light sx={{ marginBottom: "60px" }} />

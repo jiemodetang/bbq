@@ -71,7 +71,7 @@ const Home = ({ colTyple }) => {
         });
     }, [colTyple]);
     return (
-        <MYContainer maxWidth={"xl"}>
+        <MYContainer maxWidth={"lg"}>
             <ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
                 {!_.isEmpty(itemData) &&
                     itemData[page].map((item) => (

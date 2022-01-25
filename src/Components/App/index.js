@@ -21,12 +21,16 @@ import Footer from "../Footer";
 
 import Drcollection from "../Drcollection";
 import CreateItem from "../CreateItem";
-
+import {getCookie} from '../../utils/index'
+import {apiConfig} from '../../service/mmp'
 const NB = () => {
     return 111;
 };
 
 const App = () => {
+     if(  getCookie('token')){
+          apiConfig.token =   getCookie('token')
+      }
     return (
         <div>
             <Navigation />

@@ -3,6 +3,7 @@ import Qs from "qs"; // 引入qs模块，用来序列化post类型的数据
 import MockAdapter from "axios-mock-adapter";
 import { dealMock } from "../myMock";
 import {apiConfig } from '../service/mmp'
+import {getCookie} from '../utils/index'
 
 let inError = false;
 const instance = axios.create({
@@ -44,7 +45,8 @@ instance.interceptors.request.use(
                   },
             config.headers
         );
-        config.headers.Authorization= apiConfig.token
+        config.headers.Authorization= apiConfig.token? getCookie('token'):''
+        
         if (config.method === "post") {
             const contentType = config.headers["Content-Type"];
             // 根据Content-Type转换data格式
