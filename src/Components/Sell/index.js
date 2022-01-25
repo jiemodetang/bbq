@@ -25,7 +25,7 @@ import { sellItem } from '../../service/bbq'
 // 合约
 import $web3js from "../../lib/contract/web3";
 import numberUtils from "../../utils/numberUtils";
-import { formartadd, removeLocalStorage, setLocalStorage, getLocalStorage, div } from "../../utils/index";
+import { formartadd, removeLocalStorage, setLocalStorage, getLocalStorage, getQueryStringRegExp } from "../../utils/index";
 // 出售挂单 abi
 const creatOrderJson = require("../../lib/contract/creatOrder.json");
 const nftContract = require("../../lib/contract/contractAddress");
@@ -57,7 +57,7 @@ export default function ControlledOpenSelect() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
-    const [age, setAge] = React.useState("");
+    const [age, setAge] = React.useState("6");
     const [values, setValues] = React.useState({
         amount: "",
         password: "",
@@ -89,10 +89,8 @@ export default function ControlledOpenSelect() {
         // sell 挂单参数
         const params = {
             data: {
-                itemId: 2,
-                price: 0.001,
-                priceType: 1,
-                deadLine: 6
+                itemId: getQueryStringRegExp('id'),
+              ...data
             },
         };
         sellItem(params).then(res => {
@@ -234,7 +232,7 @@ export default function ControlledOpenSelect() {
                         >
                             <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">BNB</InputLabel>
-                                <Select labelId="demo-simple-select-label" id="demo-simple-select" value={age} label="Age" onChange={handleChange} {...register("type")}>
+                                <Select labelId="demo-simple-select-label" id="demo-simple-select" value={2} label="Age" onChange={handleChange} {...register("priceType")}>
                                     <MenuItem value={"2"}>BNB</MenuItem>
                                     <MenuItem value={"1"}>USDT</MenuItem>
                                 </Select>
@@ -250,7 +248,7 @@ export default function ControlledOpenSelect() {
                             noValidate
                             autoComplete="off"
                         >
-                            <TextField id="outlined-basic" label="数量" variant="outlined" {...register("num")} />
+                            <TextField id="outlined-basic" label="数量" variant="outlined" {...register("reqNo")} />
                         </Box>
                     </Grid>
                 </Grid>
@@ -267,7 +265,7 @@ export default function ControlledOpenSelect() {
                         >
                             <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">6个月</InputLabel>
-                                <Select labelId="demo-simple-select-label" id="demo-simple-select" value={age} label="Age" onChange={handleChange} {...register("yue")}>
+                                <Select labelId="demo-simple-select-label" id="demo-simple-select" value={age} label="Age" onChange={handleChange} {...register("deadLine")}>
                                     <MenuItem value={1}>1个月</MenuItem>
                                     <MenuItem value={3}>3个月</MenuItem>
                                     <MenuItem value={6}>6个月</MenuItem>
@@ -294,7 +292,7 @@ export default function ControlledOpenSelect() {
                                     "aria-label": "weight",
                                 }}
                                 placeholder={"服务费"}
-                                {...register("feiyong")}
+                                {...register("price")}
                             />
                             <FormHelperText id="standard-weight-helper-text"></FormHelperText>
                         </FormControl>
