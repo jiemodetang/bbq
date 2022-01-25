@@ -32,7 +32,7 @@ const App = () => {
           apiConfig.token =   getCookie('token')
       }
     return (
-        <div>
+        <>
             <Navigation />
             <Switch>
                 <Route exact path="/" component={Home} />
@@ -51,7 +51,7 @@ const App = () => {
                 
             </Switch>
             <Footer></Footer>
-        </div>
+        </>
     );
 };
 

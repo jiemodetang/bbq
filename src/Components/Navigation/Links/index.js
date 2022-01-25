@@ -8,7 +8,7 @@ import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import Stack from "@mui/material/Stack";
 import $web3js from "../../../lib/contract/web3";
-import { formartadd, removeLocalStorage, setLocalStorage, getLocalStorage, getCookie,setCookie } from "../../../utils/index";
+import { formartadd, removeLocalStorage, setLocalStorage, getLocalStorage, getCookie, setCookie } from "../../../utils/index";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
@@ -24,46 +24,9 @@ import NEW from "./image/NEW.png";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { login, getAllColType } from "../../../service/bbq";
 import { connect } from "react-redux";
-import { apiConfig } from '../../../service/mmp'
+import { apiConfig } from "../../../service/mmp";
 import _ from "lodash";
-
-const ntfList = [
-    {
-        title: "所有",
-        img: suoyou,
-        type: ''
-    },
-    {
-        title: "最新",
-        img: NEW,
-        type: ''
-    },
-    {
-        title: "摄影",
-        img: sheying,
-        type: ''
-    },
-    {
-        title: "音乐",
-        img: yingyue,
-        type: ''
-    },
-    {
-        title: "收藏品",
-        img: shoucangping,
-        type: ''
-    },
-    {
-        title: "艺术",
-        img: yishu,
-        type: ''
-    },
-    {
-        title: "运动",
-        img: yundong,
-        type: ''
-    },
-];
+const imgList = [suoyou, NEW, sheying, yingyue, shoucangping, yishu, yundong];
 
 const Container = styled.div`
     display: none;
@@ -97,6 +60,7 @@ const Item = styled.li`
 const Links = ({ colTyple, dispatch }) => {
     const [nftType, setNftType] = React.useState(null);
     const [userInfo, setUserInfo] = React.useState(null);
+    const [zzzlist, setList] = React.useState([]);
     // 登录状态
     const [userState, setUserState] = React.useState(getLocalStorage("walletaccount"));
     // 跳转路由
@@ -104,9 +68,11 @@ const Links = ({ colTyple, dispatch }) => {
 
     useEffect(() => {
         const params = {
-            method: 'get'
-        }
-        getAllColType(params)
+            method: "get",
+        };
+        getAllColType(params).then((res) => {
+            setList(_.concat([{ id: "",itemValue:'所有' }], _.get(res, ["data"], [])));
+        });
     }, []);
     // EXPLORE nft 类型选择
     const openNftType = Boolean(nftType);
@@ -133,12 +99,11 @@ const Links = ({ colTyple, dispatch }) => {
     }
     // 我的集合
     function handleList(type) {
-        history.push("/");
         dispatch({
-            type: 'LINK',
-            payload: type
-        })
-
+            type: "LINK",
+            payload: type,
+        });
+        history.push("/");
         handleClose();
     }
     // 我的集合
@@ -179,13 +144,13 @@ const Links = ({ colTyple, dispatch }) => {
                     addr: address,
                 },
             };
-            login(params).then(res => {
-                if (res.code === '0000') {
-                    apiConfig.token = _.get(res, ['data', 'token'])
-                    window._M.success('链接钱包成功');
+            login(params).then((res) => {
+                if (res.code === "0000") {
+                    apiConfig.token = _.get(res, ["data", "token"]);
+                    window._M.success("链接钱包成功");
                     // 链接钱包成功之后，弹出提示信息
                     setLocalStorage("walletaccount", address);
-                    setCookie('token',_.get(res, ['data', 'token']),1)
+                    setCookie("token", _.get(res, ["data", "token"]), 1);
                     setUserState(address);
                 } else {
                     window._M.error(res.msg);
@@ -229,23 +194,26 @@ const Links = ({ colTyple, dispatch }) => {
                         horizontal: "left",
                     }}
                 >
-                    {ntfList.map((item, index) => {
+                    {zzzlist.map((item, index) => {
                         const dom = (
                             <div>
-                                <MenuItem onClick={() => {
-                                    handleList(item.type)
-                                }} key={index}>
+                                <MenuItem
+                                    onClick={() => {
+                                        handleList(item.id);
+                                    }}
+                                    key={index}
+                                >
                                     <ListItemIcon key={item.img}>
                                         <img
-                                            src={item.img}
-                                            alt={item.title}
+                                            src={imgList[index]}
+                                            alt={item.itemValue}
                                             loading="lazy"
                                             onClick={() => {
                                                 // history.push("/collection/detail");
                                             }}
                                         ></img>
                                     </ListItemIcon>
-                                    {item.title}
+                                    {item.itemValue}
                                 </MenuItem>
                             </div>
                         );

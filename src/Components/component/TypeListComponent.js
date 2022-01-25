@@ -14,7 +14,7 @@ import { uploadImg } from "../../service/bbq";
 import { getAllColType } from "../../service/bbq";
 import _ from "lodash";
 
-const TypeListComponent = ({ cb })=> {
+const TypeListComponent = ({ cb,value })=> {
     const [list, setList] = useState("");
     const [age, setAge] = useState("");
 
@@ -25,6 +25,7 @@ const TypeListComponent = ({ cb })=> {
         getAllColType(params).then((res) => {
             setList(_.get(res, ["data"], []));
         });
+    
     }, []);
     const handleChangeType = (event) => {
         setAge(event.target.value);
@@ -37,7 +38,7 @@ const TypeListComponent = ({ cb })=> {
                 <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
-                    // value={age}
+                    value={value}
                     displayEmpty
                     inputProps={{ "aria-label": "Without label" }}
                     onChange={handleChangeType}

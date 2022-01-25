@@ -14,7 +14,8 @@ const types ={
   community:'COMMUNITY',
   create:'CREATE',
   next:"NEXT",
-  link:'LINK'
+  link:'LINK',
+  search:'SEARCH'
 }
 
 

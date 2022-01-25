@@ -41,7 +41,7 @@ const Input = styled("input")({
 function Collections() {
     const [type, setType] = React.useState("");
     const [colData, setColData] = React.useState({});
-    const [itemData, setItemData] = React.useState({});
+    const [editImg, setEditImg] = React.useState('');
 
     const [img, setImg] = React.useState("");
     const history = useHistory();
@@ -70,6 +70,7 @@ function Collections() {
                 setValue("memo", memo);
                 setValue("colImage", colImage);
                 setType(colType);
+                setEditImg(colImage)
             });
         }
         if (getQueryStringRegExp("type") == "item" && getQueryStringRegExp("itemId")) {
@@ -197,7 +198,7 @@ function Collections() {
                     <label htmlFor="contained-button-file">
                         <Input accept="image/*" id="contained-button-file" type="file" onChange={nC} />
 
-                        <TpImg src={img ? apiConfig.productionUrl + img + "" : Tp} />
+                        <TpImg src={editImg ? apiConfig.productionUrl + editImg + "" : Tp} />
                     </label>
                 </Typography>
 
@@ -220,7 +221,7 @@ function Collections() {
                 />
 
                 <h4>类型</h4>
-                <TypeListComponent cb={cb}></TypeListComponent>
+                <TypeListComponent cb={cb} value={type}></TypeListComponent>
 
                 <CreateDiv>
                     <Button variant="contained" type="submit" onPress={createCollections}>

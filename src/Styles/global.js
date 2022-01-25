@@ -2,10 +2,14 @@ import { createGlobalStyle } from 'styled-components';
 
 
 const GlobalStyle = createGlobalStyle`
-  body{
+  body,html{
     margin:0;
     padding:0;
     font-family:"Roboto";
+    height:100%
+  }
+  #root{
+    height:80%
   }
 `
 

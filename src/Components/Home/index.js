@@ -16,12 +16,13 @@ import _ from "lodash";
 import { connect } from "react-redux";
 import Pagination from "@mui/material/Pagination";
 import { apiConfig } from "../../service/mmp";
-
-
-
+import limg from "./loading.png";
+import KImg from "./11.png";
 const ua = navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
 const MYContainer = styled(Container)`
     margin-top: 120px;
+    height: 100%;
+
 `;
 const ConDiv = styled.div`
     margin-top: 15px;
@@ -44,11 +45,17 @@ const Item2 = styled.div`
     color: #333333;
     line-height: 16px;
 `;
+const LoadingImg = styled.img`
+width: 190px;
+height: 190px;
+`;
+
 const pageSize = 12;
-const Home = ({ colTyple }) => {
+const Home = ({ colTyple,search }) => {
     const [itemData, setItemData] = useState([]);
     const [page, setPage] = React.useState(0);
     const [count, setCount] = React.useState(1);
+    const [loading, setLoading] = React.useState(true);
 
     const handleChange = (event, value) => {
         setPage(value - 1);
@@ -57,91 +64,113 @@ const Home = ({ colTyple }) => {
     const history = useHistory();
 
     useEffect(() => {
-
         const params = {
             data: {
                 colType: colTyple,
+                searchValue:search
             },
         };
+        setLoading(true)
         getI(params).then((res) => {
             const data = _.get(res, ["pageInfo", "list"], []);
             const t = _.get(res, ["pageInfo", "total"]);
             setCount(Math.ceil(t / pageSize));
             setItemData(_.chunk(data, pageSize));
+            setLoading(false)
         });
-    }, [colTyple]);
+    }, [colTyple,search]);
     return (
         <MYContainer maxWidth={"lg"}>
-            <ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
-                {!_.isEmpty(itemData) &&
-                    itemData[page].map((item) => (
-                        <ImageListItem
-                            key={item.img}
-                            sx={{
-                                padding: "10px",
-                                background: "#FFFFFF",
-                                boxShadow: "0px 5px 8px 0px rgba(231, 231, 231, 0.6)",
-                                borderRadius: " 20px",
-                                border: "1px solid #E4E8EB",
-                            }}
-                        >
-                            <img
-                                src={apiConfig.productionUrl + item.itemImage}
-                                // srcSet={`${item.colImage}?w=260&h=260&fit=crop&auto=format&dpr=2 2x`}
-                                alt={item.colName}
-                                loading="lazy"
-                                onClick={() => {
-                                    history.push("/collection/detail?id=" + item.id);
+            {loading ? (
+              <Box sx={
+                  {
+                    display:'flex',
+                    justifyContent:'center',
+                    alignItems:'center',
+                    height:'100%'
+                  }
+              }>
+                    <LoadingImg src={KImg} /> 
+              </Box>
+            ) : (
+                !_.isEmpty(itemData) ?<ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
+                    {!_.isEmpty(itemData) &&
+                        itemData[page].map((item) => (
+                            <ImageListItem
+                                key={item.img}
+                                sx={{
+                                    padding: "10px",
+                                    background: "#FFFFFF",
+                                    boxShadow: "0px 5px 8px 0px rgba(231, 231, 231, 0.6)",
+                                    borderRadius: " 20px",
+                                    border: "1px solid #E4E8EB",
                                 }}
-                            />
-                            <ImageListItemBar
-                                // title={item.title}
-                                subtitle={
-                                    <Box>
-                                        <Box sx={{ width: "100%", borderBottom: "1px solid #ccc" }} pb={2}>
-                                            <Grid container rowSpacing={1} sx={{ margin: "12px 0 " }}>
-                                                <Grid item xs={6}>
-                                                    <Item1>心脏计划</Item1>
+                            >
+                                <img
+                                    src={apiConfig.productionUrl + item.itemImage}
+                                    // srcSet={`${item.colImage}?w=260&h=260&fit=crop&auto=format&dpr=2 2x`}
+                                    alt={item.colName}
+                                    loading="lazy"
+                                    onClick={() => {
+                                        history.push("/collection/detail?id=" + item.id);
+                                    }}
+                                />
+                                <ImageListItemBar
+                                    // title={item.title}
+                                    subtitle={
+                                        <Box>
+                                            <Box sx={{ width: "100%", borderBottom: "1px solid #ccc" }} pb={2}>
+                                                <Grid container rowSpacing={1} sx={{ margin: "12px 0 " }}>
+                                                    <Grid item xs={6}>
+                                                        <Item1>心脏计划</Item1>
+                                                    </Grid>
+                                                    <Grid item xs={6} sx={{ textAlign: "right" }}>
+                                                        <Item1>最高出价</Item1>
+                                                    </Grid>
+                                                    <Grid item xs={6} sx={{ textAlign: "left" }}>
+                                                        <Item2>{item.itemName}</Item2>
+                                                    </Grid>
+                                                    <Grid item xs={6} sx={{ textAlign: "right" }}>
+                                                        <Item2>{item.itemNums}</Item2>
+                                                    </Grid>
                                                 </Grid>
-                                                <Grid item xs={6} sx={{ textAlign: "right" }}>
-                                                    <Item1>最高出价</Item1>
-                                                </Grid>
-                                                <Grid item xs={6} sx={{ textAlign: "left" }}>
-                                                    <Item2>{item.itemName}</Item2>
-                                                </Grid>
-                                                <Grid item xs={6} sx={{ textAlign: "right" }}>
-                                                    <Item2>{item.itemNums}</Item2>
-                                                </Grid>
-                                            </Grid>
+                                            </Box>
+                                            <ConDiv>
+                                                {/* <Stack spacing={1} sx={{width:'40%',margin:'auto'}} > */}
+                                                <Button
+                                                    variant="contained"
+                                                    sx={{ background: "#56ADBB", borderRadius: "10px" }}
+                                                    onClick={() => {
+                                                        // history.push("/home/sell?id=" + item.id);
+                                                        history.push("/collection/detail?id=" + item.id);
+                                                    }}
+                                                >
+                                                    购买
+                                                </Button>
+                                                {/* </Stack> */}
+                                            </ConDiv>
                                         </Box>
-                                        <ConDiv>
-                                            {/* <Stack spacing={1} sx={{width:'40%',margin:'auto'}} > */}
-                                            <Button
-                                                variant="contained"
-                                                sx={{ background: "#56ADBB", borderRadius: "10px" }}
-                                                onClick={() => {
-                                                    // history.push("/home/sell?id=" + item.id);
-                                                    history.push("/collection/detail?id=" + item.id);
-                                                }}
-                                            >
-                                                购买
-                                            </Button>
-                                            {/* </Stack> */}
-                                        </ConDiv>
-                                    </Box>
-                                }
-                                position="below"
-                            />
-                        </ImageListItem>
-                    ))}
-            </ImageList>
+                                    }
+                                    position="below"
+                                />
+                            </ImageListItem>
+                        ))}
+                </ImageList>: <Box sx={
+                  {
+                    display:'flex',
+                    justifyContent:'center',
+                    alignItems:'center',
+                    height:'100%'
+                  }
+              }>
+                    <LoadingImg src={limg} /> 
+              </Box>
+            )}
             <Box
                 sx={{
-                    display: 'flex',
-                    justifyContent: 'end',
-                    margin: ' 20px',
-
-
+                    display: "flex",
+                    justifyContent: "end",
+                    margin: " 20px",
                 }}
             >
                 {!_.isEmpty(itemData) && <Pagination count={count} onChange={handleChange} />}
@@ -153,6 +182,7 @@ const Home = ({ colTyple }) => {
 const mapStateToProps = ({ linkReducer }) => {
     return {
         colTyple: linkReducer.colTyple,
+        search:linkReducer.search
     };
 };
 

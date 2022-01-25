@@ -11,6 +11,9 @@ import Divider from "@mui/material/Divider";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import DirectionsIcon from "@mui/icons-material/Directions";
+import { connect } from "react-redux";
+
+
 const Container = styled.div`
     width: 100%;
 `;
@@ -53,8 +56,14 @@ const SubContainer = styled.div`
 `;
 
 //FUNCTIONALITY NEEDS TO BE REWORKED BUT FOR NOW THE VISUALS ARE CORRECT
-const Form = () => {
-    const [state, setState] = useState(false);
+const Form = ({dispatch}) => {
+    const [state, setStateSearch] = useState(false);
+    const go =()=>{
+        dispatch({
+            type: "SEARCH",
+            payload: state,
+        });
+    }
     return (
         <Container>
             <FormContainer>
@@ -65,8 +74,12 @@ const Form = () => {
                             <Grid item xs={8}>
                                 <Paper component="form" sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400, boxShadow: "none", border: "1px solid #e1e1e1" }}>
                                     <IconButton sx={{ p: "10px" }} aria-label="menu"></IconButton>
-                                    <InputBase sx={{ ml: 1, flex: 1 }} placeholder="搜索" inputProps={{ "aria-label": "search google maps" }} />
-                                    <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+                                    <InputBase sx={{ ml: 1, flex: 1 }} placeholder="搜索" inputProps={{ "aria-label": "search google maps" }} onChange={(e)=>{
+                                      setStateSearch(e.target.value)
+                                    }} />
+                                    <IconButton  sx={{ p: "10px" }} aria-label="search" onClick={
+                                        go
+                                    }>
                                         <SearchIcon />
                                     </IconButton>
                                 </Paper>
@@ -80,5 +93,12 @@ const Form = () => {
         </Container>
     );
 };
+const mapStateToProps = ({ linkReducer }) => {
+    return {
+        colTyple: linkReducer.colTyple,
+        search:linkReducer.search
+    };
+};
 
-export default Form;
+
+export default connect(mapStateToProps)(Form)      ;
