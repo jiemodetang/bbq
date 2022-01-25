@@ -86,7 +86,7 @@ export default function ControlledOpenSelect() {
     };
     const onSubmit = (data) => {
         // TODO 1.调后台接口，接口返回成功打开弹窗 handleOpen(),
-        // sell 参数
+        // sell 挂单参数
         const params = {
             data: {
                 itemId: 2,
@@ -235,8 +235,8 @@ export default function ControlledOpenSelect() {
                             <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">BNB</InputLabel>
                                 <Select labelId="demo-simple-select-label" id="demo-simple-select" value={age} label="Age" onChange={handleChange} {...register("type")}>
-                                    <MenuItem value={"BNB"}>BNB</MenuItem>
-                                    <MenuItem value={"USDT"}>USDT</MenuItem>
+                                    <MenuItem value={"2"}>BNB</MenuItem>
+                                    <MenuItem value={"1"}>USDT</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box1>
@@ -268,9 +268,9 @@ export default function ControlledOpenSelect() {
                             <FormControl fullWidth>
                                 <InputLabel id="demo-simple-select-label">6个月</InputLabel>
                                 <Select labelId="demo-simple-select-label" id="demo-simple-select" value={age} label="Age" onChange={handleChange} {...register("yue")}>
-                                    <MenuItem value={10}>1个月</MenuItem>
-                                    <MenuItem value={20}>3个月</MenuItem>
-                                    <MenuItem value={30}>6个月</MenuItem>
+                                    <MenuItem value={1}>1个月</MenuItem>
+                                    <MenuItem value={3}>3个月</MenuItem>
+                                    <MenuItem value={6}>6个月</MenuItem>
                                 </Select>
                             </FormControl>
                         </Box1>
