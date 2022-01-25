@@ -21,7 +21,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import $message from 'popular-message';
-import { sellItem } from '../../service/bbq'
+import { sellItem, increase } from '../../service/bbq'
 // 合约
 import $web3js from "../../lib/contract/web3";
 import numberUtils from "../../utils/numberUtils";
@@ -53,10 +53,17 @@ const style = {
 };
 
 export default function ControlledOpenSelect() {
-	const [open, setOpen] = React.useState(false);
-	const handleOpen = () => setOpen(true);
-	const handleClose = () => setOpen(false);
-
+	const [open1, setOpen1] = React.useState(false);
+	const handleOpen1 = () => setOpen1(true);
+	const handleClose1 = () => setOpen1(false);
+	const [open2, setOpen2] = React.useState(false);
+	const handleOpen2 = () => setOpen2(true);
+	const handleClose2 = () => {
+		setToAddress('');
+		setOpen2(false);
+	}
+	const [disableBtn, setDisableBtn] = React.useState(false);
+	const [toAddress, setToAddress] = React.useState('');
 	const [age, setAge] = React.useState("6");
 	const [values, setValues] = React.useState({
 		amount: "",
@@ -84,6 +91,8 @@ export default function ControlledOpenSelect() {
 	const handlerSell = () => {
 		handleSubmit(onSubmit);
 	};
+
+	// sell
 	const onSubmit = (data) => {
 		// TODO 1.调后台接口，接口返回成功打开弹窗 handleOpen(),
 		// sell 挂单参数
@@ -96,7 +105,7 @@ export default function ControlledOpenSelect() {
 		sellItem(params).then(res => {
 			if (res.code === '0000') {
 				// 打开弹窗
-				handleOpen();
+				handleOpen1();
 			} else {
 				$message.error(res.msg)
 			}
@@ -118,10 +127,12 @@ export default function ControlledOpenSelect() {
 			.isApprovedForAll(myaddress, nftContractSellAdd)
 			.call({ from: myaddress })
 			.then((res) => {
+				console.log('res', res);
 				if (!res) {
 					approveNft();
 				} else {
-					handleClose();
+					handleClose1();
+					// 改变出售文案
 				}
 			});
 	}
@@ -205,6 +216,85 @@ export default function ControlledOpenSelect() {
 				$message.error(error.message)
 			});
 	}
+		// 用户没有登录
+		const NotLogin = () => {
+			if (!getLocalStorage('walletaccount')) {
+				window._M.info('请先链接钱包，登录账号')
+				return true;
+			} else {
+				return false;
+			}
+		}
+		// 赠送
+		const giveAway = () => {
+			if (NotLogin()) return;
+			handleOpen2();
+		}
+		const handleChangeAddr = (event) => {
+			setToAddress(event.target.value);
+	};
+		// 赠送确定
+		const handlerConfirmIncase = (event) => {
+			incaseTo(toAddress);
+		}
+		const incaseTo = (toAddress) => {
+			let incaseHash = '';
+			// const nftContractSellAdd = nftContract.default.test.sellContract;
+			const nftContractAdd = nftContract.default.test.nftContract;
+			const myaddress = getLocalStorage("walletaccount");
+			const incaseWeb3 = $web3js.getWeb3();
+			connectMetaMask();
+			const incaseConst = new incaseWeb3.eth.Contract(
+				creatOrderJson.abi,
+				nftContractAdd,
+				{
+					from: myaddress,
+				}
+			);
+			let tokenId = getQueryStringRegExp('tokenId');
+			let itemId =  getQueryStringRegExp('id')
+			// let toAddress = '0x89351d3339738Da10428581D05F420248D2c841D';
+			console.log('incaseConst', incaseConst);
+			incaseConst.methods
+				.safeTransferFrom(myaddress, toAddress, tokenId)
+				.send({ from: myaddress })
+				.on("transactionHash", function (hash) {
+					console.log('incaseHash', hash);
+					$message.info('请耐心等待交易打包，不要退出')
+					incaseHash = hash;
+				})
+				.on("receipt", function (receipt) {
+					if (receipt.transactionHash == incaseHash) {
+						// 调后台确认交易
+						incaseSuccess(itemId, toAddress, incaseHash);
+					}
+				})
+				.on("error", function (error, receipt) {
+					$message.error(error.message)
+				});
+		}
+	
+		// 转赠成功
+		const incaseSuccess = (itemId, toAddress, incaseHash) => {
+			const params = {
+				data: {
+					itemId: itemId,
+					toAddr: toAddress,
+					txHash: incaseHash,
+				},
+			};
+			increase(params).then(res => {
+				if (res.code === '0000') {
+					$message.success('转增成功');
+					handleClose2();
+					setToAddress('');
+					// 赠送成功之后，按钮状态修改
+					setDisableBtn(true);
+				} else {
+					$message.error(res.msg)
+				}
+			})
+		}
 	const connectMetaMask = () => {
 		$web3js
 			.connectMetaMask()
@@ -222,7 +312,7 @@ export default function ControlledOpenSelect() {
 				<Grid container spacing={2}>
 					<Grid item xs={12}>
 						价格
-                    </Grid>
+            </Grid>
 					<Grid item xs={2}>
 						<Box1
 							sx={{
@@ -248,14 +338,14 @@ export default function ControlledOpenSelect() {
 							noValidate
 							autoComplete="off"
 						>
-							<TextField id="outlined-basic" label="数量" variant="outlined" {...register("reqNo")} />
+							<TextField id="outlined-basic" label="数量" variant="outlined" {...register("price")} />
 						</Box>
 					</Grid>
 				</Grid>
 				<Grid container spacing={2}>
 					<Grid item xs={12} style={{ marginTop: '15px' }}>
 						期间
-                    </Grid>
+            </Grid>
 					<Grid item xs={6}>
 						<Box1
 							sx={{
@@ -278,7 +368,7 @@ export default function ControlledOpenSelect() {
 				<Grid container spacing={2}>
 					<Grid item xs={12} style={{ marginTop: '15px' }}>
 						费用
-                    </Grid>
+            </Grid>
 					<Grid item xs={6}>
 						<FormControl variant="standard" sx={{ m: 1, mt: 3, width: "25ch" }}>
 							<Input
@@ -292,24 +382,34 @@ export default function ControlledOpenSelect() {
 									"aria-label": "weight",
 								}}
 								placeholder={"服务费"}
-								{...register("price")}
+								{...register("reqNo")}
 							/>
 							<FormHelperText id="standard-weight-helper-text"></FormHelperText>
 						</FormControl>
 					</Grid>
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1, mb: 5 }}>
-					<Grid item xs={2}>
-						<Button variant="contained" type="submit" onPress={handlerSell}>
+					<Grid item xs={4}>
+						<Button 
+						variant="contained" type="submit" 
+						disabled={disableBtn} 
+						onPress={handlerSell}>
 							出售
-                        </Button>
+              </Button>
+							<Button
+								disabled={disableBtn}
+								variant="contained"
+								onClick={giveAway}
+								style={{ marginLeft: '25px' }}>
+								{" "}
+								转赠
+              </Button>
 					</Grid>
 				</Grid>
 			</form>
 			<Dialog
-				open={open}
+				open={open1}
 				fullWidth
-				onClose={handleClose}
 				aria-labelledby="responsive-dialog-title">
 				<DialogTitle id="responsive-dialog-title">
 					{"确认挂单"}
@@ -323,15 +423,39 @@ export default function ControlledOpenSelect() {
                     </DialogContentText>
 					<DialogContentText>
 						3. 确认
-                    </DialogContentText>
+          </DialogContentText>
 				</DialogContent>
 				<DialogActions>
-					<Button autoFocus onClick={handleClose}>
+					{/* <Button autoFocus onClick={handleClose}>
 						取消
-                    </Button>
+          </Button> */}
 					<Button onClick={handlerConfirm} autoFocus>
 						确定
-                    </Button>
+          </Button>
+				</DialogActions>
+			</Dialog>
+
+			<Dialog open={open2} fullWidth fullWidth>
+				<DialogTitle>转赠NFT</DialogTitle>
+				<DialogContent>
+					<DialogContentText>
+						请输入转赠此NFT的帐户地址：
+        </DialogContentText>
+					<TextField
+						value={toAddress}
+						autoFocus
+						margin="dense"
+						id="name"
+						label="User Address"
+						type="text"
+						fullWidth
+						variant="standard"
+						onChange={handleChangeAddr}
+					/>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleClose2}>取消</Button>
+					<Button onClick={handlerConfirmIncase}>确定</Button>
 				</DialogActions>
 			</Dialog>
 		</Container>
