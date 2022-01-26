@@ -49,7 +49,7 @@ const Box1 = styled(Box)`
 `;
 const ua = navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
 const MYContainer = styled.div`
-    margin-top: 72px;
+	margin-top: 72px;
 `;
 const ConDiv = styled.div`
     margin-top: 15px;
@@ -162,7 +162,7 @@ const Item = ({ collectionId }) => {
 				</Box>
 			</Stack>
 			<Divider light sx={{ marginBottom: "60px" }} />
-			<Container maxWidth={'lg'}>
+			<Container maxWidth={'lg'} sx={{minHeight:'300px'}}>
 				{
 					_.isEmpty(itemData) ?
 						<Box sx={

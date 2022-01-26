@@ -153,7 +153,7 @@ function Collections() {
 
                 saveItem(p).then((res) => {
                     window._M.success("保存成功");
-                    history.goBack();
+                    history.push("/collections?colId="+ getQueryStringRegExp("colId"));
                 });
             }
         // }
@@ -200,7 +200,7 @@ function Collections() {
         <Container>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Typography variant="h5" gutterBottom component="div">
-                    {getQueryStringRegExp("type") == "item"?(colData.itemName?('编辑:'+colData.itemName):'创建新项目'):'创建一个集合'}
+                    {getQueryStringRegExp("type") == "item"?(colData.itemName?('编辑:'+colData.itemName):'创建一个新NFT'):'创建一个集合'}
                 </Typography>
                 <Typography variant="body2" gutterBottom>
                     <Xh>*</Xh>
@@ -225,7 +225,7 @@ function Collections() {
                 <h4>
                     名称 <Xh>*</Xh>
                 </h4>
-                <TextField fullWidth id="outlined-basic" placeholder="集合名称" variant="outlined" {...register("colName", { required: true })} />
+                <TextField fullWidth id="outlined-basic" placeholder={getQueryStringRegExp("type") == "item"?"NFT名称" :"集合名称"} variant="outlined" {...register("colName", { required: true })} />
                 {/* <input {...register("exampleRequired", { required: true })} /> */}
                 <h4>
                     描述 <Xh>*</Xh>
@@ -233,7 +233,7 @@ function Collections() {
                 <TextField fullWidth id="outlined-multiline-flexible" placeholder="提供您的详细描述" multiline maxRows={4} {...register("memo", { required: true })} />
 
                 <h4>
-                    外部链接 <Xh>*</Xh>{" "}
+                    外部链接 
                 </h4>
                 <TextField
                     fullWidth
@@ -241,8 +241,7 @@ function Collections() {
                     placeholder="http://yoursite.io/item"
                     multiline
                     maxRows={4}
-                    defaultValue={"http://baidu.com/"}
-                    {...register("externalLink", { required: true })}
+                    {...register("externalLink")}
                 />
 
                 <h4>类型</h4>

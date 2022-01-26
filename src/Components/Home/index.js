@@ -17,10 +17,12 @@ import { connect } from "react-redux";
 import Pagination from "@mui/material/Pagination";
 import { apiConfig } from "../../service/mmp";
 import noDataIMg from "../Img/noData.png";
-import loadImg from "../Img/11.png";
+import loadImg from "../Img/myloading.gif";
+
 const ua = navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
 const MYContainer = styled(Container)`
     margin-top: 120px;
+    min-height:800px
 
 `;
 const ConDiv = styled.div`
@@ -45,8 +47,8 @@ const Item2 = styled.div`
     line-height: 16px;
 `;
 const LoadingImg = styled.img`
-width: 190px;
-height: 190px;
+width: 90px;
+height: 90px;
 `;
 
 const pageSize = 12;
@@ -89,7 +91,7 @@ const Home = ({ colTyple, search }) => {
                     display:'flex',
                     justifyContent:'center',
                     alignItems:'center',
-                    height:'100%'
+                    minHeight:'600px'
                   }
               }>
                     <LoadingImg src={loadImg} /> 

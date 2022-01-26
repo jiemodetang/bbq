@@ -322,7 +322,7 @@ const Detail = () => {
         deleteItem(c).then((res) => {
             if (res.code == "0000") {
                 window._M.success("删除成功");
-                history.goBack();
+                history.push('/collection/item?colId='+ getQueryStringRegExp("id"))
             } else {
                 window._M.error(res.msg);
             }

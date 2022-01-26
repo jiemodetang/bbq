@@ -19,6 +19,8 @@ import _ from "lodash";
 import Pagination from "@mui/material/Pagination";
 import Typography from "@mui/material/Typography";
 import { apiConfig } from "../../service/mmp";
+import noDataIMg from "../Img/noData.png";
+import loadImg from "../Img/myloading.gif";
 
 const colNameStyle = {
     fontSize: "16px",
@@ -27,7 +29,7 @@ const colNameStyle = {
 };
 
 const Container = styled.div`
-   margin: 100px 210px 20px 210px;
+    margin: 100px 210px 20px 210px;
 `;
 const MYContainer = styled(Container)`
     margin-top: 120px;
@@ -54,96 +56,117 @@ const Item2 = styled.div`
 `;
 const ua = navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
 const itemData = [
-	{
-		img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-		title: "Breakfast",
-		author: "@bkristastucchio",
-	},
-	{
-		img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
-		title: "Burger",
-		author: "@rollelflex_graphy726",
-	},
-	{
-		img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
-		title: "Camera",
-		author: "@helloimnik",
-	},
-	{
-		img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
-		title: "Coffee",
-		author: "@nolanissac",
-	},
-	{
-		img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
-		title: "Hats",
-		author: "@hjrc33",
-	},
+    {
+        img: "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
+        title: "Breakfast",
+        author: "@bkristastucchio",
+    },
+    {
+        img: "https://images.unsplash.com/photo-1551782450-a2132b4ba21d",
+        title: "Burger",
+        author: "@rollelflex_graphy726",
+    },
+    {
+        img: "https://images.unsplash.com/photo-1522770179533-24471fcdba45",
+        title: "Camera",
+        author: "@helloimnik",
+    },
+    {
+        img: "https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c",
+        title: "Coffee",
+        author: "@nolanissac",
+    },
+    {
+        img: "https://images.unsplash.com/photo-1533827432537-70133748f5c8",
+        title: "Hats",
+        author: "@hjrc33",
+    },
 ];
+const LoadingImg = styled.img`
+    width: 90px;
+    height: 90px;
+`;
 const pageSize = 12;
 class Collections extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			data: [],
-			page: 0,
-			count: 1,
-		};
-	}
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: [],
+            page: 0,
+            count: 1,
+            loading: true,
+        };
+    }
 
-	handleChange = (event, value) => {
-		this.setState({
-			page: value - 1,
-		});
-	};
-	componentDidMount() {
-		// setTimeout(() => {
-		//   const c = {
-		//     data:{
-		//       id:2
-		//     }
-		//   }
+    handleChange = (event, value) => {
+        this.setState({
+            page: value - 1,
+        });
+    };
+    componentDidMount() {
+        // setTimeout(() => {
+        //   const c = {
+        //     data:{
+        //       id:2
+        //     }
+        //   }
 
-		//   deleteC(c)
-		// }, 3000);
-		const p = {
-			data: {
-				colType: "",
-			},
-		};
-
-		getMyList(p).then((res) => {
-			const data = _.get(res, ["pageInfo", "list"], []);
-			const t = _.get(res, ["pageInfo", "total"]);
-			this.setState({
-				count: Math.ceil(t / pageSize),
-				data: _.chunk(data, 12),
-			});
-		});
-	}
-	createCollections() {
-		this.props.history.push("/collection/create?type=col");
-	}
-	goDr = () => {
-		this.props.history.push("/collection/dr");
-	};
-	render() {
-		return (
-			<Container>
-				<h3>我的集合</h3>
-				<p>创建、策划和管理独特 NFT 的集合以共享和销售</p>
-				<Stack spacing={2} direction="row">
-					<Button variant="contained" onClick={this.createCollections.bind(this)}>
-						创建一个集合
+        //   deleteC(c)
+        // }, 3000);
+        const p = {
+            data: {
+                colType: "",
+            },
+        };
+        this.setState({
+            loading: true,
+        });
+        getMyList(p).then((res) => {
+            const data = _.get(res, ["pageInfo", "list"], []);
+            const t = _.get(res, ["pageInfo", "total"]);
+            this.setState({
+                count: Math.ceil(t / pageSize),
+                data: _.chunk(data, 12),
+                loading: false,
+            });
+        });
+    }
+    createCollections() {
+        this.props.history.push("/collection/create?type=col");
+    }
+    goDr = () => {
+        this.props.history.push("/collection/dr");
+    };
+    render() {
+        return (
+            <Container>
+                <h3>我的集合</h3>
+                <p>创建、策划和管理独特 NFT 的集合以共享和销售</p>
+                <Stack spacing={2} direction="row">
+                    <Button variant="contained" onClick={this.createCollections.bind(this)}>
+                        创建一个集合
                     </Button>
-					{/* <Button variant="outlined" onClick={this.goDr}>
+                    {/* <Button variant="outlined" onClick={this.goDr}>
                         导入智能合约
                     </Button> */}
                 </Stack>
-                <div >
-                    <ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
-                        {!_.isEmpty(this.state.data) &&
-                            this.state.data[this.state.page].map((item) => (
+                <div style={{ minHeight: "600px",display: "flex",
+    justifyContent: 'center',
+    alignItems: 'center' }}>
+                    {this.state.loading ? (
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                minHeight: "600px",
+                            }}
+                        >
+                            <LoadingImg src={loadImg} />
+                        </Box>
+                    ) : !_.isEmpty(this.state.data) ? (
+                        <ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
+                            {this.state.data[this.state.page].map((item) => (
                                 <ImageListItem
                                     key={item.img}
                                     sx={{
@@ -163,7 +186,7 @@ class Collections extends React.Component {
                                         }}
                                         style={{
                                             height: "200px",
-                                            objectFit:'contain'
+                                            objectFit: "contain",
                                         }}
                                     />
                                     <ImageListItemBar
@@ -171,11 +194,17 @@ class Collections extends React.Component {
                                         subtitle={
                                             <Box>
                                                 <Box sx={{ width: "100%", borderBottom: "1px solid #ccc" }} pb={2}>
-                                                    <Typography align={"center"} sx= {colNameStyle}>{item.colName}</Typography>
-                                                    <Typography align={"center"} sx={{color:'#8A939B'}}>{item.memo}</Typography>
+                                                    <Typography align={"center"} sx={colNameStyle}>
+                                                        {item.colName}
+                                                    </Typography>
+                                                    <Typography align={"center"} sx={{ color: "#8A939B" }}>
+                                                        {item.memo}
+                                                    </Typography>
                                                 </Box>
                                                 <ConDiv>
-                                                <Typography align={"center"}  sx={{ color: "#8A939B" }} >{item.itemNums}项目</Typography>
+                                                    <Typography align={"center"} sx={{ color: "#8A939B" }}>
+                                                        {item.itemNums}项目
+                                                    </Typography>
                                                 </ConDiv>
                                             </Box>
                                         }
@@ -183,21 +212,24 @@ class Collections extends React.Component {
                                     />
                                 </ImageListItem>
                             ))}
-                    </ImageList>
+                        </ImageList>
+                    ) : (
+                        <LoadingImg src={noDataIMg} />
+                    )}
                 </div>
 
-				<Box
-					sx={{
-						display: "flex",
-						justifyContent: "end",
-						margin: " 20px",
-					}}
-				>
-					{!_.isEmpty(this.state.data) && <Pagination count={this.state.count} onChange={this.handleChange} />}
-				</Box>
-			</Container>
-		);
-	}
+                <Box
+                    sx={{
+                        display: "flex",
+                        justifyContent: "end",
+                        margin: " 20px",
+                    }}
+                >
+                    {!_.isEmpty(this.state.data) && <Pagination count={this.state.count} onChange={this.handleChange} />}
+                </Box>
+            </Container>
+        );
+    }
 }
 
 export default Collections;
