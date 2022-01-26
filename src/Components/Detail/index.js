@@ -110,7 +110,7 @@ const Detail = () => {
 	const [data, setData] = React.useState({});
 	const [open, setOpen] = React.useState(false);
 	const [disableBtn, setDisableBtn] = React.useState(false);
-	const [isBuy, setIsBuy] = React.useState(true);
+	const [isSelled, setisSelled] = React.useState(false);
 	const [toAddress, setToAddress] = React.useState("");
 	const handleOpen = () => setOpen(true);
 	const history = useHistory();
@@ -239,6 +239,7 @@ const Detail = () => {
 		};
 		BuyItemSuccess(params).then((res) => {
 			if (res.code === "0000") {
+				// 购买成功之后，调 detail ，取交易列表
 				detailItemList();
 				$message.destroy();
 				setTimeout(() => {
@@ -271,10 +272,12 @@ const Detail = () => {
 		CancelsellItem(params).then((res) => {
 			if (res.code === "0000") {
 				$message.success("取消出售成功");
+				setisSelled(true)
 				// 购买和取消出售送成功之后，按钮状态修改
 				setDisableBtn(true);
 			} else {
 				$message.error(res.msg);
+				setDisableBtn(true);
 			}
 		});
 	};
@@ -287,25 +290,25 @@ const Detail = () => {
 			});
 	};
 
-	const d = () => {
+const d = () => {
 		const c = {
-			data: {
-				id: getQueryStringRegExp("itemId"),
-			},
+				data: {
+						id: getQueryStringRegExp("itemId"),
+				},
 		};
 		deleteItem(c).then((res) => {
-			if (res.code == "0000") {
-				window._M.success("删除成功");
-				history.goBack();
-			} else {
-				window._M.error(res.msg);
-			}
+				if (res.code == "0000") {
+						window._M.success("删除成功");
+						history.push('/collection/item?colId='+ getQueryStringRegExp("id"))
+				} else {
+						window._M.error(res.msg);
+				}
 		});
-	};
+};
 
 	return (
 		<Container>
-			{!getQueryStringRegExp("from") && (
+			{!getQueryStringRegExp("from") && isSelled && (
 				<Box
 					sx={{
 						textAlign: "right",
@@ -321,10 +324,12 @@ const Detail = () => {
 						}}
 					>
 						<EditIcon />
-					</Fab>
+					</Fab> 
+
+					isSelled ?
 					<Fab color="primary" aria-label="add" size="small" onClick={d} sx={{ mr: 1, ml: 1 }}>
-						<DeleteIcon />
-					</Fab>
+					<DeleteIcon />
+				</Fab>
 				</Box>
 			)}
 			<Paper sx={{ p: 20, margin: "auto", maxWidth: 1260, paddingTop: "0px", boxShadow: "none", padding: 0 }}>

@@ -35,7 +35,8 @@ const sellJson = require("../../lib/contract/sell.json");
 
 const Container = styled.div`
    margin: 100px 210px 20px 210px;
-    // display: flex;
+   min-height:650px
+
 `;
 const Box1 = styled(Box)`
     display: flex;
@@ -334,7 +335,8 @@ export default function ControlledOpenSelect() {
 	}
 
 	return (
-		<Container>
+		<Container sx={{
+		}}>
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<Grid container spacing={2}>
 					<Grid item xs={12}>
