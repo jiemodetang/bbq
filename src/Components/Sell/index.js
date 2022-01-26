@@ -106,8 +106,11 @@ export default function ControlledOpenSelect() {
 			if (res.code === '0000') {
 				// 打开弹窗
 				handleOpen1();
+			} else if (res.code === '9999') {
+				$message.error(res.msg);
 			} else {
-				$message.error(res.msg)
+				$message.error(res.msg);
+				setDisableBtn(true);
 			}
 		})
 	};
@@ -133,6 +136,8 @@ export default function ControlledOpenSelect() {
 				} else {
 					handleClose1();
 					// 改变出售文案
+					// 挂单成功之后，按钮状态修改
+					setDisableBtn(true);
 				}
 			});
 	}
@@ -150,29 +155,36 @@ export default function ControlledOpenSelect() {
 				from: myaddress,
 			}
 		);
-		let alertMesg;
 		approveConst.methods
 			.setApprovalForAll(nftContractSellAdd, true)
 			.send({ from: myaddress })
 			.on("transactionHash", function (hash) {
-				$message.info('请耐心等待交易打包，不要退出')
+				$message.config({
+					top: 50,
+					duration: 0
+				});
+				$message.loading("请耐心等待交易打包，不要退出");
 				getedHash = hash;
 			})
 			.on("receipt", function (receipt) {
 				if (receipt.transactionHash === getedHash) {
 					console.log('approve', 'success');
-					if (alertMesg) {
-						alertMesg.destroy();
-					}
-					$message.success('授权成功！')
+					$message.destroy();
+					setTimeout(() => {
+						$message.success('授权成功！')
+					}, 800)
+
+					handleClose1();
+					// 挂单成功之后，按钮状态修改
+					setDisableBtn(true);
 				}
 			})
 			.on("error", function (error, receipt) {
 				console.log('err', error);
-				if (alertMesg) {
-					alertMesg.destroy();
-				}
-				$message.error(error.message)
+				$message.destroy();
+				setTimeout(() => {
+					$message.error(error.message);
+				}, 800)
 			});
 	}
 
@@ -190,30 +202,32 @@ export default function ControlledOpenSelect() {
 				from: myaddress,
 			}
 		);
-		let alertMesg;
 		approveConst.methods
 			.setApprovalForAll(nftContractSellAdd, false)
 			.send({ from: myaddress })
 			.on("transactionHash", function (hash) {
 				console.log('hash', hash);
-				$message.info('请耐心等待交易打包，不要退出')
+				$message.config({
+					top: 50,
+					duration: 0
+				});
+				$message.loading("请耐心等待交易打包，不要退出");
 				getedHash = hash;
 			})
 			.on("receipt", function (receipt) {
 				if (receipt.transactionHash === getedHash) {
 					console.log('approve', 'success');
-					if (alertMesg) {
-						alertMesg.destroy();
-					}
-					$message.success('授权成功！')
+					$message.destroy();
+					setTimeout(() => {
+						$message.success('授权成功！')
+					}, 800)
 				}
 			})
 			.on("error", function (error, receipt) {
-				console.log('err', error);
-				if (alertMesg) {
-					alertMesg.destroy();
-				}
-				$message.error(error.message)
+				$message.destroy();
+				setTimeout(() => {
+					$message.error(error.message);
+				}, 800)
 			});
 	}
 		// 用户没有登录
@@ -260,7 +274,11 @@ export default function ControlledOpenSelect() {
 				.send({ from: myaddress })
 				.on("transactionHash", function (hash) {
 					console.log('incaseHash', hash);
-					$message.info('请耐心等待交易打包，不要退出')
+					$message.config({
+						top: 50,
+						duration: 0
+					});
+					$message.loading("请耐心等待交易打包，不要退出");
 					incaseHash = hash;
 				})
 				.on("receipt", function (receipt) {
@@ -270,7 +288,10 @@ export default function ControlledOpenSelect() {
 					}
 				})
 				.on("error", function (error, receipt) {
-					$message.error(error.message)
+					$message.destroy();
+					setTimeout(() => {
+						$message.error(error.message);
+					}, 800)
 				});
 		}
 	
@@ -285,13 +306,20 @@ export default function ControlledOpenSelect() {
 			};
 			increase(params).then(res => {
 				if (res.code === '0000') {
-					$message.success('转增成功');
+					$message.destroy();
+					setTimeout(() => {
+						$message.success('转赠成功');
+					}, 800)
 					handleClose2();
 					setToAddress('');
 					// 赠送成功之后，按钮状态修改
 					setDisableBtn(true);
 				} else {
-					$message.error(res.msg)
+					$message.destroy();
+					setTimeout(() => {
+						$message.error(res.msg)
+					}, 800)
+				
 				}
 			})
 		}

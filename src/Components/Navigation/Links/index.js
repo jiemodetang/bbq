@@ -164,6 +164,7 @@ const Links = ({ colTyple, dispatch }) => {
 					setLocalStorage("walletaccount", address);
 					setCookie("token", _.get(res, ["data", "token"]), 1);
 					setUserState(address);
+					history.push("/");
 				} else {
 					window._M.error(res.msg);
 				}

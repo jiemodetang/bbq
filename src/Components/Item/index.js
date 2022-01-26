@@ -195,7 +195,11 @@ const Item = ({ collectionId }) => {
 											alt={item.colName}
 											loading="lazy"
 											onClick={() => {
-												history.push("/collection/detail?itemId="+item.id+"&id="+ getQueryStringRegExp("colId"));
+												if (!item.tradeStatus ) {
+													history.push("/home/sell?id=" + item.id + '&tokenId=' + item.tokenId)
+												} else {
+													history.push("/collection/detail?itemId="+item.id+"&id="+ getQueryStringRegExp("colId"));
+												}
 											}}
 											style={{
 												height: "200px",
@@ -226,6 +230,8 @@ const Item = ({ collectionId }) => {
 															onClick={() => {
 																if (!item.tradeStatus ) {
 																	history.push("/home/sell?id=" + item.id + '&tokenId=' + item.tokenId)
+																} else {
+																	history.push("/collection/detail?itemId="+item.id+"&id="+ getQueryStringRegExp("colId"));
 																}
 															}}
 														>
