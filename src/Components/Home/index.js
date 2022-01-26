@@ -114,7 +114,7 @@ const Home = ({ colTyple, search }) => {
                                     alt={item.colName}
                                     loading="lazy"
                                     onClick={() => {
-                                        history.push("/collection/detail?id=" + item.id);
+                                        history.push("/collection/detail?from=home&itemId=" + item.id);
                                     }}
                                 />
                                 <ImageListItemBar

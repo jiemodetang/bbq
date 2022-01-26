@@ -334,7 +334,7 @@ const Detail = () => {
 
 	return (
 		<Container>
-			<Box sx={{
+			{!getQueryStringRegExp("from") &&  <Box sx={{
 				textAlign:'right'
 			}}>
 				<Fab
@@ -351,7 +351,7 @@ const Detail = () => {
 					<Fab color="primary" aria-label="add" size="small" onClick={d} sx={{ mr: 1, ml: 1 }}>
 						<DeleteIcon />
 					</Fab>
-			</Box>
+			</Box>}
 			<Paper sx={{ p: 20, margin: "auto", maxWidth: 1260, paddingTop: "0px", boxShadow: "none", padding: 0 }}>
 				<Grid container spacing={2}>
 					<Grid item xs={4} sx={{
@@ -469,7 +469,7 @@ const Detail = () => {
 							<AccordionSummary aria-controls="panel1d-content" id="panel1d-header" sx={{ background: "#fff", }}>
 								<Typography>筛选</Typography>
 							</AccordionSummary>
-							<AccordionDetails>
+							{/* <AccordionDetails>
 								<Typography>
 									<List sx={{ width: "100%", bgcolor: "background.paper" }}>
 										{tableListMMP.map((value, index) => {
@@ -503,11 +503,11 @@ const Detail = () => {
 										})}
 									</List>
 								</Typography>
-							</AccordionDetails>
+							</AccordionDetails> */}
 						</Accordion>
 
 						{/* table */}
-						<TableContainer component={Paper}>
+						{/* <TableContainer component={Paper}>
 							<Table sx={{ minWidth: 650 }} aria-label="simple table">
 								<TableHead>
 									<TableRow>
@@ -532,7 +532,9 @@ const Detail = () => {
 									))}
 								</TableBody>
 							</Table>
-						</TableContainer>
+						</TableContainer> */}
+
+
 					</AccordionDetails>
 				</Accordion>
 			</div>
