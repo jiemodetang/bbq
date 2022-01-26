@@ -144,7 +144,7 @@ const Home = ({ colTyple, search }) => {
                                                     sx={{ background: "#56ADBB", borderRadius: "10px" }}
                                                     onClick={() => {
                                                         // history.push("/home/sell?id=" + item.id);
-                                                        history.push("/collection/detail?id=" + item.id);
+                                                        history.push("/collection/detail?from=home&itemId=" + item.id);
                                                     }}
                                                 >
                                                     购买
