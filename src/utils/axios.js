@@ -102,9 +102,9 @@ const request = async function (opt) {
 		...opt,
 	};
 	const { myUrl, qz } = apiConfig;
-	if (process.env.NODE_ENV === "production") {
-		options.baseURL = myUrl.productionUrl + qz;
-	}
+	// if (process.env.NODE_ENV === "production") {
+	// 	options.baseURL = myUrl.productionUrl + qz;
+	// }
 	try {
 		const res = await instance(options);
 		return res;

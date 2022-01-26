@@ -12,7 +12,7 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import DirectionsIcon from "@mui/icons-material/Directions";
 import { connect } from "react-redux";
-
+import { useHistory } from "react-router-dom";
 
 const Container = styled.div`
     width: 100%;
@@ -58,7 +58,9 @@ const SubContainer = styled.div`
 //FUNCTIONALITY NEEDS TO BE REWORKED BUT FOR NOW THE VISUALS ARE CORRECT
 const Form = ({ dispatch }) => {
 	const [state, setStateSearch] = useState(false);
+	const history = useHistory();
 	const go = () => {
+		history.push('/')
 		dispatch({
 			type: "SEARCH",
 			payload: state,

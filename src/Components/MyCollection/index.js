@@ -140,7 +140,7 @@ class Collections extends React.Component {
                         导入智能合约
                     </Button> */}
                 </Stack>
-                <div style={{height:'350px'}}>
+                <div >
                     <ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
                         {!_.isEmpty(this.state.data) &&
                             this.state.data[this.state.page].map((item) => (

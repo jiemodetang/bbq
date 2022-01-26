@@ -34,7 +34,6 @@ const TypeListComponent = ({ cb, value }) => {
 	return (
 		<Box sx={{ minWidth: 120 }}>
 			<FormControl fullWidth>
-				<InputLabel id="demo-simple-select-label">请选择创建类型</InputLabel>
 				<Select
 					labelId="demo-simple-select-label"
 					id="demo-simple-select"
@@ -43,8 +42,9 @@ const TypeListComponent = ({ cb, value }) => {
 					inputProps={{ "aria-label": "Without label" }}
 					onChange={handleChangeType}
 					label={""}
+					placeholder={'请选择创建类型'}
 				>
-					{_.map(list, (i, d) => {
+					{_.map(_.concat([{id:'',itemValue:'所有',memo:''}],list), (i, d) => {
 						return (
 							<MenuItem value={i.id} key={d}>
 								{i.itemValue}

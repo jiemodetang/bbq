@@ -8,9 +8,7 @@ const GlobalStyle = createGlobalStyle`
     font-family:"Roboto";
     height:100%
   }
-  #root{
-    height:80%
-  }
+
 `
 
 export default GlobalStyle

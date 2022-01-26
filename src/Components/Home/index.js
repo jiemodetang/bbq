@@ -66,14 +66,17 @@ const Home = ({ colTyple, search }) => {
         const params = {
             data: {
                 colType: colTyple,
-                searchValue:search
+                // searchValue:search
             },
         };
         setLoading(true)
         getI(params).then((res) => {
-            const data = _.get(res, ["pageInfo", "list"], []);
+            let  data = _.get(res, ["pageInfo", "list"], []);
             const t = _.get(res, ["pageInfo", "total"]);
             setCount(Math.ceil(t / pageSize));
+            if(search){
+                data =   _.filter(data,o =>o?.itemName?.indexOf(search) != -1)
+            }
             setItemData(_.chunk(data, pageSize));
             setLoading(false)
         });
@@ -92,7 +95,7 @@ const Home = ({ colTyple, search }) => {
                     <LoadingImg src={loadImg} /> 
               </Box>
             ) : (
-                !_.isEmpty(itemData) ?<ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
+            !_.isEmpty(itemData) ?<ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
                     {!_.isEmpty(itemData) &&
                         itemData[page].map((item) => (
                             <ImageListItem
@@ -159,7 +162,8 @@ const Home = ({ colTyple, search }) => {
                     display:'flex',
                     justifyContent:'center',
                     alignItems:'center',
-                    height:'100%'
+                    height:'100%',
+                    margin:'300px 0'
                   }
               }>
                     <LoadingImg src={noDataIMg} /> 

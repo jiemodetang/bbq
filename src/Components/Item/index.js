@@ -195,7 +195,7 @@ const Item = ({ collectionId }) => {
 											alt={item.colName}
 											loading="lazy"
 											onClick={() => {
-												history.push("/collection/detail?isItem=true&id="+getQueryStringRegExp("colId"));
+												history.push("/collection/detail?itemId="+item.id+"&id="+ getQueryStringRegExp("colId"));
 											}}
 											style={{
 												height: "200px",

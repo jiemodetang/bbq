@@ -34,7 +34,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import CommentIcon from "@mui/icons-material/Comment";
-import { postDetail, detailItem, BuyItem, BuyItemSuccess, increase, CancelsellItem } from "../../service/bbq";
+import { postDetail, detailItem, BuyItem, BuyItemSuccess, increase, CancelsellItem,deleteItem } from "../../service/bbq";
 import { getQueryStringRegExp } from "../../utils/index";
 import _ from "lodash";
 import { getLocalStorage } from "../../utils/index";
@@ -46,9 +46,15 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import $message from 'popular-message';
-
+import { useHistory } from "react-router-dom";
 import $web3js from "../../lib/contract/web3";
 import numberUtils from "../../utils/numberUtils";
+
+import Fab from "@mui/material/Fab";
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 const creatOrderJson = require("../../lib/contract/creatOrder.json");
 const nftContract = require("../../lib/contract/contractAddress");
 const sellJson = require("../../lib/contract/sell.json");
@@ -103,6 +109,7 @@ const Detail = () => {
 	const [disableBtn, setDisableBtn] = React.useState(false);
 	const [toAddress, setToAddress] = React.useState('');
 	const handleOpen = () => setOpen(true);
+	const history = useHistory();
 	const handleClose = () => {
 		setToAddress('');
 		setOpen(false);
@@ -125,7 +132,7 @@ const Detail = () => {
 	React.useEffect(() => {
 		const params = {
 			data: {
-				id: getQueryStringRegExp('id')
+				id: getQueryStringRegExp('itemId')
 			},
 		};
 		detailItem(params).then(res => {
@@ -309,8 +316,42 @@ const Detail = () => {
 			});
 	}
 	
+	const d = () => {
+		const c = {
+			data: {
+				id: getQueryStringRegExp("itemId"),
+			},
+		};
+		deleteItem(c).then((res) => {
+			if (res.code == "0000") {
+				window._M.success("删除成功");
+				history.goBack()
+			} else {
+				window._M.error(res.msg);
+			}
+		});
+	};
+
 	return (
 		<Container>
+			<Box sx={{
+				textAlign:'right'
+			}}>
+				<Fab
+						color="primary"
+						aria-label="edit"
+						size="small"
+						sx={{ ml: 1 }}
+						onClick={() => {
+							history.push("/collection/create?colId="+getQueryStringRegExp('id')+"&type=item&itemId=" + getQueryStringRegExp("itemId"));
+						}}
+					>
+						<EditIcon />
+					</Fab>
+					<Fab color="primary" aria-label="add" size="small" onClick={d} sx={{ mr: 1, ml: 1 }}>
+						<DeleteIcon />
+					</Fab>
+			</Box>
 			<Paper sx={{ p: 20, margin: "auto", maxWidth: 1260, paddingTop: "0px", boxShadow: "none", padding: 0 }}>
 				<Grid container spacing={2}>
 					<Grid item xs={4} sx={{
@@ -334,15 +375,20 @@ const Detail = () => {
 								</Typography>
 							</Grid>
 							<Grid sx={{ borderRadius: "20px", border: "1px solid #E4E8EB", height: "auto", padding: "10px", marginLeft: "30px", marginTop: "20px" }}>
-								<Card sx={{ maxWidth: 700, boxShadow: "none" }}>
+								<Card sx={{ maxWidth: 600, boxShadow: "none" }}>
 									<TopBox>
 										<AccessTimeIcon></AccessTimeIcon>
 										<Box
 											sx={{
 												flex: 1,
+												overflow: 'hidden',
+													textOverflow: 'ellipsis',
+													whiteSpace: 'nowrap',
+													maxWidth: 400
+
 											}}
 										>
-											销售于美国中部标准时间2022年6月13日凌晨4:30结束
+											{data.memo}
                                         </Box>
 										<Box>
 											<Tooltip title="延长拍卖10分钟以内的新最高出价剩余的将延长拍卖额外的 10 分钟。" placement="top">
