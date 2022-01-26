@@ -39,9 +39,9 @@ height: 190px;
 `;
 
 const colNameStyle = {
-    fontSize: "16px",
-    fontWeight: "500",
-    color: " #333333",
+	fontSize: "16px",
+	fontWeight: "500",
+	color: " #333333",
 };
 
 const Box1 = styled(Box)`
@@ -79,179 +79,180 @@ const Item = ({ collectionId }) => {
 	const [count, setCount] = React.useState(1);
 	const [colData, setColData] = React.useState({});
 
-    const handleChange = (event, value) => {
-        setPage(value - 1);
-    };
-    const history = useHistory();
-    React.useEffect(() => {
-        const params = {
-            data: {
-                colId: getQueryStringRegExp("colId"),
-            },
-        };
-        getMineItem(params).then((res) => {
-            const data = _.get(res, ["pageInfo", "list"], []);
-            const t = _.get(res, ["pageInfo", "total"]);
-            setCount(Math.ceil(t / pageSize));
-            setItemData(_.chunk(data, pageSize));
-        });
+	const handleChange = (event, value) => {
+		setPage(value - 1);
+	};
+	const history = useHistory();
+	React.useEffect(() => {
+		const params = {
+			data: {
+				colId: getQueryStringRegExp("colId"),
+			},
+		};
+		getMineItem(params).then((res) => {
+			const data = _.get(res, ["pageInfo", "list"], []);
+			const t = _.get(res, ["pageInfo", "total"]);
+			setCount(Math.ceil(t / pageSize));
+			setItemData(_.chunk(data, pageSize));
+		});
 
-        const p = {
-            data: {
-                id: getQueryStringRegExp("colId"),
-            },
-        };
-        postDetail(p).then((res) => {
-            const d = _.get(res, "data", {});
-            setColData(_.get(res, "data", {}));
-        });
-    }, []);
-    const d = () => {
-        const c = {
-            data: {
-                id: getQueryStringRegExp("colId"),
-            },
-        };
-        deleteC(c).then((res) => {
-            if (res.code == "0000") {
-                window._M.success("删除成功");
-                history.push("/collections");
-            } else {
-                window._M.error(res.msg);
-            }
-        });
-    };
+		const p = {
+			data: {
+				id: getQueryStringRegExp("colId"),
+			},
+		};
+		postDetail(p).then((res) => {
+			const d = _.get(res, "data", {});
+			setColData(_.get(res, "data", {}));
+		});
+	}, []);
+	const d = () => {
+		const c = {
+			data: {
+				id: getQueryStringRegExp("colId"),
+			},
+		};
+		deleteC(c).then((res) => {
+			if (res.code == "0000") {
+				window._M.success("删除成功");
+				history.push("/collections");
+			} else {
+				window._M.error(res.msg);
+			}
+		});
+	};
 
-    return (
-        <MYContainer maxWidth={"lg"}>
-            <img src={jp} style={{ width: "100%" }} />
-            <Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={2} sx={{ margin: "40px 0" }}>
-                <Box sx={{ display: "flex" }}>
-                    <Typography variant={"h4"} align={"center"}>
-                        {colData.colName}
-                    </Typography>
-                    <Fab
-                        color="primary"
-                        aria-label="edit"
-                        size="small"
-                        sx={{ ml: 1 }}
-                        onClick={() => {
-                            history.push("/collection/create?type=col&colId=" + getQueryStringRegExp("colId"));
-                        }}
-                    >
-                        <EditIcon />
-                    </Fab>
-                    <Fab color="primary" aria-label="add" size="small" onClick={d} sx={{ mr: 1, ml: 1 }}>
-                        <DeleteIcon />
-                    </Fab>
-                    <Fab
-                        color="primary"
-                        aria-label="add"
-                        size="small"
-                        onClick={() => {
-                            history.push("/collection/create?type=item&colId=" + getQueryStringRegExp("colId"));
-                        }}
-                    >
-                        <AddIcon />
-                    </Fab>
-                </Box>
-                <Box sx={{ display: "flex" }}>
-                    <Typography variant={"p"} sx={{ maxWidth: "490px", color: "#8A939B" }}>
-                        {colData.memo}
-                    </Typography>
-                </Box>
-            </Stack>
-            <Divider light sx={{ marginBottom: "60px" }} />
-            <Container maxWidth={'lg'}>
-                {
-                    _.isEmpty(itemData)?
-                    <Box sx={
-                        {
-                          display:'flex',
-                          justifyContent:'center',
-                          alignItems:'center',
-                          height:'100%'
-                        }
-                    }>
-                          <LoadingImg src={noDataIMg} /> 
-                    </Box>:
+	return (
+		<MYContainer maxWidth={"lg"}>
+			<img src={jp} style={{ width: "100%" }} />
+			<Stack direction="column" justifyContent="flex-start" alignItems="center" spacing={2} sx={{ margin: "40px 0" }}>
+				<Box sx={{ display: "flex" }}>
+					<Typography variant={"h4"} align={"center"}>
+						{colData.colName}
+					</Typography>
+					<Fab
+						color="primary"
+						aria-label="edit"
+						size="small"
+						sx={{ ml: 1 }}
+						onClick={() => {
+							history.push("/collection/create?type=col&colId=" + getQueryStringRegExp("colId"));
+						}}
+					>
+						<EditIcon />
+					</Fab>
+					<Fab color="primary" aria-label="add" size="small" onClick={d} sx={{ mr: 1, ml: 1 }}>
+						<DeleteIcon />
+					</Fab>
+					<Fab
+						color="primary"
+						aria-label="add"
+						size="small"
+						onClick={() => {
+							history.push("/collection/create?type=item&colId=" + getQueryStringRegExp("colId"));
+						}}
+					>
+						<AddIcon />
+					</Fab>
+				</Box>
+				<Box sx={{ display: "flex" }}>
+					<Typography variant={"p"} sx={{ maxWidth: "490px", color: "#8A939B" }}>
+						{colData.memo}
+					</Typography>
+				</Box>
+			</Stack>
+			<Divider light sx={{ marginBottom: "60px" }} />
+			<Container maxWidth={'lg'}>
+				{
+					_.isEmpty(itemData) ?
+						<Box sx={
+							{
+								display: 'flex',
+								justifyContent: 'center',
+								alignItems: 'center',
+								height: '100%'
+							}
+						}>
+							<LoadingImg src={noDataIMg} />
+						</Box> :
 
-           
-            <ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
-                {!_.isEmpty(itemData) &&
-                    itemData[page].map((item) => (
-                        <ImageListItem
-                            key={item.img}
-                            sx={{
-                                padding: "10px",
-                                background: "#FFFFFF",
-                                boxShadow: "0px 5px 8px 0px rgba(231, 231, 231, 0.6)",
-                                borderRadius: " 20px",
-                                border: "1px solid #E4E8EB",
-                            }}
-                        >
-                            <img
-                                src={apiConfig.productionUrl + item.itemImage}
-                                alt={item.colName}
-                                loading="lazy"
-                                onClick={() => {
-                                    history.push("/collection/detail?isItem=true&id="+getQueryStringRegExp("colId"));
-                                }}
-                                style={{
-                                    height: "200px",
-                                    objectFit: "contain",
-                                }}
-                            />
-                            <ImageListItemBar
-                                // title={item.title}
-                                subtitle={
-                                    <Box>
-                                        <Box sx={{ width: "100%", borderBottom: "1px solid #ccc" }} pb={2}>
-                                            <Typography align={"center"} sx={colNameStyle}>
-                                                {item.colName}
-                                            </Typography>
-                                            {/* <Typography align={"center"}>{item.externalLink}</Typography> */}
-                                            <Typography align={"center"} sx={{ color: "#8A939B" }}>
-                                                {item.memo}
-                                            </Typography>
-                                        </Box>
-                                        <ConDiv>
-                                            <Typography align={"center"}  sx={{ color: "#8A939B" }} >{item.itemNums}项目</Typography>
-                                        </ConDiv>
-                                        <ConDiv>
-                                            {/* <Stack spacing={1} sx={{width:'40%',margin:'auto'}} > */}
-                                            <Button
-                                                variant="contained"
-                                                sx={{ background: "#56ADBB", borderRadius: "10px" }}
-                                                onClick={() => {
-                                                    // history.push("/home/sell?id=" + item.id);
-                                                    history.push("/home/sell?id=" + item.id);
-                                                }}
-                                            >
-                                                出售
-                                            </Button>
-                                            {/* </Stack> */}
-                                        </ConDiv>
-                                    </Box>
-                                }
-                                position="below"
-                            />
-                        </ImageListItem>
-                    ))}
-            </ImageList>
-           
-                 }
-                  <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "end",
-                    margin: " 20px",
-                }}
-            >
-                {!_.isEmpty(itemData) && <Pagination count={count} onChange={handleChange} />}
-            </Box>
-            </Container>
-        </MYContainer>
-    );
+
+						<ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
+							{!_.isEmpty(itemData) &&
+								itemData[page].map((item) => (
+									<ImageListItem
+										key={item.img}
+										sx={{
+											padding: "10px",
+											background: "#FFFFFF",
+											boxShadow: "0px 5px 8px 0px rgba(231, 231, 231, 0.6)",
+											borderRadius: " 20px",
+											border: "1px solid #E4E8EB",
+										}}
+									>
+										<img
+											src={apiConfig.productionUrl + item.itemImage}
+											alt={item.colName}
+											loading="lazy"
+											onClick={() => {
+												history.push("/collection/detail?isItem=true&id="+getQueryStringRegExp("colId"));
+											}}
+											style={{
+												height: "200px",
+												objectFit: "contain",
+											}}
+										/>
+										<ImageListItemBar
+											// title={item.title}
+											subtitle={
+												<Box>
+													<Box sx={{ width: "100%", borderBottom: "1px solid #ccc" }} pb={2}>
+														<Typography align={"center"} sx={colNameStyle}>
+															{item.colName}
+														</Typography>
+														{/* <Typography align={"center"}>{item.externalLink}</Typography> */}
+														<Typography align={"center"} sx={{ color: "#8A939B" }}>
+															{item.memo}
+														</Typography>
+													</Box>
+													<ConDiv>
+														<Typography align={"center"} sx={{ color: "#8A939B" }} >{item.itemNums}项目</Typography>
+													</ConDiv>
+													<ConDiv>
+														{/* <Stack spacing={1} sx={{width:'40%',margin:'auto'}} > */}
+														<Button
+															variant="contained"
+															sx={{ background: "#56ADBB", borderRadius: "10px" }}
+															onClick={() => {
+																if (!item.tradeStatus ) {
+																	history.push("/home/sell?id=" + item.id + '&tokenId=' + item.tokenId)
+																}
+															}}
+														>
+															{item.tradeStatus? '出售中' : '出售/转赠'}
+                              </Button>
+														{/* </Stack> */}
+													</ConDiv>
+												</Box>
+											}
+											position="below"
+										/>
+									</ImageListItem>
+								))}
+						</ImageList>
+
+				}
+				<Box
+					sx={{
+						display: "flex",
+						justifyContent: "end",
+						margin: " 20px",
+					}}
+				>
+					{!_.isEmpty(itemData) && <Pagination count={count} onChange={handleChange} />}
+				</Box>
+			</Container>
+		</MYContainer>
+	);
 };
 export default Item;

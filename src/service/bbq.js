@@ -135,6 +135,15 @@ export const sellItem = (payload)=>{
     })
 }
 
+
+// 取消挂单
+export const CancelsellItem = (payload)=>{
+    return  request({
+        url: apiConfig.v5Api +'/cancel',
+        ...payload
+    })
+}
+
 // 转增
 export const increase = (payload)=>{
     return  request({
