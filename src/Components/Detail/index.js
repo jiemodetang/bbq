@@ -167,7 +167,7 @@ const Detail = () => {
 				let sellAddress = res.data.sellerAddr;
 				// contractAddFromEnd ---- 后台返回的合约地址
 				// let contractAddFromEnd = res.data.nftAddr;;
-				let contractAddFromEnd = '0x7234dDd2E6129580b2F8777BCE15966070C4c2c6';
+				let contractAddFromEnd = '0x1CE4d44eA0668B7f38A7759FE8d4dE68B5431273';
 				let Val = Number(res.data.price);
 				let value = numberUtils.movePointRight(Val, 18);
 				// 暂时写死  1---- usdt
@@ -201,10 +201,10 @@ const Detail = () => {
 		// // sellAddress ---- 后台返回卖家地址
 		// let sellAddress = '0x25Ba0564f4F64E6c529F2Ad05A15698a710F0aF9';
 		// // contractAddFromEnd ---- 后台返回的合约地址
-		// let contractAddFromEnd = '0x7234dDd2E6129580b2F8777BCE15966070C4c2c6';
+		// let contractAddFromEnd = '0x1CE4d44eA0668B7f38A7759FE8d4dE68B5431273';
 		// let value = numberUtils.movePointRight(0.001, 18);
 		tradeConst.methods
-			.callTransferFrom(contractAddFromEnd, sellAddress, tokenId)
+			._atomicMatch(contractAddFromEnd, sellAddress, tokenId)
 			.send({ from: myaddress, value: value })
 			.on("transactionHash", function (hash) {
 				console.log('tradehash', hash);
