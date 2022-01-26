@@ -103,7 +103,7 @@ const rows = [
     createData("test", 305, 3.7, 67, 4.3),
     createData("test", 356, 16.0, 49, 3.9),
 ];
-const tableListMMP = ["时间", "价格", "来自", "去向", "日期"];
+const tableListMMP = ["时间", "价格", "来自", "去向", "类型"];
 const Detail = () => {
     const [expanded, setExpanded] = React.useState("");
     const [checked, setChecked] = React.useState([]);
@@ -424,9 +424,9 @@ const Detail = () => {
                                                         margin: "0  20px",
                                                     }}
                                                 >
-                                                    30
+                                                {data.price}
                                                 </Box>
-                                                <Box>($93,983.40)</Box>
+                                                {/* <Box>($93,983.40)</Box> */}
                                             </Grid>
                                         </Typography>
                                     </CardContent>
@@ -473,18 +473,7 @@ const Detail = () => {
                                 </TableHead>
 
                                 {_.isEmpty(_.get(data, ["orderRespList"], [])) ? (
-                                    // <Box sx={
-                                    // 	{
-                                    // 	  display:'flex',
-                                    // 	  justifyContent:'center',
-                                    // 	  alignItems:'center',
-                                    // 	  height:'100%',
-                                    // 	  margin:'100px 0'
-                                    // 	}
-                                    // }>
-                                    // 	  <LoadingImg src={noDataIMg} />
-                                    // </Box>
-                                    ""
+                                   ''
                                 ) : (
                                     <TableBody>
                                         {_.get(data, ["orderRespList"], []).map((row) => (
@@ -502,6 +491,21 @@ const Detail = () => {
                                 )}
                             </Table>
                         </TableContainer>
+						{
+							_.isEmpty(_.get(data, ["orderRespList"], [])) &&
+                                   
+								<Box sx={
+							   {
+								 display:'flex',
+								 justifyContent:'center',
+								 alignItems:'center',
+								 height:'100%',
+								 margin:'100px 0'
+							   }
+						   }>
+								 <LoadingImg src={noDataIMg} />
+						   </Box>
+						}
                     </AccordionDetails>
                 </Accordion>
             </div>
