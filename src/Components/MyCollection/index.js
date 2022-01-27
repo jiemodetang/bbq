@@ -125,7 +125,8 @@ class Collections extends React.Component {
         });
 	  }
 	  f()
-	  setInterval(() => {
+	  let  time = null 
+	  time =  setInterval(() => {
 		f()
 	}, 8000);
     }
