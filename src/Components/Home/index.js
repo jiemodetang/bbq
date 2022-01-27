@@ -125,6 +125,9 @@ const Home = ({ colTyple, search }) => {
                                     // srcSet={`${item.colImage}?w=260&h=260&fit=crop&auto=format&dpr=2 2x`}
                                     alt={item.colName}
                                     loading="lazy"
+                                    style={{
+                                        maxHeight:'260px'
+                                    }}
                                     onClick={() => {
                                         history.push("/collection/detail?from=home&itemId=" + item.id);
                                     }}
