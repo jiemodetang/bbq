@@ -94,7 +94,8 @@ class Collections extends React.Component {
             data: [],
             page: 0,
             count: 1,
-            loading: true,
+			loading: true,
+			lxl:false
         };
     }
 
@@ -124,7 +125,7 @@ class Collections extends React.Component {
         });
 	  }
 	  f()
-	  const time = setInterval(() => {
+	  setInterval(() => {
 		f()
 	}, 8000);
     }
@@ -157,7 +158,7 @@ class Collections extends React.Component {
                                 minHeight: "600px",
                             }}
                         >
-                            <LoadingImg src={loadImg} />
+                            {/* <LoadingImg src={loadImg} /> */}
                         </Box>
                     ) :!_.isEmpty(this.state.data) ? (
                         <ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>

@@ -87,7 +87,7 @@ const Home = ({ colTyple, search }) => {
     f ()
         const time = setInterval(() => {
             f()
-        }, 8000);
+        }, 20000);
         return () => {
             clearTimeout(time)
         }
