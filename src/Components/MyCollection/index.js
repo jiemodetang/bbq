@@ -150,9 +150,7 @@ class Collections extends React.Component {
                         导入智能合约
                     </Button> */}
                 </Stack>
-                <div style={{ minHeight: "600px",display: "flex",
-    justifyContent: 'center',
-    alignItems: 'center' }}>
+                <div style={{ minHeight: "600px"}}>
                     {this.state.loading ? (
                         <Box
                             sx={{
@@ -164,7 +162,7 @@ class Collections extends React.Component {
                         >
                             <LoadingImg src={loadImg} />
                         </Box>
-                    ) : !_.isEmpty(this.state.data) ? (
+                    ) :!_.isEmpty(this.state.data) ? (
                         <ImageList sx={{ height: "100%" }} cols={ua ? 1 : 4} gap={20}>
                             {this.state.data[this.state.page].map((item) => (
                                 <ImageListItem
@@ -214,7 +212,16 @@ class Collections extends React.Component {
                             ))}
                         </ImageList>
                     ) : (
+						<Box sx={{
+
+    justifyContent: 'center',
+    display: "flex",
+    marginTop: '200px'
+
+						}}>
                         <LoadingImg src={noDataIMg} />
+
+						</Box>
                     )}
                 </div>
 
