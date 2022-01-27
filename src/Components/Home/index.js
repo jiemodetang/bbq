@@ -65,6 +65,7 @@ const Home = ({ colTyple, search }) => {
 	const history = useHistory();
 
     useEffect(() => {
+    const f =()=>{
         const params = {
             data: {
                 colType: colTyple,
@@ -82,7 +83,16 @@ const Home = ({ colTyple, search }) => {
             setItemData(_.chunk(data, pageSize));
             setLoading(false)
         });
+    }
+    f ()
+        const time = setInterval(() => {
+            f()
+        }, 8000);
+        return () => {
+            clearTimeout(time)
+        }
     }, [colTyple,search]);
+
     return (
         <MYContainer maxWidth={"lg"}>
             {loading ? (

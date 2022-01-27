@@ -84,6 +84,16 @@ const Item = ({ collectionId }) => {
 	};
 	const history = useHistory();
 	React.useEffect(() => {
+			g()
+			const time = setInterval(() => {
+				g()
+			}, 8000);
+			return () => {
+				clearTimeout(time)
+			}
+	}, []);
+
+	const g = ()=>{
 		const params = {
 			data: {
 				colId: getQueryStringRegExp("colId"),
@@ -105,7 +115,7 @@ const Item = ({ collectionId }) => {
 			const d = _.get(res, "data", {});
 			setColData(_.get(res, "data", {}));
 		});
-	}, []);
+	}
 	const d = () => {
 		const c = {
 			data: {

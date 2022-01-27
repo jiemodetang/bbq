@@ -104,16 +104,8 @@ class Collections extends React.Component {
         });
     };
     componentDidMount() {
-        // setTimeout(() => {
-        //   const c = {
-        //     data:{
-        //       id:2
-        //     }
-        //   }
-
-        //   deleteC(c)
-        // }, 3000);
-        const p = {
+      const f = ()=>{
+		const p = {
             data: {
                 colType: "",
             },
@@ -130,6 +122,11 @@ class Collections extends React.Component {
                 loading: false,
             });
         });
+	  }
+	  f()
+	  const time = setInterval(() => {
+		f()
+	}, 8000);
     }
     createCollections() {
         this.props.history.push("/collection/create?type=col");
