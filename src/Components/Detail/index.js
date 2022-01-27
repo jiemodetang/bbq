@@ -482,7 +482,7 @@ const d = () => {
 												</TableCell>
 												<TableCell align="right">{row.from}</TableCell>
 												<TableCell align="right">{row.to}</TableCell>
-												<TableCell align="right">{row.tradeType == 1?'购买':"转增"}</TableCell>
+												<TableCell align="right">{row.tradeType == 1?'购买':"转赠"}</TableCell>
 											</TableRow>
 										))}
 									</TableBody>
