@@ -437,6 +437,7 @@ export default function ControlledOpenSelect() {
 				</Grid>
 			</form>
 			<Dialog
+				style={{top:'50px'}}
 				open={open1}
 				fullWidth
 				aria-labelledby="responsive-dialog-title">
@@ -444,10 +445,10 @@ export default function ControlledOpenSelect() {
 					{"确认挂单"}
 				</DialogTitle>
 				<DialogContent>
-					<DialogContentText>
-						1. 初始化你的钱包
-                    </DialogContentText>
-					<DialogContentText>
+					<DialogContentText style={{paddingLeft: '15px;'}}>
+							<span>	1.初始化你的钱包</span>
+          </DialogContentText>
+					<DialogContentText style={{margin: '15px 0'}}>
 						2. 批准出售此商品
                     </DialogContentText>
 					<DialogContentText>
