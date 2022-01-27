@@ -135,7 +135,7 @@ const Home = ({ colTyple, search }) => {
                                                         <Item2>{item.itemName}</Item2>
                                                     </Grid>
                                                     <Grid item xs={6} sx={{ textAlign: "right" }}>
-                                                        <Item2>{item.itemNums}</Item2>
+                                                        <Item2>{item.price}</Item2>
                                                     </Grid>
                                                 </Grid>
                                             </Box>

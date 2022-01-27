@@ -140,7 +140,7 @@ export default function ControlledOpenSelect() {
 					// 挂单成功之后，按钮状态修改
 					setDisableBtn(true);
 				}
-			});
+			}).catch(err=>console.log('error', err))
 	}
 	const approveNft = () => {
 		let getedHash = '';

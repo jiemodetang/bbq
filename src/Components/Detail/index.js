@@ -326,7 +326,6 @@ const d = () => {
 						<EditIcon />
 					</Fab> 
 
-					isSelled ?
 					<Fab color="primary" aria-label="add" size="small" onClick={d} sx={{ mr: 1, ml: 1 }}>
 					<DeleteIcon />
 				</Fab>
