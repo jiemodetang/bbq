@@ -103,7 +103,7 @@ const rows = [
 	createData("test", 305, 3.7, 67, 4.3),
 	createData("test", 356, 16.0, 49, 3.9),
 ];
-const tableListMMP = ["时间", "价格", "来自", "去向", "类型"];
+const tableListMMP = ["时间",  "来自", "去向", "类型"];
 const Detail = () => {
 	const [expanded, setExpanded] = React.useState("");
 	const [checked, setChecked] = React.useState([]);
@@ -134,14 +134,21 @@ const Detail = () => {
 		setChecked(newChecked);
 	};
 	React.useEffect(() => {
-		const params = {
-			data: {
-				id: getQueryStringRegExp("itemId"),
-			},
-		};
-		detailItem(params).then((res) => {
-			setData(_.get(res, "data") || {});
-		});
+		const p = ()=>{
+			const params = {
+				data: {
+					id: getQueryStringRegExp("itemId"),
+				},
+			};
+			detailItem(params).then((res) => {
+				setData(_.get(res, "data") || {});
+			});
+		}
+		p()
+		let time = null 
+		time = setInterval(()=>{
+			p()
+		},5000)
 	}, []);
 
 	// 购买成功，重新调用详情，取购买列表数据
@@ -473,10 +480,9 @@ const d = () => {
 												<TableCell component="th" scope="row">
 													{row.date}
 												</TableCell>
-												<TableCell align="right">{row.price}</TableCell>
 												<TableCell align="right">{row.from}</TableCell>
 												<TableCell align="right">{row.to}</TableCell>
-												<TableCell align="right">{row.priceType}</TableCell>
+												<TableCell align="right">{row.priceType == 1?'购买':"转增"}</TableCell>
 											</TableRow>
 										))}
 									</TableBody>
