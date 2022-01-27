@@ -44,7 +44,7 @@ instance.interceptors.request.use(
 				},
 			config.headers
 		);
-		config.headers.Authorization = apiConfig.token ? getCookie('token') : ''
+		config.headers.Authorization = getCookie('token');
 
 		if (config.method === "post") {
 			const contentType = config.headers["Content-Type"];

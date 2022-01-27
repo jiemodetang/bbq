@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useHistory } from "react-router-dom";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -54,6 +55,7 @@ const style = {
 };
 
 export default function ControlledOpenSelect() {
+	const history = useHistory();
 	const [open1, setOpen1] = React.useState(false);
 	const handleOpen1 = () => setOpen1(true);
 	const handleClose1 = () => setOpen1(false);
@@ -136,9 +138,9 @@ export default function ControlledOpenSelect() {
 					approveNft();
 				} else {
 					handleClose1();
-					// 改变出售文案
 					// 挂单成功之后，按钮状态修改
 					setDisableBtn(true);
+					history.push("/");
 				}
 			}).catch(err=>console.log('error', err))
 	}
@@ -445,14 +447,14 @@ export default function ControlledOpenSelect() {
 					{"确认挂单"}
 				</DialogTitle>
 				<DialogContent>
-					<DialogContentText style={{paddingLeft: '15px;'}}>
-							<span>	1.初始化你的钱包</span>
+					<DialogContentText style={{paddingLeft: '20px;'}}>
+							<span style={{paddingLeft: '20px'}}>1.  初始化你的钱包</span>
           </DialogContentText>
 					<DialogContentText style={{margin: '15px 0'}}>
-						2. 批准出售此商品
+					<span style={{paddingLeft: '20px'}}>2.  批准出售此商品</span>
                     </DialogContentText>
 					<DialogContentText>
-						3. 确认
+					<span style={{paddingLeft: '20px'}}>3.  确认</span>
           </DialogContentText>
 				</DialogContent>
 				<DialogActions>

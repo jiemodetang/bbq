@@ -22,7 +22,7 @@ import loadImg from "../Img/myloading.gif";
 const ua = navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
 const MYContainer = styled(Container)`
     margin-top: 120px;
-    min-height:800px
+    min-height:500px
 
 `;
 const ConDiv = styled.div`
@@ -72,7 +72,7 @@ const Home = ({ colTyple, search }) => {
                 // searchValue:search
             },
         };
-        setLoading(true)
+        // setLoading(true)
         getI(params).then((res) => {
             let  data = _.get(res, ["pageInfo", "list"], []);
             const t = _.get(res, ["pageInfo", "total"]);
