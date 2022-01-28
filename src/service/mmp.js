@@ -31,7 +31,7 @@ export const apiConfig = {
     v3Api: "/api/v1/cqc/web/file",
     protal:'/api/v1/cqc/portal/sysDict',
     v5Api:'/api/v1/cqc/web/item',
-    productionUrl: "http://54.251.197.76:8081",
+    productionUrl: "http://13.212.197.232:8081",
     isMock: false,
     token:''
 };
