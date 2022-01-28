@@ -9,6 +9,8 @@ import mobileActionCreators from "../../../Redux/ActionCreators/MobileNavActionC
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
+
+import HLogo from '../../Img/hLogo.png'
 const Container = styled.div`
     display: flex;
     align-items: center;
@@ -49,6 +51,10 @@ const Text = styled.div`
         display: block;
     }
 `;
+const MyLogo = styled.img`
+    width: 160px;
+    margin-left:20px
+`;
 
 const Icon = ({ toggle, show }) => {
     const history = useHistory();
@@ -58,7 +64,8 @@ const Icon = ({ toggle, show }) => {
 
     return (
         <Container onClick={goHome}>
-            <Box >
+            <MyLogo src={HLogo}></MyLogo>
+            {/* <Box >
                 <Grid   >
                     <Grid item>
                         <IconContainer>
@@ -71,7 +78,7 @@ const Icon = ({ toggle, show }) => {
                 <KeyboardArrowDownIcon style={{ fontSize: "30px" }} />
             </ArrowContainer>
 
-            <Text>Here my logo</Text>
+            <Text>Here my logo</Text> */}
         </Container>
     );
 };

@@ -23,6 +23,11 @@ import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
+import HLogo from '../Img/bLogo.png'
+
+import instagram from "./img/instagram.png";
+import telegram from "./img/telegram.png";
+import tt from "./img/tt.png";
 
 const ua = navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i);
 
@@ -32,20 +37,17 @@ const imgList = [
 		title: "github",
 	},
 	{
-		img: githubPng,
-		title: "github",
+		img: instagram,
+		title: "instagram",
 	},
 	{
-		img: githubPng,
-		title: "github",
+		img: telegram,
+		title: "telegram",
 	},
+
 	{
-		img: githubPng,
-		title: "github",
-	},
-	{
-		img: githubPng,
-		title: "github",
+		img: tt,
+		title: "tt",
 	},
 ];
 const MyBox = styled(Box)`
@@ -59,7 +61,10 @@ const Box1 = styled.div`
     background: #0d2744;
     width:100%;
 `;
-
+const MyLogo = styled.img`
+    width: 160px;
+    margin-left:20px
+`;
 export default function Footer() {
 	return (
 		<MyBox>
@@ -71,9 +76,9 @@ export default function Footer() {
 								<CardContent>
 									<Typography variant="h5" component="div">
 										<Stack direction="row" spacing={2}>
-											<Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+											{/* <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" /> */}
 											<Grid item xs={6}>
-												Logo
+											<MyLogo src={HLogo}></MyLogo>
                                             </Grid>
 										</Stack>
 									</Typography>
