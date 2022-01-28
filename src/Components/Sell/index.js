@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useHistory } from "react-router-dom";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -14,13 +15,17 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import FormHelperText from "@mui/material/FormHelperText";
 import { useForm } from "react-hook-form";
-import Typography from "@mui/material/Typography";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import $message from 'popular-message';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { sellItem, increase } from '../../service/bbq'
 // 合约
 import $web3js from "../../lib/contract/web3";
@@ -54,6 +59,8 @@ const style = {
 };
 
 export default function ControlledOpenSelect() {
+	const [expanded, setExpanded] = React.useState(false);
+	const history = useHistory();
 	const [open1, setOpen1] = React.useState(false);
 	const handleOpen1 = () => setOpen1(true);
 	const handleClose1 = () => setOpen1(false);
@@ -73,6 +80,9 @@ export default function ControlledOpenSelect() {
 		weightRange: "",
 		showPassword: false,
 	});
+	const handleChangeDialog = (panel) => (event, isExpanded) => {
+		setExpanded(isExpanded ? panel : false);
+	};
 
 	const handleChange = (event) => {
 		setAge(event.target.value);
@@ -136,11 +146,11 @@ export default function ControlledOpenSelect() {
 					approveNft();
 				} else {
 					handleClose1();
-					// 改变出售文案
 					// 挂单成功之后，按钮状态修改
 					setDisableBtn(true);
+					history.push("/");
 				}
-			}).catch(err=>console.log('error', err))
+			}).catch(err => console.log('error', err))
 	}
 	const approveNft = () => {
 		let getedHash = '';
@@ -231,99 +241,99 @@ export default function ControlledOpenSelect() {
 				}, 800)
 			});
 	}
-		// 用户没有登录
-		const NotLogin = () => {
-			if (!getLocalStorage('walletaccount')) {
-				window._M.info('请先链接钱包，登录账号')
-				return true;
-			} else {
-				return false;
-			}
+	// 用户没有登录
+	const NotLogin = () => {
+		if (!getLocalStorage('walletaccount')) {
+			window._M.info('请先链接钱包，登录账号')
+			return true;
+		} else {
+			return false;
 		}
-		// 赠送
-		const giveAway = () => {
-			if (NotLogin()) return;
-			handleOpen2();
-		}
-		const handleChangeAddr = (event) => {
-			setToAddress(event.target.value);
+	}
+	// 赠送
+	const giveAway = () => {
+		if (NotLogin()) return;
+		handleOpen2();
+	}
+	const handleChangeAddr = (event) => {
+		setToAddress(event.target.value);
 	};
-		// 赠送确定
-		const handlerConfirmIncase = (event) => {
-			incaseTo(toAddress);
-		}
-		const incaseTo = (toAddress) => {
-			let incaseHash = '';
-			// const nftContractSellAdd = nftContract.default.test.sellContract;
-			const nftContractAdd = nftContract.default.test.nftContract;
-			const myaddress = getLocalStorage("walletaccount");
-			const incaseWeb3 = $web3js.getWeb3();
-			connectMetaMask();
-			const incaseConst = new incaseWeb3.eth.Contract(
-				creatOrderJson.abi,
-				nftContractAdd,
-				{
-					from: myaddress,
-				}
-			);
-			let tokenId = getQueryStringRegExp('tokenId');
-			let itemId =  getQueryStringRegExp('id')
-			// let toAddress = '0x89351d3339738Da10428581D05F420248D2c841D';
-			console.log('incaseConst', incaseConst);
-			incaseConst.methods
-				.safeTransferFrom(myaddress, toAddress, tokenId)
-				.send({ from: myaddress })
-				.on("transactionHash", function (hash) {
-					console.log('incaseHash', hash);
-					$message.config({
-						top: 50,
-						duration: 0
-					});
-					$message.loading("请耐心等待交易打包，不要退出");
-					incaseHash = hash;
-				})
-				.on("receipt", function (receipt) {
-					if (receipt.transactionHash == incaseHash) {
-						// 调后台确认交易
-						incaseSuccess(itemId, toAddress, incaseHash);
-					}
-				})
-				.on("error", function (error, receipt) {
-					$message.destroy();
-					setTimeout(() => {
-						$message.error(error.message);
-					}, 800)
+	// 赠送确定
+	const handlerConfirmIncase = (event) => {
+		incaseTo(toAddress);
+	}
+	const incaseTo = (toAddress) => {
+		let incaseHash = '';
+		// const nftContractSellAdd = nftContract.default.test.sellContract;
+		const nftContractAdd = nftContract.default.test.nftContract;
+		const myaddress = getLocalStorage("walletaccount");
+		const incaseWeb3 = $web3js.getWeb3();
+		connectMetaMask();
+		const incaseConst = new incaseWeb3.eth.Contract(
+			creatOrderJson.abi,
+			nftContractAdd,
+			{
+				from: myaddress,
+			}
+		);
+		let tokenId = getQueryStringRegExp('tokenId');
+		let itemId = getQueryStringRegExp('id')
+		// let toAddress = '0x89351d3339738Da10428581D05F420248D2c841D';
+		console.log('incaseConst', incaseConst);
+		incaseConst.methods
+			.safeTransferFrom(myaddress, toAddress, tokenId)
+			.send({ from: myaddress })
+			.on("transactionHash", function (hash) {
+				console.log('incaseHash', hash);
+				$message.config({
+					top: 50,
+					duration: 0
 				});
-		}
-	
-		// 转赠成功
-		const incaseSuccess = (itemId, toAddress, incaseHash) => {
-			const params = {
-				data: {
-					itemId: itemId,
-					toAddr: toAddress,
-					txHash: incaseHash,
-				},
-			};
-			increase(params).then(res => {
-				if (res.code === '0000') {
-					$message.destroy();
-					setTimeout(() => {
-						$message.success('转赠成功');
-					}, 800)
-					handleClose2();
-					setToAddress('');
-					// 赠送成功之后，按钮状态修改
-					setDisableBtn(true);
-				} else {
-					$message.destroy();
-					setTimeout(() => {
-						$message.error(res.msg)
-					}, 800)
-				
+				$message.loading("请耐心等待交易打包，不要退出");
+				incaseHash = hash;
+			})
+			.on("receipt", function (receipt) {
+				if (receipt.transactionHash == incaseHash) {
+					// 调后台确认交易
+					incaseSuccess(itemId, toAddress, incaseHash);
 				}
 			})
-		}
+			.on("error", function (error, receipt) {
+				$message.destroy();
+				setTimeout(() => {
+					$message.error(error.message);
+				}, 800)
+			});
+	}
+
+	// 转赠成功
+	const incaseSuccess = (itemId, toAddress, incaseHash) => {
+		const params = {
+			data: {
+				itemId: itemId,
+				toAddr: toAddress,
+				txHash: incaseHash,
+			},
+		};
+		increase(params).then(res => {
+			if (res.code === '0000') {
+				$message.destroy();
+				setTimeout(() => {
+					$message.success('转赠成功');
+				}, 800)
+				handleClose2();
+				setToAddress('');
+				// 赠送成功之后，按钮状态修改
+				setDisableBtn(true);
+			} else {
+				$message.destroy();
+				setTimeout(() => {
+					$message.error(res.msg)
+				}, 800)
+
+			}
+		})
+	}
 	const connectMetaMask = () => {
 		$web3js
 			.connectMetaMask()
@@ -419,51 +429,103 @@ export default function ControlledOpenSelect() {
 				</Grid>
 				<Grid container spacing={2} sx={{ mt: 1, mb: 5 }}>
 					<Grid item xs={4}>
-						<Button 
-						variant="contained" type="submit" 
-						disabled={disableBtn} 
-						onPress={handlerSell}>
+						<Button
+							variant="contained" type="submit"
+							disabled={disableBtn}
+							onPress={handlerSell}>
 							出售
               </Button>
-							<Button
-								disabled={disableBtn}
-								variant="contained"
-								onClick={giveAway}
-								style={{ marginLeft: '25px' }}>
-								{" "}
+						<Button
+							disabled={disableBtn}
+							variant="contained"
+							onClick={giveAway}
+							style={{ marginLeft: '25px' }}>
+							{" "}
 								转赠
               </Button>
 					</Grid>
 				</Grid>
 			</form>
+			{/* 弹窗中添加 手风琴效果 */}
 			<Dialog
-				style={{top:'50px'}}
+				style={{ top: '50px' }}
 				open={open1}
 				fullWidth
 				aria-labelledby="responsive-dialog-title">
 				<DialogTitle id="responsive-dialog-title">
-					{"确认挂单"}
+					{"确认出售"}
 				</DialogTitle>
-				<DialogContent>
-					<DialogContentText style={{paddingLeft: '15px;'}}>
-							<span>	1.初始化你的钱包</span>
+				{/* <DialogContent>
+					<DialogContentText style={{paddingLeft: '20px;'}}>
+							<span style={{paddingLeft: '20px'}}>1.  初始化你的钱包</span>
           </DialogContentText>
 					<DialogContentText style={{margin: '15px 0'}}>
-						2. 批准出售此商品
+					<span style={{paddingLeft: '20px'}}>2.  批准出售此商品</span>
                     </DialogContentText>
 					<DialogContentText>
-						3. 确认
+					<span style={{paddingLeft: '20px'}}>3.  确认</span>
           </DialogContentText>
-				</DialogContent>
+				</DialogContent> */}
+				<Accordion expanded={expanded === 'panel1'} onChange={handleChangeDialog('panel1')}>
+					<AccordionSummary
+						expandIcon={<ExpandMoreIcon />}
+						aria-controls="panel1bh-content"
+						id="panel1bh-header"
+					>
+						<Typography sx={{ width: '33%', flexShrink: 0 }}>
+							1. 初始化你的钱包
+          </Typography>
+					</AccordionSummary>
+					<AccordionDetails>
+						<Typography>
+							要首次设置拍卖列表，您必须批准该项目进行销售，这需要一次性的汽油费
+          </Typography>
+					</AccordionDetails>
+				</Accordion>
+				<Accordion expanded={expanded === 'panel2'} onChange={handleChangeDialog('panel2')}>
+					<AccordionSummary
+						expandIcon={<ExpandMoreIcon />}
+						aria-controls="panel2bh-content"
+						id="panel2bh-header"
+					>
+						<Typography sx={{ width: '33%', flexShrink: 0 }}>2.  批准出售此商品</Typography>
+					</AccordionSummary>
+					<AccordionDetails>
+						<Typography>
+							要首次设置拍卖列表，您必须批准该项目进行销售，这需要一次性的汽油费
+          </Typography>
+					</AccordionDetails>
+				</Accordion>
+				<Accordion expanded={expanded === 'panel3'} onChange={handleChangeDialog('panel3')}>
+					<AccordionSummary
+						expandIcon={<ExpandMoreIcon />}
+						aria-controls="panel3bh-content"
+						id="panel3bh-header"
+					>
+						<Typography sx={{ width: '33%', flexShrink: 0 }}>
+							3.  确认出售
+          </Typography>
+					</AccordionSummary>
+					<AccordionDetails>
+						<Typography>
+							接受您钱包中的签名请求并等待您的列表处理。
+          </Typography>
+					</AccordionDetails>
+				</Accordion>
+
+
 				<DialogActions>
-					{/* <Button autoFocus onClick={handleClose}>
-						取消
-          </Button> */}
-					<Button onClick={handlerConfirm} autoFocus>
+					<Button 
+					onClick={handlerConfirm} 
+					autoFocus 
+					style={{fontSize: '18px'}}>
 						确定
           </Button>
 				</DialogActions>
 			</Dialog>
+
+
+
 
 			<Dialog open={open2} fullWidth fullWidth>
 				<DialogTitle>转赠NFT</DialogTitle>
