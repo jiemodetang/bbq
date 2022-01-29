@@ -111,6 +111,8 @@ const Detail = () => {
 	const [open, setOpen] = React.useState(false);
 	const [disableBtn, setDisableBtn] = React.useState(false);
 	const [isSelled, setisSelled] = React.useState(false);
+	const [defalut111, setDefalut111] = React.useState(1);
+
 	const [toAddress, setToAddress] = React.useState("");
 	const handleOpen = () => setOpen(true);
 	const history = useHistory();
@@ -254,6 +256,7 @@ const Detail = () => {
 				}, 800)
 				// 购买和取消出售送成功之后，按钮状态修改
 				setDisableBtn(true);
+				setDefalut111(2)
 			} else {
 				$message.destroy();
 				setTimeout(() => {
@@ -427,7 +430,7 @@ const d = () => {
 										</Button>
 										}
 										{
-											data.owner === getLocalStorage("walletaccount") ? 
+											data.owner === getLocalStorage("walletaccount") && defalut111 === 1 ? 
 											<Button 
 											disabled={disableBtn} 
 											variant="contained" 
