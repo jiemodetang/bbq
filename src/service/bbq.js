@@ -10,7 +10,7 @@ export const login = (payload)=>{
 
 export const getHomeList = (payload)=>{
     return  request({
-        url: apiConfig.v1Api +'/getAllCollections',
+        url: apiConfig.v2Api +'/getAllCollections',
         ...payload
     })
 }
