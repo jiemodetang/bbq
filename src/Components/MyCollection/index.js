@@ -128,7 +128,7 @@ class Collections extends React.Component {
 	  let  time = null 
 	  time =  setInterval(() => {
 		f()
-	}, 8000);
+	}, 15000);
     }
     createCollections() {
         this.props.history.push("/collection/create?type=col");

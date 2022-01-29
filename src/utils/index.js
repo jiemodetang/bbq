@@ -164,17 +164,20 @@ export const  getQueryStringRegExp = function(name) {
 };
 
 
-export function getCookie(cName) {
-  if (document.cookie.length > 0) {
-      var cStart = document.cookie.indexOf(cName + "=");
-      if (cStart != -1) {
-          cStart = cStart + cName.length + 1;
-          var cEnd = document.cookie.indexOf(";", cStart);
-          if (cEnd == -1) cEnd = document.cookie.length;
-          return document.cookie.substring(cStart, cEnd);
-      }
-  }
-  return "";
+export function getCookie(name) {
+  let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        let cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            // 判断这个cookie的参数名是不是我们想要的
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }
 
 //设置cookie
