@@ -89,7 +89,7 @@ function handlerBuyUseBnb() {
     // sellAddress ---- 后台返回卖家地址
     let sellAddress = '0x25Ba0564f4F64E6c529F2Ad05A15698a710F0aF9';
     // contractAddFromEnd ---- 后台返回的合约地址
-    let contractAddFromEnd = '0x1CE4d44eA0668B7f38A7759FE8d4dE68B5431273';
+    let contractAddFromEnd = '0xac8429D8C2e97eeC374aE3bf746A3c7fBd1CAeB7';
     let value = numberUtils.movePointRight(0.001, 18);
     tradeConst.methods
         .callTransferFrom(contractAddFromEnd, sellAddress, tokenId)

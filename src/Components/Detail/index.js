@@ -186,7 +186,7 @@ const Detail = () => {
 				let tokenId = res.data.tokenId;
 				let sellAddress = res.data.sellerAddr;
 				// let contractAddFromEnd = res.data.nftAddr;;
-				let contractAddFromEnd = res.data.nftAddr ? res.data.nftAddr : "0x1CE4d44eA0668B7f38A7759FE8d4dE68B5431273";
+				let contractAddFromEnd = res.data.nftAddr ? res.data.nftAddr : "0xac8429D8C2e97eeC374aE3bf746A3c7fBd1CAeB7";
 				let Val = Number(res.data.price);
 				let value = numberUtils.movePointRight(Val, 18);
 				// 暂时写死  1---- usdt

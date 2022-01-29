@@ -3,8 +3,8 @@
  */
  const contractAdd = {
   'test': {
-    nftContract: '0x1CE4d44eA0668B7f38A7759FE8d4dE68B5431273',
-    sellContract: '0x8BBb1d0C4a08435a75Bb1D55607813a7f4eE516B'
+    nftContract: '0xac8429D8C2e97eeC374aE3bf746A3c7fBd1CAeB7',
+    sellContract: '0x450188E5E983595D045AFe47c2A16f9c570e9391'
   }
 };
 export default contractAdd;
