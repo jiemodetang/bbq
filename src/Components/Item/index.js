@@ -87,7 +87,7 @@ const Item = ({ collectionId }) => {
 			g()
 			const time = setInterval(() => {
 				g()
-			}, 15000);
+			}, 30000);
 			return () => {
 				clearTimeout(time)
 			}
